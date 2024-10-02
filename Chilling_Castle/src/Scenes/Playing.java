@@ -19,7 +19,7 @@ public class Playing extends GameScenes implements SceneMethod {
         super(game);
         MapLoader();
         tilesManager = new TilesManager();
-        buttonBottomBar = new ButtonBottomBar(0,640,940,100, this);
+        buttonBottomBar = new ButtonBottomBar(0,640,960,100, this);
         changeStage(); 
     }
 
