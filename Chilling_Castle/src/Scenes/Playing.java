@@ -7,19 +7,20 @@ import Main.Game;
 import MapLevel.Level1;
 import MapLevel.Level2;
 import Tiles.TilesManager;
-import UI.ButtonBottomBar;
+import UI.BottomBar;
+import UI.Buttons;
 
 public class Playing extends GameScenes implements SceneMethod {
     public int[][] lv1, lv2;
     private TilesManager tilesManager;
     private int currentMap = 0;
     private int[][] currentLevel;
-    private ButtonBottomBar buttonBottomBar;
+    private BottomBar bottomBar;
     public Playing(Game game) {
         super(game);
         MapLoader();
         tilesManager = new TilesManager();
-        buttonBottomBar = new ButtonBottomBar(0,640,960,100, this);
+        bottomBar = new BottomBar(0,640,960,100, this);
         changeStage(); 
     }
 
@@ -47,7 +48,7 @@ public class Playing extends GameScenes implements SceneMethod {
                 g.drawImage(getImageFromID(ID), j * 32, i * 32, null);
             }
         }
-        buttonBottomBar.draw(g);
+        bottomBar.draw(g);
     }
 
     public void switchMap() {
@@ -65,7 +66,7 @@ public class Playing extends GameScenes implements SceneMethod {
     private void MapLoader() {
         lv1 = Level1.getLevel1Data();
         lv2 = Level2.getLevel2Data();
-        // Nếu có thêm bản đồ thì tiếp tục khởi tạo ở đây
+        
     }
 
     private BufferedImage getImageFromID(int ID) {
@@ -74,26 +75,25 @@ public class Playing extends GameScenes implements SceneMethod {
 
     @Override
     public void mouseClicked(int x, int y) {
-        // TODO: Thực hiện logic khi chuột được nhấn
-    }
+            }
 
     @Override
     public void mouseMoved(int x, int y) {
-        // TODO: Thực hiện logic khi chuột di chuyển
+        
     }
 
     @Override
     public void mousePressed(int x, int y) {
-        // TODO: Thực hiện logic khi chuột được nhấn
+        
     }
 
     @Override
     public void mouseReleased(int x, int y) {
-        // TODO: Thực hiện logic khi chuột được thả
+        
     }
 
     @Override
     public void mouseDragged(int x, int y) {
-        // TODO: Thực hiện logic khi chuột được kéo
+        
     }
 }
