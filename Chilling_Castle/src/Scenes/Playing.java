@@ -33,7 +33,7 @@ public class Playing extends GameScenes implements SceneMethod {
                 currentLevel = lv2;
                 break;
             default:
-                currentMap = 0; // Quay lại bản đồ đầu tiên
+                currentMap = 0; 
                 currentLevel = lv1;
                 break;
         }
@@ -79,7 +79,9 @@ public class Playing extends GameScenes implements SceneMethod {
 
     @Override
     public void mouseMoved(int x, int y) {
-        
+        if(y >= 640) {
+        	bottomBar.mouseMoved(x,y);
+        }
     }
 
     @Override

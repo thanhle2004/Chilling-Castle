@@ -29,11 +29,12 @@ public class Game extends JFrame implements Runnable {
       private Menu menu;
       private Playing playing;
       private Setting setting;
-
+      private GameScreen gameScreen;
 
     
     public static void main(String[] args) {
         Game game = new Game(); 
+        game.gameScreen.initInputs();
         game.start();
     }
 
@@ -47,7 +48,7 @@ public class Game extends JFrame implements Runnable {
     }
     
     private void initClasses() {
-    	  GameScreen gameScreen = new GameScreen(this);
+    	  gameScreen = new GameScreen(this);
     	  render = new Renders(this);
     	  add(gameScreen);   
     	  menu = new Menu(this);

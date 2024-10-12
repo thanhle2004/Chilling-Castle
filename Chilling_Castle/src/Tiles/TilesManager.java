@@ -53,7 +53,7 @@ public class TilesManager {
     public static BufferedImage getPathTowerImage(String nameTower) {
         BufferedImage image = null;
         try {
-            image = ImageIO.read(TilesManager.class.getClassLoader().getResourceAsStream("Tower/" + nameTower));
+            image = ImageIO.read(TilesManager.class.getClassLoader().getResourceAsStream(nameTower));
         } catch (IOException e) {
             e.printStackTrace();
         }

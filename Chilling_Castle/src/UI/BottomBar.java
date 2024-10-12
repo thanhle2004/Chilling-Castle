@@ -16,6 +16,7 @@ public class BottomBar {
 	private Playing playing;
 	private Buttons menuButtons,towerButtons;
 	private TilesManager tilesManager;
+	
 	public BottomBar(int x, int y, int Width, int Height,Playing playhing) {
 		this.x = x;
 		this.y = y;
@@ -23,6 +24,7 @@ public class BottomBar {
 		this.Height = Height;
 		this.playing = playing;
 		tilesManager = new TilesManager();
+		menuButtons = new Buttons(0, 640, 50, 50); 
 		
 	}
 	
@@ -44,9 +46,8 @@ public class BottomBar {
     }
     
     private void drawMenuButton(Graphics g) {
-    	menuButtons = new Buttons(0, 640, 50, 50);
+    	 
     	menuButtons.draw(g);
-    	
     }
     
     private void drawTowerButton(Graphics g) {
@@ -64,5 +65,14 @@ public class BottomBar {
     		x += xOff;
     	}	
     }
+    
+    
+    public void mouseMoved(int x, int y) {
+    	menuButtons.setMouseOver(false);
+    	if(menuButtons.checkBounds().contains(x, y)) {
+    		menuButtons.setMouseOver(true);
+    	}
+    }
+    
 
 }

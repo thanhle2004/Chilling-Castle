@@ -27,14 +27,13 @@ public class GameScreen extends JPanel {
     public GameScreen(Game game) {
     	
     	this.game = game;
-        initInputs();
         SetSizeScreen();
         
     }
     
     //Input key and mouse
-	private void initInputs() {
-    	mouse = new Mouse();
+	public void initInputs() {
+    	mouse = new Mouse(game);
     	keyboard = new KeyBoard(game);
     	addMouseListener(mouse);
     	addMouseMotionListener(mouse);
