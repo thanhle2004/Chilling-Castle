@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 public class MyButton {
-	
+
 	public int x, y, width, height, id;
 	private String text;
 	private Rectangle bounds;
