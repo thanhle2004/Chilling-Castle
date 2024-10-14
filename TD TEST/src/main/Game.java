@@ -46,8 +46,6 @@ public class Game extends JFrame implements Runnable {
 		int[] arr = new int[400];
 		for (int i = 0; i < arr.length; i++)
 			arr[i] = 0;
-
-
 	}
 
 	private void initClasses() {

@@ -80,20 +80,24 @@ public class Stage2 extends GameScene implements SceneMethods{
 
 	@Override
 	public void mouseMoved(int x, int y) {
-		// TODO Auto-generated method stub
-		
+		if (y >= 640)
+			bottomBar.mouseMoved(x, y);
+		else {
+			mouseX = (x / 32) * 32;
+			mouseY = (y / 32) * 32;
+		}
 	}
 
 	@Override
 	public void mousePressed(int x, int y) {
-		// TODO Auto-generated method stub
-		
+		if (y >= 640) {
+			bottomBar.mousePressed(x, y);
+		}
 	}
 
 	@Override
 	public void mouseReleased(int x, int y) {
-		// TODO Auto-generated method stub
-		
+		bottomBar.mouseReleased(x, y);
 	}
 
 	@Override

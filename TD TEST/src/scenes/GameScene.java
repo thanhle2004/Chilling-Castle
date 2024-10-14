@@ -20,6 +20,7 @@ public class GameScene {
 	}
 
 	protected boolean isAnimation(int spriteID) {
+
 		return game.getTileManager().isSpriteAnimation(spriteID);
 	}
 
