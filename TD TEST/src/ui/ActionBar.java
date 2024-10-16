@@ -6,21 +6,20 @@ import static main.GameStates.SetGameState;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import scenes.Stage1;
 import scenes.Stage2;
 
 public class ActionBar extends Bar {
 
-	private Stage1 playing1;
+//	private Stage1 playing1;
 	private MyButton bMenu;
 	private Stage2 playing2;
 
-	public ActionBar(int x, int y, int width, int height, Stage1 playing) {
-		super(x, y, width, height);
-		this.playing1 = playing;
-
-		initButtons();
-	}
+//	public ActionBar(int x, int y, int width, int height, Stage1 playing) {
+//		super(x, y, width, height);
+//		this.playing1 = playing;
+//
+//		initButtons();
+//	}
 	
 	public ActionBar(int x, int y, int width, int height, Stage2 playing) {
 		super(x, y, width, height);
@@ -69,7 +68,6 @@ public class ActionBar extends Bar {
 
 	public void mouseReleased(int x, int y) {
 		bMenu.resetBooleans();
-
 	}
 
 }

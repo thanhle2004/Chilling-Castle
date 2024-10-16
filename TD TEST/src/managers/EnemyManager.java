@@ -3,11 +3,8 @@ package managers;
 import java.awt.Graphics;
 
 import java.awt.image.BufferedImage;
-import java.security.cert.X509Certificate;
-import java.time.Year;
 import java.util.ArrayList;
-import java.util.IllegalFormatCodePointException;
-import java.util.Random;
+
 import enemies.DUDE;
 import enemies.Enemy;
 import enemies.OSTER;
@@ -16,13 +13,10 @@ import enemies.SLIME;
 import helpz.LoadPathImage;
 import main.GameStates;
 import scenes.GameScene;
-import scenes.Stage1;
 import scenes.Stage2;
+import stages.Stage1;
+
 import static helpz.Constants.Enemy.*;
-
-import static helpz.Constants.Direction.*;
-
-import static helpz.Constants.Tiles.*;
 
 public class EnemyManager {
 	private Stage1 stage1;
@@ -41,7 +35,8 @@ public class EnemyManager {
 	        xTarget = 19*32;
 	        yTarget = 9*32;
 	        addEnemy(OSTER, 0*32, 14 * 32);
-	    } else if (stage instanceof Stage2) {
+	    }
+	   	if (stage instanceof Stage2) {
 	        moveManager = new MoveManager((Stage2) stage);
 	        loadEnemyImgs(GameStates.STAGE2);
 	        addEnemy(DUDE, 0, 1 * 32);

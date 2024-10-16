@@ -21,14 +21,17 @@ public class MyMouseListener implements MouseListener, MouseMotionListener {
 		case MENU:
 			game.getMenu().mouseDragged(e.getX(), e.getY());
 			break;
-		case STAGE1:
-			game.getStage1().mouseDragged(e.getX(), e.getY());
+		case STAGES:
+			game.getStages().mouseDragged(e.getX(), e.getY());
 			break;
 		case STAGE2:
 			game.getStage2().mouseDragged(e.getX(), e.getY());
 			break;
 		case SETTINGS:
 			game.getSettings().mouseDragged(e.getX(), e.getY());
+			break;
+		case TOWER:
+			game.getTowers().mouseDragged(e.getX(), e.getY());
 			break;
 		default:
 			break;
@@ -42,8 +45,8 @@ public class MyMouseListener implements MouseListener, MouseMotionListener {
 		case MENU:
 			game.getMenu().mouseMoved(e.getX(), e.getY());
 			break;
-		case STAGE1:
-			game.getStage1().mouseMoved(e.getX(), e.getY());
+		case STAGES:
+			game.getStages().mouseMoved(e.getX(), e.getY());
 			break;
 		case STAGE2:
 			game.getStage2().mouseMoved(e.getX(), e.getY());
@@ -51,12 +54,13 @@ public class MyMouseListener implements MouseListener, MouseMotionListener {
 		case SETTINGS:
 			game.getSettings().mouseMoved(e.getX(), e.getY());
 			break;
-
+		case TOWER:
+			game.getTowers().mouseMoved(e.getX(), e.getY());
+			break;
 		default:
 			break;
 		}
-//		System.out.println(e.getX());
-//		System.out.println(e.getY());
+
 	}
 
 	@Override
@@ -66,14 +70,17 @@ public class MyMouseListener implements MouseListener, MouseMotionListener {
 			case MENU:
 				game.getMenu().mouseClicked(e.getX(), e.getY());
 				break;
-			case STAGE1:
-				game.getStage1().mouseClicked(e.getX(), e.getY());
+			case STAGES:
+				game.getStages().mouseClicked(e.getX(), e.getY());
 				break;
 			case STAGE2:
 				game.getStage2().mouseClicked(e.getX(), e.getY());
 				break;
 			case SETTINGS:
 				game.getSettings().mouseClicked(e.getX(), e.getY());
+				break;
+			case TOWER:
+				game.getTowers().mouseClicked(e.getX(), e.getY());
 				break;
 			default:
 				break;
@@ -87,8 +94,8 @@ public class MyMouseListener implements MouseListener, MouseMotionListener {
 		case MENU:
 			game.getMenu().mousePressed(e.getX(), e.getY());
 			break;
-		case STAGE1:
-			game.getStage1().mousePressed(e.getX(), e.getY());
+		case STAGES:
+			game.getStages().mousePressed(e.getX(), e.getY());
 			break;
 		case STAGE2:
 			game.getStage2().mousePressed(e.getX(), e.getY());
@@ -96,7 +103,9 @@ public class MyMouseListener implements MouseListener, MouseMotionListener {
 		case SETTINGS:
 			game.getSettings().mousePressed(e.getX(), e.getY());
 			break;
-	
+	 	case TOWER:
+			game.getTowers().mousePressed(e.getX(), e.getY());
+			break;
 		default:
 			break;
 		}
@@ -108,8 +117,8 @@ public class MyMouseListener implements MouseListener, MouseMotionListener {
 		case MENU:
 			game.getMenu().mouseReleased(e.getX(), e.getY());
 			break;
-		case STAGE1:
-			game.getStage1().mouseReleased(e.getX(), e.getY());
+		case STAGES:
+			game.getStages().mouseReleased(e.getX(), e.getY());
 			break;
 		case STAGE2:
 			game.getStage2().mouseReleased(e.getX(), e.getY());
@@ -117,7 +126,9 @@ public class MyMouseListener implements MouseListener, MouseMotionListener {
 		case SETTINGS:
 			game.getSettings().mouseReleased(e.getX(), e.getY());
 			break;
-		
+		case TOWER:
+			game.getTowers().mouseReleased(e.getX(), e.getY());
+			break;
 		default:
 			break;
 		}

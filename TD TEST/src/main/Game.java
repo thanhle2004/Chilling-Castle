@@ -6,10 +6,9 @@ import helpz.LoadPathImage;
 import inputs.KeyboardListener;
 import inputs.MyMouseListener;
 import managers.TileManager;
-import scenes.Menu;
-import scenes.Stage1;
-import scenes.Stage2;
-import scenes.Settings;
+import objects.SoundEffect;
+import scenes.*;
+import stages.Stage1;
 
 public class Game extends JFrame implements Runnable {
 
@@ -22,10 +21,12 @@ public class Game extends JFrame implements Runnable {
 	// Classes
 	private Render render;
 	private Menu menu;
-	private Stage1 stage1;
+	private Stages stages;
 	private Stage2 stage2;
 	private Settings settings;
-
+	private Towers towers;
+	private SoundEffect soundEffect;
+	private Stage1 stage1;
 
 	private TileManager tileManager;
 
@@ -53,9 +54,13 @@ public class Game extends JFrame implements Runnable {
 		render = new Render(this);
 		gameScreen = new GameScreen(this);
 		menu = new Menu(this);
-		stage1 = new Stage1(this);
+		settings = new Settings(this,menu);
+		towers = new Towers(this);
+		stages = new Stages(this,towers.getBottomBar());
+		stage1 = new Stage1(this, towers.getBottomBar(), settings);
 		stage2 = new Stage2(this);
-		settings = new Settings(this);
+
+		soundEffect = new SoundEffect();
 	
 
 	}
@@ -74,10 +79,14 @@ public class Game extends JFrame implements Runnable {
 		case STAGE1:
 			stage1.update();
 			break;
+		case STAGES:
+			break;
 		case STAGE2:
 			stage2.update();
 			break;
 		case SETTINGS:
+			break;
+		case TOWER:
 			break;
 		default:
 			break;
@@ -139,25 +148,22 @@ public class Game extends JFrame implements Runnable {
 	public Render getRender() {
 		return render;
 	}
-
 	public Menu getMenu() {
 		return menu;
 	}
-
-	public Stage1 getStage1() {
-		return stage1;
+	public Stages getStages() {
+		return stages;
 	}
-
 	public Settings getSettings() {
 		return settings;
 	}
-
 	public TileManager getTileManager() {
 		return tileManager;
 	}
-	
 	public Stage2 getStage2() {
 		return stage2;
 	}
+	public Towers getTowers() { return towers; }
+	public Stage1 getStage1() { return stage1; }
 
 }

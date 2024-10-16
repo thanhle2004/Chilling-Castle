@@ -3,17 +3,15 @@ package managers;
 import enemies.Enemy;
 import static helpz.Constants.Direction.*;
 import static helpz.Constants.Tiles.*;
-import scenes.Stage1;
+
 import scenes.Stage2;
 
-import java.util.ArrayList;
-
-import Map.Level1;
 import Map.Level2;
+import stages.Stage1;
 
 
 public class MoveManager {
-    private Stage1 stage1; 
+    private Stage1 stage1;
     private Stage2 stage2;
     private float speed = 0.5f; 
     private float previousX, previousY;
@@ -175,8 +173,9 @@ public class MoveManager {
 
     private int getTileType(int x, int y) {
         if (stage1 != null) {
-            return stage1.getTileType(x, y); 
-        } else if (stage2 != null) {
+            return stage1.getTileType(x, y);
+        }
+        if (stage2 != null) {
             return stage2.getTileType(x, y);  
         }
         return -1;  

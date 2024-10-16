@@ -19,9 +19,9 @@ public class Render {
 			game.getMenu().render(g);
 
 			break;
-		case STAGE1:
+		case STAGES:
 
-			game.getStage1().render(g);
+			game.getStages().render(g);
 
 			break;
 		case STAGE2:
@@ -32,6 +32,16 @@ public class Render {
 		case SETTINGS:
 
 			game.getSettings().render(g);
+
+			break;
+		case TOWER:
+
+			game.getTowers().render(g);
+
+			break;
+		case STAGE1:
+
+			game.getStage1().render(g);
 
 			break;
 		default:
