@@ -4,7 +4,7 @@ import enemies.Enemy;
 import static helpz.Constants.Direction.*;
 import static helpz.Constants.Tiles.*;
 
-import scenes.Stage2;
+import stages.Stage2;
 
 import Map.Level2;
 import stages.Stage1;
@@ -41,8 +41,8 @@ public class MoveManager {
             setNewDirectionAndMove(e,xTarget,yTarget); 
         }
         //System.out.println(e.getLastDir());
-        System.out.println(e.getX());
-        System.out.println(e.getY());
+//        System.out.println(e.getX());
+//        System.out.println(e.getY());
      
     }
     
@@ -72,7 +72,7 @@ public class MoveManager {
             newY1 / 32 >= 0 && newY1 / 32 < mapHeight) {
             // Safe to access the tile array
             tileValue = Level2.getLevelData2()[newY1 / 32][newX1 / 32];
-            System.out.println("Tile Value at [" + newX1 / 32 + "," + newY1 / 32 + "]: " + tileValue);
+//            System.out.println("Tile Value at [" + newX1 / 32 + "," + newY1 / 32 + "]: " + tileValue);
         } else {
         	if (dir == LEFT || dir == RIGHT) {
                 

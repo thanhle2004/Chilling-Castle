@@ -2,25 +2,25 @@ package scenes;
 
 import static main.GameStates.*;
 import static main.GameStates.SetGameState;
-
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
+import Map.Level1;
+import Map.Level2;
 import main.Game;
-import main.GameStates;
+import managers.EnemyManager;
 import objects.SoundEffect;
+import stages.Stage1;
 import stages.StageBoard;
-import towers.BottomBar;
-import towers.TowerBoard;
-import ui.MyButton;
+import ui.Button;
+import ui.TowerBar;
+
 
 public class Stages extends GameScene implements SceneMethods {
 
-    private StageBoard bMenu, selectedStage;
+    private Button bMenu, selectedStage;
     private StageBoard[] bStage = new StageBoard[4];
 
     private BufferedImage background, menuButton, warningImage;
@@ -28,17 +28,16 @@ public class Stages extends GameScene implements SceneMethods {
 
     private long warningStartTime = 0;
 
-    private BottomBar bottomBar;
-
-    private Towers towers;
+    private TowerBar towerBar;
 
     private SoundEffect soundEffect;
 
-    public Stages(Game game, BottomBar bottomBar) {
-        super(game);
-        this.bottomBar = bottomBar;
-        soundEffect = new SoundEffect();
+    private EnemyManager enemyManager;
 
+    public Stages(Game game, TowerBar towerBar) {
+        super(game);
+        this.towerBar = towerBar;
+        soundEffect = new SoundEffect();
         importImg();
         initButtons();
 
@@ -63,11 +62,13 @@ public class Stages extends GameScene implements SceneMethods {
     }
 
     private void initButtons() {
-        bMenu = new StageBoard("Menu", 530, 40, 65, 65, menuButton);
+        bMenu = new Button("Menu", 530, 40, 65, 65, menuButton);
 
         for (int i = 0; i < 4; i++) {
-            bStage[i] = new StageBoard("Stage" + (i + 1), 110, 120 + i * 90, 420, 70, bStageImg[i]);
+            bStage[i] = new StageBoard("Stage" + (i + 1), 110, 120 + i * 90, 420, 70, bStageImg[i], i);
         }
+
+
 
     }
 
@@ -80,9 +81,11 @@ public class Stages extends GameScene implements SceneMethods {
 
         drawStages(g);
 
-        bottomBar.draw(g);
+        towerBar.draw(g);
 
         drawWarning(g);
+
+
     }
 
     private void drawBackground(Graphics g) {
@@ -118,21 +121,22 @@ public class Stages extends GameScene implements SceneMethods {
             SetGameState(MENU);
             soundEffect.playEffect(1);
         } else {
-            for(int i = 0; i < 4; i++) {
-                if(bStage[i].getBounds().contains(x, y)) {
-                    for(int j = 0; j < 3; j++) {
-                        if(bottomBar.isEquippedTower()) {
+            for (int i = 0; i < 4; i++) {
+                if (bStage[i].getBounds().contains(x, y)) {
+                    for (int j = 0; j < 3; j++) {
+                        if (towerBar.isEquippedTower()) {
                             switch (i) {
                                 case 0:
                                     SetGameState(STAGE1);
                                     soundEffect.playEffect(1);
                                     break;
-//	                    		case 1:
-//	                        		SetGameState(STAGE2);
-//	                        		break;
-//	                    		case 2:
-//	                        		SetGameState(STAGE3);
-//	                        		break;
+                                case 1:
+                                    SetGameState(STAGE2);
+                                    soundEffect.playEffect(1);
+                                    break;
+//                                case 2:
+//                                    SetGameState(STAGE1);
+//                                    break;
 //	                    		case 3:
 //	                        		SetGameState(STAGE4);
 //	                        		break;
@@ -154,15 +158,15 @@ public class Stages extends GameScene implements SceneMethods {
     @Override
     public void mouseMoved(int x, int y) {
         bMenu.setMouseOver(false);
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             bStage[i].setMouseOver(false);
         }
 
         if (bMenu.getBounds().contains(x, y)) {
             bMenu.setMouseOver(true);
         } else {
-            for(int i = 0; i < 4; i++) {
-                if(bStage[i].getBounds().contains(x, y)) {
+            for (int i = 0; i < 4; i++) {
+                if (bStage[i].getBounds().contains(x, y)) {
                     bStage[i].setMouseOver(true);
                 }
             }
@@ -174,8 +178,8 @@ public class Stages extends GameScene implements SceneMethods {
         if (bMenu.getBounds().contains(x, y)) {
             bMenu.setMousePressed(true);
         } else {
-            for(int i = 0; i < 4; i++) {
-                if(bStage[i].getBounds().contains(x, y)) {
+            for (int i = 0; i < 4; i++) {
+                if (bStage[i].getBounds().contains(x, y)) {
                     bStage[i].setMousePressed(true);
                 }
             }
@@ -189,15 +193,20 @@ public class Stages extends GameScene implements SceneMethods {
 
     private void resetButtons() {
         bMenu.resetBooleans();
-        for(int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             bStage[i].resetBooleans();
         }
     }
 
     @Override
     public void mouseDragged(int x, int y) {
-        // TODO Auto-generated method stub
 
     }
+
+    @Override
+    public void keyPressed(int key) {
+
+    }
+
 
 }

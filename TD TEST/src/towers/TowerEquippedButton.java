@@ -5,9 +5,8 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import scenes.GameScene;
-import scenes.SceneMethods;
 import scenes.Towers;
+import ui.TowerBoard;
 
 public class TowerEquippedButton {
 

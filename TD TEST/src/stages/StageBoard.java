@@ -8,18 +8,19 @@ import java.awt.Rectangle;
 public class StageBoard {
 
     private BufferedImage img;
-    private int x, y, width, height;
+    private int x, y, width, height, id;
     private String text;
     private Rectangle bounds;
     private boolean mouseOver, mousePressed, mouseClicked;
 
-    public StageBoard(String text, int x, int y, int width, int height, BufferedImage img) {
+    public StageBoard(String text, int x, int y, int width, int height, BufferedImage img, int id) {
         this.text = text;
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
         this.img = img;
+        this.id = id;
 
         initBounds();
     }
@@ -100,6 +101,10 @@ public class StageBoard {
     public String getName() {
         // TODO Auto-generated method stub
         return text;
+    }
+
+    public int getId() {
+        return id;
     }
 
 }

@@ -13,7 +13,8 @@ import enemies.SLIME;
 import helpz.LoadPathImage;
 import main.GameStates;
 import scenes.GameScene;
-import scenes.Stage2;
+import scenes.Stages;
+import stages.Stage2;
 import stages.Stage1;
 
 import static helpz.Constants.Enemy.*;
@@ -26,15 +27,17 @@ public class EnemyManager {
 	private MoveManager moveManager;
 	private BufferedImage atlas;
 	private int xTarget, yTarget;
+	private Stages stages;
+
     // Constructor to initialize the EnemyManager with a stage
 	public EnemyManager(GameScene stage) {
-	    enemyImgs = new BufferedImage[6]; 
+	    enemyImgs = new BufferedImage[6];
 	    if (stage instanceof Stage1) {
 	        moveManager = new MoveManager((Stage1) stage);
 	        loadEnemyImgs(GameStates.STAGE1);
-	        xTarget = 19*32;
-	        yTarget = 9*32;
-	        addEnemy(OSTER, 0*32, 14 * 32);
+			addEnemy(OSTER, 0, 14 * 32);
+			xTarget = 19*32;
+			yTarget = 1*32;
 	    }
 	   	if (stage instanceof Stage2) {
 	        moveManager = new MoveManager((Stage2) stage);
@@ -68,8 +71,6 @@ public class EnemyManager {
     	// add vào toremove để tạm thời, sau đó xóa toàn bộ nó đi. vì e trong enemies và toRemove có chung địa chỉ.
     	ArrayList<Enemy> toRemove = new ArrayList<>();
         for (Enemy e : enemies) {
-
-            
             if (Math.abs(e.getX() - xTarget) < 1 && Math.abs(e.getY() - yTarget) < 1) {
             	 toRemove.add(e);
             } else {
@@ -99,8 +100,12 @@ public class EnemyManager {
 
   
     public void draw(Graphics g) {
-        for (Enemy e : enemies)
-            drawEnemy(e, g);
+			for (Enemy e : enemies)
+				drawEnemy(e, g);
+			System.out.println("Draw failure at");
+
+
+
     }
 
     
@@ -109,4 +114,13 @@ public class EnemyManager {
         // 1 tile is 32*32, monster is 23*23 so it takes an offset of 4*4
         g.drawImage(enemyImgs[imgIndex], (int) e.getX(), (int) e.getY(), null); 
     }
+
+	public void resetEnemies() {
+		enemies.clear();
+	}
+
 }
+
+
+
+

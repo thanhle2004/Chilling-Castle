@@ -2,7 +2,6 @@ package scenes;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
@@ -10,16 +9,14 @@ import main.Game;
 import main.Sound;
 import managers.SoundEffectManager;
 import objects.SoundEffect;
-import setting.SettingBoard;
-import stages.PauseSetting;
-import stages.StageBoard;
-import ui.MyButton;
+import ui.SettingButton;
+import ui.SettingBoardUI;
 
 import static main.GameStates.*;
 
 public class Settings extends GameScene implements SceneMethods {
 
-	private SettingBoard bMenu, bMusic, bSound, bMusicHandle, bSoundHandle;
+	private SettingButton bMenu, bMusic, bSound, bMusicHandle, bSoundHandle;
 
 	private Sound sound;
 
@@ -33,7 +30,7 @@ public class Settings extends GameScene implements SceneMethods {
 	public int musicX = 500, musicY = 190;
 	public int soundX = 500, soundY = 312;
 
-	private PauseSetting pauseSetting;
+	private SettingBoardUI pauseSetting;
 
 	public Settings(Game game, Menu menu) {
 		super(game);
@@ -45,17 +42,17 @@ public class Settings extends GameScene implements SceneMethods {
 
 		sound.stop();
 
-		bMusicHandle = new SettingBoard(null, musicX, musicY, 20, 20, sliderHandle);
+		bMusicHandle = new SettingButton(null, musicX, musicY, 20, 20, sliderHandle);
 
-		bSoundHandle = new SettingBoard(null, soundX, soundY, 20, 20, sliderHandle);
+		bSoundHandle = new SettingButton(null, soundX, soundY, 20, 20, sliderHandle);
 
 
 	}
 
 	private void initButtons() {
-		bMenu = new SettingBoard("Menu", 530, 40, 65, 65, menuButton);
-		bMusic = new SettingBoard(null, 275, 141, 60, 30, MusicStatus);
-		bSound = new SettingBoard(null, 275, 263, 60, 30, SoundStatus);
+		bMenu = new SettingButton("Menu", 530, 40, 65, 65, menuButton);
+		bMusic = new SettingButton(null, 275, 141, 60, 30, MusicStatus);
+		bSound = new SettingButton(null, 275, 263, 60, 30, SoundStatus);
 	}
 
 
@@ -239,6 +236,11 @@ public class Settings extends GameScene implements SceneMethods {
 
 
 		}
+	}
+
+	@Override
+	public void keyPressed(int key) {
+
 	}
 
 	@Override

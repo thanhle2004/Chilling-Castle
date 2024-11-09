@@ -1,19 +1,15 @@
 package scenes;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 
 import javax.imageio.ImageIO;
-import javax.swing.text.html.FormView;
 
 import main.Game;
 import objects.SoundEffect;
-import towers.BottomBar;
-import towers.TowerBoard;
-import towers.TowerEquippedButton;
+import ui.TowerBar;
+import ui.TowerBoard;
 import towers.TowerInfo;
 
 import static main.GameStates.*;
@@ -31,7 +27,7 @@ public class Towers extends GameScene implements SceneMethods {
     private TowerInfo[] tower = new TowerInfo[5];
     private TowerInfo towerSeclectedInfo;
 
-    private BottomBar bottomBar;
+    private TowerBar towerBar;
 
     private SoundEffect soundEffect;
 
@@ -44,7 +40,7 @@ public class Towers extends GameScene implements SceneMethods {
 
         soundEffect = new SoundEffect();
 
-        bottomBar = new BottomBar(0, 520, 640, 140, this);
+        towerBar = new TowerBar(0, 520, 640, 140, this);
 
     }
 
@@ -102,7 +98,7 @@ public class Towers extends GameScene implements SceneMethods {
 
         drawTowerInfo(g);
 
-        bottomBar.draw(g);
+        towerBar.draw(g);
     }
 
     private void drawBackground(Graphics g) {
@@ -178,7 +174,7 @@ public class Towers extends GameScene implements SceneMethods {
                     // Check if an empty slot is available
                     int slot = findEmptySlot();
                     if (slot != -1) {
-                        bottomBar.equipTower(towerSeclectedInfo, bTowerSelected, slot);
+                        towerBar.equipTower(towerSeclectedInfo, bTowerSelected, slot);
                     }
                     break;
                 }
@@ -186,10 +182,10 @@ public class Towers extends GameScene implements SceneMethods {
 
             //Remove tower
             for (int i = 0; i < 3; i++) {
-                if (bottomBar.getEquippedTower(i).getBounds().contains(x, y)) {
+                if (towerBar.getEquippedTower(i).getBounds().contains(x, y)) {
 
                     soundEffect.playEffect(1);
-                    bottomBar.removeTower(i);
+                    towerBar.removeTower(i);
 
                     break;
                 }
@@ -199,7 +195,7 @@ public class Towers extends GameScene implements SceneMethods {
 
     private boolean isTowerAlreadyEquipped(int towerNum) {
         for (int i = 0; i < 3; i++) {
-            if (bottomBar.getEquippedTower(i).getTowerNum() == towerNum) {
+            if (towerBar.getEquippedTower(i).getTowerNum() == towerNum) {
                 return true;  //already equipped
             }
         }
@@ -209,7 +205,7 @@ public class Towers extends GameScene implements SceneMethods {
     private int findEmptySlot() {
 
         for (int i = 0; i < 3; i++) {
-            if (bottomBar.getEquippedTower(i).getTowerNum() == 0) {
+            if (towerBar.getEquippedTower(i).getTowerNum() == 0) {
                 return i;
             }
         }
@@ -264,14 +260,14 @@ public class Towers extends GameScene implements SceneMethods {
         return bTowerSelected;
     }
 
-    public BottomBar getBottomBar() {
-        return bottomBar;
+    public TowerBar getBottomBar() {
+        return towerBar;
     }
 
     @Override
-    public void mouseDragged(int x, int y) {
-        // TODO Auto-generated method stub
+    public void mouseDragged(int x, int y) {}
 
-    }
+    @Override
+    public void keyPressed(int key) {}
 
 }

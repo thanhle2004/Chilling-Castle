@@ -2,13 +2,12 @@ package main;
 
 import javax.swing.JFrame;
 
-import helpz.LoadPathImage;
-import inputs.KeyboardListener;
-import inputs.MyMouseListener;
+import managers.StageManager;
 import managers.TileManager;
 import objects.SoundEffect;
 import scenes.*;
 import stages.Stage1;
+import stages.Stage2;
 
 public class Game extends JFrame implements Runnable {
 
@@ -27,11 +26,10 @@ public class Game extends JFrame implements Runnable {
 	private Towers towers;
 	private SoundEffect soundEffect;
 	private Stage1 stage1;
-
 	private TileManager tileManager;
+	private StageManager stageManager;
 
 	public Game() {
-
 		initClasses();
 		createDefaultLevel();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -40,7 +38,6 @@ public class Game extends JFrame implements Runnable {
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
-
 	}
 
 	private void createDefaultLevel() {
@@ -58,11 +55,8 @@ public class Game extends JFrame implements Runnable {
 		towers = new Towers(this);
 		stages = new Stages(this,towers.getBottomBar());
 		stage1 = new Stage1(this, towers.getBottomBar(), settings);
-		stage2 = new Stage2(this);
-
+		stage2 = new Stage2(this, towers.getBottomBar(), settings);
 		soundEffect = new SoundEffect();
-	
-
 	}
 
 	private void start() {
@@ -76,10 +70,10 @@ public class Game extends JFrame implements Runnable {
 		switch (GameStates.gameState) {
 		case MENU:
 			break;
+		case STAGES:
+			break;
 		case STAGE1:
 			stage1.update();
-			break;
-		case STAGES:
 			break;
 		case STAGE2:
 			stage2.update();
@@ -93,12 +87,12 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 
-	public static void main(String[] args) {
 
+
+	public static void main(String[] args) {
 		Game game = new Game();
 		game.gameScreen.initInputs();
 		game.start();
-
 	}
 
 	@Override
@@ -119,6 +113,15 @@ public class Game extends JFrame implements Runnable {
 		while (true) {
 			now = System.nanoTime();
 
+			// Update
+			if(stage1.isPaused() == false) {
+				if (now - lastUpdate >= timePerUpdate) {
+					updateGame();
+					lastUpdate = now;
+					updates++;
+				}
+			}
+
 			// Render
 			if (now - lastFrame >= timePerFrame) {
 				repaint();
@@ -126,15 +129,7 @@ public class Game extends JFrame implements Runnable {
 				frames++;
 			}
 
-			// Update
-			if (now - lastUpdate >= timePerUpdate) {
-				updateGame();
-				lastUpdate = now;
-				updates++;
-			}
-
 			if (System.currentTimeMillis() - lastTimeCheck >= 1000) {
-				System.out.println("FPS: " + frames + " | UPS: " + updates);
 				frames = 0;
 				updates = 0;
 				lastTimeCheck = System.currentTimeMillis();
