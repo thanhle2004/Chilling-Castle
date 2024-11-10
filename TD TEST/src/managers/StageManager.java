@@ -21,12 +21,12 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     protected int mouseX, mouseY;
     protected EnemyManager enemyManager;
     protected Settings settings;
-    protected SettingBoardUI pauseSetting;
+    protected SettingBoardUI SettingBoardUI;
     protected TowerBar towerBar;
     protected SoundEffect soundEffect;
     protected BufferedImage optionButton;
     protected Button bOption;
-    protected boolean isPaused = false, isContinue = false;
+    public static boolean isPaused = false;
 
     public StageManager(Game game, TowerBar towerBar, Settings settings) {
         super(game);
@@ -38,11 +38,10 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         this.towerBar = towerBar;
         this.settings = settings;
         enemyManager = new EnemyManager(this);
-        pauseSetting = new SettingBoardUI(37, 15, 560, 555, settings);
+        soundEffect = new SoundEffect();
+        SettingBoardUI = new SettingBoardUI(37, 15, 560, 555, settings);
         
     }
-
-
 
     private void initButtons() {
         bOption = new Button(null, 2, 2, 50, 50, optionButton);
@@ -110,21 +109,22 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     public void mouseClicked(int x, int y) {
 
         if (bOption.getBounds().contains(x, y)) {
-            togglePause();
+            isPaused = !isPaused;
             soundEffect.playEffect(1);
         }
 
         if(isPaused && x >= 30 && x <= 590 && y >= 15 && y <= 570) {
-            pauseSetting.mouseClicked(x, y);
-
+            soundEffect.playEffect(1);
+            SettingBoardUI.mouseClicked(x, y);
         }
 
-        if (isPaused && pauseSetting.bContinue.getBounds().contains(x, y)) {
+        if (isPaused && SettingBoardUI.bContinue.getBounds().contains(x, y)) {
             isPaused = false;
             soundEffect.playEffect(1);
         }
 
-        if (isPaused && pauseSetting.bReplay.getBounds().contains(x, y)) {
+        if (isPaused && SettingBoardUI.bReplay.getBounds().contains(x, y)) {
+            soundEffect.playEffect(1);
             resetGame();
         }
 
@@ -157,32 +157,25 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
     @Override
     public void mouseDragged(int x, int y) {
-
+        SettingBoardUI.mouseDragged(x,y);
     }
 
     private void drawButtonPaused(Graphics g) {
         if (!isPaused) {
             bOption.draw(g);
         } else {
-            pauseSetting.drawSettings(g);
+            SettingBoardUI.drawSettings(g);
         }
     }
 
-    public void togglePause() {
-        isPaused = !isPaused;
-    }
-
-    public boolean isPaused() {
-        return isPaused;
-    }
 
     protected void resetGame() {
         enemyManager.resetEnemies();
     }
 
     @Override
-    public void keyPressed(int key) {
+    public void keyPressed(int key) {}
 
-    }
+
 
 }

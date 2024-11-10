@@ -2,6 +2,7 @@ package ui;
 
 import managers.SoundEffectManager;
 import objects.SoundEffect;
+import scenes.SceneMethods;
 import scenes.Settings;
 import stages.Stage1;
 
@@ -18,7 +19,7 @@ public class SettingBoardUI {
     private int x, y, width, height;
 
     private BufferedImage img, MusicStatus, SoundStatus, onButton, offButton;
-    private BufferedImage sliderHandle, slider1, slider2, HomeButton, ContinueButton, ReplayButton;
+    private BufferedImage sliderHandle, slider1, HomeButton, ContinueButton, ReplayButton;
 
     private SettingButton bMusic, bSound, bMusicHandle, bSoundHandle;
     public SettingButton bHome, bContinue, bReplay;
@@ -26,12 +27,9 @@ public class SettingBoardUI {
 
     private Settings settings;
     private SoundEffect soundEffect;
-    private SoundEffectManager soundEffectManager;
 
     public int musicX, musicY;
     public int soundX, soundY;
-
-    private Stage1 stage1;
 
     public SettingBoardUI(int x, int y, int width, int height, Settings settings) {
 
@@ -48,15 +46,13 @@ public class SettingBoardUI {
         importImage();
         initButtons();
 
-        musicX = settings.getMusicX();
-        musicY = settings.getMusicY();
-        soundX = settings.getSoundX();
-        soundY = settings.getSoundY();
+        this.musicX = settings.getMusicX();
+        this.musicY = settings.getMusicY();
+        this.soundX = settings.getSoundX();
+        this.soundY = settings.getSoundY();
 
         bMusicHandle = new SettingButton(null, musicX, musicY, 20, 20, sliderHandle);
-
         bSoundHandle = new SettingButton(null, soundX, soundY, 20, 20, sliderHandle);
-
         bHome = new SettingButton(null, 90, 380, 130, 75, HomeButton);
         bReplay = new SettingButton(null, 255, 380, 130, 75, ReplayButton);
         bContinue = new SettingButton(null, 420, 380, 130, 75, ContinueButton);
@@ -65,11 +61,13 @@ public class SettingBoardUI {
     private void importImage() {
         try {
             img = ImageIO.read(getClass().getResourceAsStream("/InGameSetting.png"));
-            onButton = ImageIO.read(getClass().getResourceAsStream("/onButton.png"));
-            offButton = ImageIO.read(getClass().getResourceAsStream("/offButton.png"));
+//            onButton = ImageIO.read(getClass().getResourceAsStream("/onButton.png"));
+//            offButton = ImageIO.read(getClass().getResourceAsStream("/offButton.png"));
+            onButton = settings.onButton;
+            offButton = settings.offButton;
 
             slider1 = ImageIO.read(getClass().getResourceAsStream("/slider1.png"));
-            slider2 = ImageIO.read(getClass().getResourceAsStream("/slider2.png"));
+//            slider2 = ImageIO.read(getClass().getResourceAsStream("/slider2.png"));
             sliderHandle = ImageIO.read(getClass().getResourceAsStream("/sliderHandle.png"));
 
             HomeButton = ImageIO.read(getClass().getResourceAsStream("/HomeButton.png"));
@@ -81,9 +79,7 @@ public class SettingBoardUI {
     }
 
     public void drawSettings(Graphics g) {
-
         g.drawImage(img, x, y, width, height, null);
-
         drawButtons(g);
     }
 
@@ -93,24 +89,21 @@ public class SettingBoardUI {
     }
 
     private void drawButtons(Graphics g) {
-        MusicStatus = settings.getMusicStatus();
-        SoundStatus = settings.getSoundStatus();
 
-        bMusic.setImg(MusicStatus);
+        bMusic.setImg(settings.getMusicStatus());
         bMusic.draw(g);
 
-        if(MusicStatus.equals(onButton)) {
+        if(settings.getMusicStatus() == settings.getOnButton()) {
             drawMusicSlider1(g);
             bMusicHandle.setPosX(settings.getMusicX());
             bMusicHandle.setPosY(settings.getMusicY());
             drawMusicHandle(g);
-
         }
 
         bSound.setImg(SoundStatus);
         bSound.draw(g);
 
-        if(SoundStatus.equals(onButton)) {
+        if(settings.getMusicStatus() == settings.getOnButton()) {
             drawSoundSlider1(g);
             bSoundHandle.setPosX(settings.getSoundX());
             bSoundHandle.setPosY(settings.getSoundY());
@@ -120,6 +113,59 @@ public class SettingBoardUI {
         bHome.draw(g);
         bContinue.draw(g);
         bReplay.draw(g);
+    }
+
+
+
+    public void mouseClicked(int x, int y) {
+        if(bHome.getBounds().contains(x, y)) {
+            SetGameState(MENU);
+        }
+
+        if(bMusic.getBounds().contains(x, y)) {
+			if(settings.getMusicStatus() == settings.getOnButton()) {
+				musicX = 280;
+				musicY = 190;
+				settings.setMusicStatus(offButton);
+				soundEffect.playEffect(1);
+                settings.offMusicBackground();
+
+
+			} else {
+				musicX = 500;
+				musicY = 190;
+                settings.setMusicStatus(onButton);
+				soundEffect.playEffect(1);
+                settings.onMusicBackground();
+			}
+		}
+
+		if(bSound.getBounds().contains(x, y)) {
+			if(settings.getMusicStatus() == settings.getOnButton()) {
+				SoundStatus = offButton;
+				soundX = 280;
+				soundY = 312;
+
+			} else {
+				SoundStatus = onButton;
+				soundX = 500;
+				soundY = 312;
+
+				soundEffect.playEffect(1);
+			}
+
+		}
+
+    }
+
+    public void mousePressed(int x, int y) {
+        if(bMusicHandle.getBounds().contains(x, y)) {
+            bMusicHandle.setMousePressed(true);
+        }
+    }
+
+    public void mouseDragged(int x, int y) {
+        settings.mouseDragged(x, y);
     }
 
     public void drawMusicSlider1(Graphics g) {
@@ -138,96 +184,5 @@ public class SettingBoardUI {
         bSoundHandle.draw(g);
     }
 
-    public void mouseClicked(int x, int y) {
-        if(bHome.getBounds().contains(x, y)) {
-            SetGameState(MENU);
-        }
-
-        if(bMusic.getBounds().contains(x, y)) {
-
-            if(MusicStatus == onButton) {
-                musicX = 280;
-                musicY = 190;
-                MusicStatus = offButton;
-                soundEffect.playEffect(1);
-                settings.offMusicBackground();
-                settings.setMusicX(musicX);
-                settings.setMusicY(musicY);
-                settings.setMusicStatus(MusicStatus);
-            } else {
-                musicX = 500;
-                musicY = 190;
-                MusicStatus = onButton;
-                soundEffect.playEffect(1);
-                settings.onMusicBackground();
-                settings.setMusicX(musicX);
-                settings.setMusicY(musicY);
-                settings.setMusicStatus(MusicStatus);
-            }
-        }
-
-        if(bSound.getBounds().contains(x, y)) {
-
-            if(SoundStatus == onButton) {
-                SoundStatus = offButton;
-                soundX = 280;
-                soundY = 312;
-
-                SoundEffectManager.muteAllSounds();
-                settings.setSoundX(soundX);
-                settings.setSoundY(soundY);
-                settings.setSoundStatus(SoundStatus);
-            } else {
-                SoundStatus = onButton;
-                soundX = 500;
-                soundY = 312;
-
-                SoundEffectManager.unmuteAllSounds();
-                soundEffect.playEffect(1);
-                settings.setSoundX(soundX);
-                settings.setSoundY(soundY);
-                settings.setSoundStatus(SoundStatus);
-            }
-
-        }
-
-    }
-
-    public void mouseMoved(int x, int y) {
-
-    }
-
-    public void mousePressed(int x, int y) {
-
-        if(bMusicHandle.getBounds().contains(x, y)) {
-            bMusicHandle.setMousePressed(true);
-        }
-
-    }
-
-    public void mouseDragged(int x, int y) {
-        if (x <= 500 && x >= 279 && y >= 190 && y <= 220) {
-            musicX = x;
-            musicY = 190;
-
-            settings.setMusicX(musicX);
-
-        }
-
-        if (x <= 500 && x >= 279 && y >= 310 && y <= 330) {
-            soundX = x;
-            soundY = 312;
-
-            settings.setSoundX(soundX);
-        }
-    }
-
-    public void mouseReleased(int x, int y) {
-        resetButtons();
-    }
-
-    private void resetButtons() {
-
-    }
 
 }

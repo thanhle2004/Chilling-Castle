@@ -9,15 +9,15 @@ import javax.imageio.ImageIO;
 import main.Game;
 import objects.SoundEffect;
 import ui.TowerBar;
-import ui.TowerBoard;
+import ui.TowerButton;
 import towers.TowerInfo;
 
 import static main.GameStates.*;
 
 public class Towers extends GameScene implements SceneMethods {
 
-    private TowerBoard bMenu, bTowerSelected;
-    private TowerBoard[] bTower = new TowerBoard[5];
+    private TowerButton bMenu, bTowerSelected;
+    private TowerButton[] bTower = new TowerButton[5];
 
     private BufferedImage[] towerImages, towerInfo;
     private BufferedImage background, menuButton, towerFrame;
@@ -45,7 +45,7 @@ public class Towers extends GameScene implements SceneMethods {
     }
 
     private void createTowerSelected() {
-        bTowerSelected = new TowerBoard(null, 0, 0, 0, 0, towerFrame);
+        bTowerSelected = new TowerButton(null, 0, 0, 0, 0, towerFrame);
         towerSeclectedInfo = new TowerInfo(null, null, 0, 0, 0, 0, 0, 0, 0);
     }
 
@@ -71,10 +71,10 @@ public class Towers extends GameScene implements SceneMethods {
     }
 
     private void initButtons() {
-        bMenu = new TowerBoard("Menu", 530, 40, 65, 65, menuButton);
+        bMenu = new TowerButton("Menu", 530, 40, 65, 65, menuButton);
 
         for (int i = 0; i < 5; i++) {
-            bTower[i] = new TowerBoard("Tower" + (i + 1), 90 + i * 95, 120, 80, 80, towerImages[i]);
+            bTower[i] = new TowerButton("Tower" + (i + 1), 90 + i * 95, 120, 80, 80, towerImages[i]);
         }
 
 
@@ -256,7 +256,7 @@ public class Towers extends GameScene implements SceneMethods {
         return towerSeclectedInfo;
     }
 
-    public TowerBoard getBTowerSeclected() {
+    public TowerButton getBTowerSeclected() {
         return bTowerSelected;
     }
 

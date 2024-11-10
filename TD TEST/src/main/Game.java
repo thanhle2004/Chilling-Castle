@@ -31,19 +31,13 @@ public class Game extends JFrame implements Runnable {
 
 	public Game() {
 		initClasses();
-		createDefaultLevel();
+
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		add(gameScreen);
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);
-	}
-
-	private void createDefaultLevel() {
-		int[] arr = new int[400];
-		for (int i = 0; i < arr.length; i++)
-			arr[i] = 0;
 	}
 
 	private void initClasses() {
@@ -87,8 +81,6 @@ public class Game extends JFrame implements Runnable {
 		}
 	}
 
-
-
 	public static void main(String[] args) {
 		Game game = new Game();
 		game.gameScreen.initInputs();
@@ -97,24 +89,20 @@ public class Game extends JFrame implements Runnable {
 
 	@Override
 	public void run() {
-
 		double timePerFrame = 1000000000.0 / FPS_SET;
 		double timePerUpdate = 1000000000.0 / UPS_SET;
-
 		long lastFrame = System.nanoTime();
 		long lastUpdate = System.nanoTime();
 		long lastTimeCheck = System.currentTimeMillis();
-
 		int frames = 0;
 		int updates = 0;
-
 		long now;
 
 		while (true) {
 			now = System.nanoTime();
 
 			// Update
-			if(stage1.isPaused() == false) {
+			if(StageManager.isPaused == false) {
 				if (now - lastUpdate >= timePerUpdate) {
 					updateGame();
 					lastUpdate = now;

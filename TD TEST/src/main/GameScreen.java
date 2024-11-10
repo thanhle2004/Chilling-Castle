@@ -33,12 +33,10 @@ public class GameScreen extends JPanel {
 	}
 
 	private void setPanelSize() {
-		size = new Dimension(640, 740);
-
+		size = new Dimension(640, 640);
 		setMinimumSize(size);
 		setPreferredSize(size);
 		setMaximumSize(size);
-
 	}
 
 	public void paintComponent(Graphics g) {

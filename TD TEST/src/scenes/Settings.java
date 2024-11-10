@@ -6,47 +6,41 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
 import main.Game;
-import main.Sound;
 import managers.SoundEffectManager;
 import objects.SoundEffect;
 import ui.SettingButton;
-import ui.SettingBoardUI;
+
 
 import static main.GameStates.*;
 
 public class Settings extends GameScene implements SceneMethods {
 
 	private SettingButton bMenu, bMusic, bSound, bMusicHandle, bSoundHandle;
-
-	private Sound sound;
+	private int tempMusic;
 
 	private Menu menu;
 
 	private SoundEffect soundEffect;
 
-	private BufferedImage background, menuButton, MusicStatus, SoundStatus, onButton, offButton;
+	private BufferedImage background, menuButton;
+	public BufferedImage SoundStatus, onButton, offButton;
+	private BufferedImage MusicStatus;
+
 	private BufferedImage sliderHandle, slider1, slider2;
 
 	public int musicX = 500, musicY = 190;
 	public int soundX = 500, soundY = 312;
-
-	private SettingBoardUI pauseSetting;
+	private float musicVolume;
 
 	public Settings(Game game, Menu menu) {
 		super(game);
 		this.menu = menu;
-		sound = new Sound();
 		soundEffect = new SoundEffect();
 		importImg();
 		initButtons();
-
-		sound.stop();
-
+		soundEffect.getSoundStop().stop();
 		bMusicHandle = new SettingButton(null, musicX, musicY, 20, 20, sliderHandle);
-
 		bSoundHandle = new SettingButton(null, soundX, soundY, 20, 20, sliderHandle);
-
-
 	}
 
 	private void initButtons() {
@@ -58,11 +52,9 @@ public class Settings extends GameScene implements SceneMethods {
 
 	@Override
 	public void render(Graphics g) {
-
 		drawBackground(g);
-
-		drawButtons(g);
-
+		drawButton(g);
+		bMenu.draw(g);
 	}
 
 
@@ -70,9 +62,7 @@ public class Settings extends GameScene implements SceneMethods {
 		g.drawImage(background, 0, 0, game);
 	}
 
-	private void drawButtons(Graphics g) {
-
-		bMenu.draw(g);
+	private void drawButton(Graphics g) {
 
 		bMusic.setImg(MusicStatus);
 		bMusic.draw(g);
@@ -85,6 +75,7 @@ public class Settings extends GameScene implements SceneMethods {
 			drawMusicHandle(g);
 		} else {
 			offMusicBackground();
+
 		}
 
 		bSound.setImg(SoundStatus);
@@ -100,6 +91,8 @@ public class Settings extends GameScene implements SceneMethods {
 			SoundEffectManager.muteAllSounds();
 		}
 	}
+
+
 
 	public void drawMusicSlider1(Graphics g) {
 		g.drawImage(slider1, 273, 185, 250, 30, game);
@@ -117,7 +110,7 @@ public class Settings extends GameScene implements SceneMethods {
 		bSoundHandle.draw(g);
 	}
 
-	private void importImg() {
+	public void importImg() {
 
 		try {
 
@@ -142,14 +135,14 @@ public class Settings extends GameScene implements SceneMethods {
 
 	private float calculateVolume(int i) {
 		float volume = (float)(i - 280) / (500 - 280);
-		volume = Math.max(0.0f, Math.min(volume, 1.0f)); // Chắc chắn rằng âm lượng nằm trong khoảng [0, 1]
+		volume = Math.max(0.0f, Math.min(volume, 1.0f));
 		return volume;
 	}
 
 
 	@Override
 	public void mouseClicked(int x, int y) {
-
+		System.out.println("SoundX" + musicX );
 		if (bMenu.getBounds().contains(x, y)) {
 			SetGameState(MENU);
 			soundEffect.playEffect(1);;
@@ -163,11 +156,13 @@ public class Settings extends GameScene implements SceneMethods {
 				MusicStatus = offButton;
 				soundEffect.playEffect(1);
 
+
 			} else {
-				musicX = 500;
+				musicX = tempMusic;
 				musicY = 190;
 				MusicStatus = onButton;
 				soundEffect.playEffect(1);
+
 
 			}
 		}
@@ -214,12 +209,12 @@ public class Settings extends GameScene implements SceneMethods {
 	public void mouseDragged(int x, int y) {
 		if (x <= 500 && x >= 279 && y >= 190 && y <= 220) {
 			musicX = x;
+			tempMusic = x;
 			musicY = 190;
 
-			float musicVolume = calculateVolume(musicX);
-			menu.setMusicVolume(musicVolume);
-
+			musicVolume = calculateVolume(musicX);
 			int volumePercent = (int) (musicVolume * 100);
+			menu.setMusicVolume(musicVolume);
 			System.out.println("Music Volume: " + volumePercent + "%");
 		}
 
@@ -228,7 +223,6 @@ public class Settings extends GameScene implements SceneMethods {
 			soundY = 312;
 
 			float effectVolume = calculateVolume(soundX);
-
 
 			int volumePercent = (int) (effectVolume * 100);
 			System.out.println("Sound Effect Volume: " + volumePercent + "%");
@@ -239,19 +233,15 @@ public class Settings extends GameScene implements SceneMethods {
 	}
 
 	@Override
-	public void keyPressed(int key) {
-
-	}
+	public void keyPressed(int key) {}
 
 	@Override
 	public void mouseReleased(int x, int y) {
 		resetButtons();
-
 	}
 
 	private void resetButtons() {
 		bMenu.resetBooleans();
-
 	}
 
 	//Getter
@@ -312,12 +302,13 @@ public class Settings extends GameScene implements SceneMethods {
 		menu.setMusicBackgroundPlay();
 	}
 
-	public BufferedImage getOnStatus() {
+	public BufferedImage getOnButton() {
 		return onButton;
 	}
 
-	public BufferedImage getOffStatus() {
+	public BufferedImage getOffButton() {
 		return offButton;
 	}
+
 
 }

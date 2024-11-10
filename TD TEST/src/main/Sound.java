@@ -10,22 +10,18 @@ import java.net.URL;
 public class Sound {
 
     private Clip Clip;
-    URL soundURL[] = new URL[30];
+    URL[] soundURL = new URL[30];
     FloatControl musicVolumeControl, effectVolumeControl;
 
     public Sound() {
-
         soundURL[0] = getClass().getResource("/soundLobby.wav");
         System.out.println("Accessed " + soundURL[0]);
         soundURL[1] = getClass().getResource("/soundPress.wav");
         soundURL[2] = getClass().getResource("/soundWarning.wav");
-
     }
 
     public void setFile(int i) {
-
         try {
-
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
             Clip = AudioSystem.getClip();
             Clip.open(ais);
@@ -38,13 +34,11 @@ public class Sound {
     }
 
     public void play() {
-
         Clip.start();
     }
 
 
     public void loop() {
-
         Clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
@@ -59,8 +53,8 @@ public class Sound {
             float min = musicVolumeControl.getMinimum();
             float max = musicVolumeControl.getMaximum();
 
-            float gain = min + (max - min) * volume;
-            musicVolumeControl.setValue(gain);
+            float dB = min + (float) (Math.log10(1 + 9 * volume) * (max - min));
+            musicVolumeControl.setValue(dB);
         }
     }
 

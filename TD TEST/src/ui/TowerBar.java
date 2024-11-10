@@ -38,7 +38,7 @@ public class TowerBar extends Bar{
         }
     }
 
-    public void equipTower(TowerInfo selectedTower, TowerBoard bSelectedTower, int position) {
+    public void equipTower(TowerInfo selectedTower, TowerButton bSelectedTower, int position) {
         if (position >= 0 && position < towerEquippedButtons.length) {
             towerEquippedButtons[position] = new TowerEquippedButton(bSelectedTower.getImage(), 180 + position * 100, 530, 80, 80, selectedTower.getTowerDamage(), selectedTower.getTowerCooldown(), selectedTower.getTowerRange(), selectedTower.getTowerCost(), selectedTower.getNumber());
         }

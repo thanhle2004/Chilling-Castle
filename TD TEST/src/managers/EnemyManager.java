@@ -20,8 +20,7 @@ import stages.Stage1;
 import static helpz.Constants.Enemy.*;
 
 public class EnemyManager {
-	private Stage1 stage1;
-	private Stage2 stage2;
+
 	BufferedImage[] enemyImgs; 
 	private ArrayList<Enemy> enemies = new ArrayList<>(); 
 	private MoveManager moveManager;
@@ -29,7 +28,6 @@ public class EnemyManager {
 	private int xTarget, yTarget;
 	private Stages stages;
 
-    // Constructor to initialize the EnemyManager with a stage
 	public EnemyManager(GameScene stage) {
 	    enemyImgs = new BufferedImage[6];
 	    if (stage instanceof Stage1) {
@@ -102,13 +100,8 @@ public class EnemyManager {
     public void draw(Graphics g) {
 			for (Enemy e : enemies)
 				drawEnemy(e, g);
-			System.out.println("Draw failure at");
-
-
-
     }
 
-    
     private void drawEnemy(Enemy e, Graphics g) {
         int imgIndex = e.getImgIndex(); 
         // 1 tile is 32*32, monster is 23*23 so it takes an offset of 4*4

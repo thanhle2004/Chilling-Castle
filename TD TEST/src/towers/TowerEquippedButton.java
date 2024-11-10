@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import scenes.Towers;
-import ui.TowerBoard;
+import ui.TowerButton;
 
 public class TowerEquippedButton {
 
@@ -18,7 +18,7 @@ public class TowerEquippedButton {
     private Rectangle bounds;
     private boolean mouseOver, mousePressed, mouseClicked;
 
-    private TowerBoard[] towersEquipped = new TowerBoard[3];
+    private TowerButton[] towersEquipped = new TowerButton[3];
     private TowerInfo[] towersEquipInfo = new TowerInfo[3];
 
     private int maxEquippedTowers = 3;

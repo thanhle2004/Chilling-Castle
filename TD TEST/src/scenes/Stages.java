@@ -7,13 +7,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-import Map.Level1;
-import Map.Level2;
 import main.Game;
 import managers.EnemyManager;
 import objects.SoundEffect;
-import stages.Stage1;
-import stages.StageBoard;
+import ui.StageButton;
 import ui.Button;
 import ui.TowerBar;
 
@@ -21,7 +18,7 @@ import ui.TowerBar;
 public class Stages extends GameScene implements SceneMethods {
 
     private Button bMenu, selectedStage;
-    private StageBoard[] bStage = new StageBoard[4];
+    private StageButton[] bStage = new StageButton[4];
 
     private BufferedImage background, menuButton, warningImage;
     private BufferedImage[] bStageImg;
@@ -58,17 +55,14 @@ public class Stages extends GameScene implements SceneMethods {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     private void initButtons() {
         bMenu = new Button("Menu", 530, 40, 65, 65, menuButton);
 
         for (int i = 0; i < 4; i++) {
-            bStage[i] = new StageBoard("Stage" + (i + 1), 110, 120 + i * 90, 420, 70, bStageImg[i], i);
+            bStage[i] = new StageButton("Stage" + (i + 1), 110, 120 + i * 90, 420, 70, bStageImg[i], i);
         }
-
-
 
     }
 
@@ -97,7 +91,7 @@ public class Stages extends GameScene implements SceneMethods {
     }
 
     public void drawStages(Graphics g) {
-        for (StageBoard stage : bStage) {
+        for (StageButton stage : bStage) {
             stage.draw(g);
         }
     }
@@ -145,8 +139,6 @@ public class Stages extends GameScene implements SceneMethods {
                             soundEffect.playEffect(2);
                             warningStartTime = System.currentTimeMillis();
                         }
-
-
                     }
 
                 }
@@ -200,12 +192,10 @@ public class Stages extends GameScene implements SceneMethods {
 
     @Override
     public void mouseDragged(int x, int y) {
-
     }
 
     @Override
     public void keyPressed(int key) {
-
     }
 
 
