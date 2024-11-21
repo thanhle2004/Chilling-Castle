@@ -1,5 +1,8 @@
 package ui;
 
+import Map.Level1;
+import Map.Level2;
+import main.GameStates;
 import scenes.Towers;
 import towers.TowerEquippedButton;
 import towers.TowerInfo;
@@ -10,17 +13,21 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import static helpz.Constants.Tiles.GRASS_TILE;
+
 public class TowerBar extends Bar{
 
     private BufferedImage towerFrame;
     private TowerEquippedButton[] towerEquippedButtons = new TowerEquippedButton[3];
     private Towers towers;
 
+    private int mouseX, mouseY;
     public TowerBar(int x, int y, int width, int height, Towers towers) {
         super(x,y,width,height);
         this.towers = towers;
         importImg();
         initButtons();
+
     }
 
     private void importImg() {
@@ -40,13 +47,18 @@ public class TowerBar extends Bar{
 
     public void equipTower(TowerInfo selectedTower, TowerButton bSelectedTower, int position) {
         if (position >= 0 && position < towerEquippedButtons.length) {
-            towerEquippedButtons[position] = new TowerEquippedButton(bSelectedTower.getImage(), 180 + position * 100, 530, 80, 80, selectedTower.getTowerDamage(), selectedTower.getTowerCooldown(), selectedTower.getTowerRange(), selectedTower.getTowerCost(), selectedTower.getNumber());
+            towerEquippedButtons[position] = new TowerEquippedButton(bSelectedTower.getImage(), 180 + position * 100, 530, 80, 80, selectedTower.getTowerDamage(), selectedTower.getTowerCooldown(), selectedTower.getTowerRange(), selectedTower.getTowerCost(), selectedTower.getId());
         }
     }
 
     public void draw(Graphics g) {
         drawButtons(g);
+
+
     }
+
+
+
 
     public void removeTower(int slot) {
         if (slot >= 0 && slot < 3) {
@@ -61,12 +73,12 @@ public class TowerBar extends Bar{
         }
     }
 
-    public void mouseClicked(int x, int y) {
-
+    public void mouseClicked(GameStates gameStates ,int x, int y) {
     }
 
     public void mouseMoved(int x, int y) {
-
+            mouseX = (x / 32) * 32;
+            mouseY = (y / 32) * 32;
     }
 
     public void mousePressed(int x, int y) {
@@ -82,10 +94,8 @@ public class TowerBar extends Bar{
             case 0:
                 return towerEquippedButtons[0];
 
-
             case 1:
                 return towerEquippedButtons[1];
-
 
             case 2:
                 return towerEquippedButtons[2];
@@ -93,7 +103,6 @@ public class TowerBar extends Bar{
             default:
                 break;
         }
-
         return null;
     }
 

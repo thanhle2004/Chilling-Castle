@@ -78,6 +78,8 @@ public class SettingBoardUI {
         }
     }
 
+
+
     public void drawSettings(Graphics g) {
         g.drawImage(img, x, y, width, height, null);
         drawButtons(g);
@@ -100,10 +102,10 @@ public class SettingBoardUI {
             drawMusicHandle(g);
         }
 
-        bSound.setImg(SoundStatus);
+        bSound.setImg(settings.getSoundStatus());
         bSound.draw(g);
 
-        if(settings.getMusicStatus() == settings.getOnButton()) {
+        if(settings.getSoundStatus() == settings.getOnButton()) {
             drawSoundSlider1(g);
             bSoundHandle.setPosX(settings.getSoundX());
             bSoundHandle.setPosY(settings.getSoundY());
@@ -141,16 +143,16 @@ public class SettingBoardUI {
 		}
 
 		if(bSound.getBounds().contains(x, y)) {
-			if(settings.getMusicStatus() == settings.getOnButton()) {
-				SoundStatus = offButton;
+			if(settings.getSoundStatus() == settings.getOnButton()) {
+				settings.setSoundStatus(offButton);
 				soundX = 280;
 				soundY = 312;
+                SoundEffectManager.muteAllSounds();
 
 			} else {
-				SoundStatus = onButton;
+				settings.setSoundStatus(onButton);
 				soundX = 500;
 				soundY = 312;
-
 				soundEffect.playEffect(1);
 			}
 

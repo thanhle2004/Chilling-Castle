@@ -28,10 +28,6 @@ public class SoundEffect {
         sound.stop();
     }
 
-    public void setVolume(float volume) {
-        sound.setVolume(volume);
-    }
-
     public void updateSoundState(boolean soundEnabled) {
         this.soundEnabled = soundEnabled;
     }

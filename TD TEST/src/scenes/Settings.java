@@ -16,7 +16,7 @@ import static main.GameStates.*;
 public class Settings extends GameScene implements SceneMethods {
 
 	private SettingButton bMenu, bMusic, bSound, bMusicHandle, bSoundHandle;
-	private int tempMusic;
+	private int tempMusic, tempSound;
 
 	private Menu menu;
 
@@ -26,7 +26,7 @@ public class Settings extends GameScene implements SceneMethods {
 	public BufferedImage SoundStatus, onButton, offButton;
 	private BufferedImage MusicStatus;
 
-	private BufferedImage sliderHandle, slider1, slider2;
+	private BufferedImage sliderHandle, slider1;
 
 	public int musicX = 500, musicY = 190;
 	public int soundX = 500, soundY = 312;
@@ -110,7 +110,7 @@ public class Settings extends GameScene implements SceneMethods {
 		bSoundHandle.draw(g);
 	}
 
-	public void importImg() {
+	private void importImg() {
 
 		try {
 
@@ -120,7 +120,7 @@ public class Settings extends GameScene implements SceneMethods {
 			offButton = ImageIO.read(getClass().getResourceAsStream("/offButton.png"));
 
 			slider1 = ImageIO.read(getClass().getResourceAsStream("/slider1.png"));
-			slider2 = ImageIO.read(getClass().getResourceAsStream("/slider2.png"));
+//			slider2 = ImageIO.read(getClass().getResourceAsStream("/slider2.png"));
 			sliderHandle = ImageIO.read(getClass().getResourceAsStream("/sliderHandle.png"));
 
 
@@ -178,7 +178,6 @@ public class Settings extends GameScene implements SceneMethods {
 				SoundStatus = onButton;
 				soundX = 500;
 				soundY = 312;
-
 				soundEffect.playEffect(1);
 			}
 
@@ -220,6 +219,7 @@ public class Settings extends GameScene implements SceneMethods {
 
 		if (x <= 500 && x >= 279 && y >= 310 && y <= 330) {
 			soundX = x;
+			tempSound = x;
 			soundY = 312;
 
 			float effectVolume = calculateVolume(soundX);
@@ -309,6 +309,8 @@ public class Settings extends GameScene implements SceneMethods {
 	public BufferedImage getOffButton() {
 		return offButton;
 	}
+
+
 
 
 }

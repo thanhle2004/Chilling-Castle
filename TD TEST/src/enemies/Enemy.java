@@ -1,6 +1,9 @@
 package enemies;
 
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.nio.Buffer;
+
 import static helpz.Constants.Direction.*;
 
 public class Enemy {
@@ -15,8 +18,7 @@ public class Enemy {
 	private int imgIndex = 0; // Chỉ số ảnh hiện tại
     private int animationSpeed = 5; // Điều chỉnh tốc độ thay đổi ảnh
     private int animationCounter = 0; // Bộ đếm để điều khiển thời gian đổi ảnh
-    private int speed;
-
+	private BufferedImage[] images;
 	public Enemy(float x, float y, int ID, int enemyType) {
 		this.x = x;
 		this.y = y;
@@ -90,5 +92,14 @@ public class Enemy {
             animationCounter = 0;
         }
     }
+
+	public void setImages(BufferedImage[] images) {
+		this.images = images;
+	}
+
+	public BufferedImage[] getImages() {
+		return images;
+	}
+
 
 }

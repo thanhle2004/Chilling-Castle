@@ -81,8 +81,6 @@ public class Menu extends GameScene implements SceneMethods {
 	}
 
 	private void drawButtons(Graphics g) {
-
-
 		bSettings.draw(g);
 		bTowers.draw(g);
 		bPlaying.draw(g);
@@ -161,5 +159,6 @@ public class Menu extends GameScene implements SceneMethods {
 	public void setMusicVolume(float i) {
 		musicBackground.setVolume(i);
 	}
+
 
 }

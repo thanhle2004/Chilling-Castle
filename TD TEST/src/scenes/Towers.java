@@ -111,7 +111,6 @@ public class Towers extends GameScene implements SceneMethods {
 
         for (int i = 0; i < bTower.length; i++) {
             bTower[i].draw(g);
-
         }
     }
 

@@ -1,10 +1,13 @@
 package managers;
 
+import events.LifeSystem;
 import main.Game;
+import main.GameStates;
 import objects.SoundEffect;
 import scenes.GameScene;
 import scenes.SceneMethods;
 import scenes.Settings;
+import stages.Stage1;
 import ui.SettingBoardUI;
 import ui.Button;
 import ui.TowerBar;
@@ -27,14 +30,12 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     protected BufferedImage optionButton;
     protected Button bOption;
     public static boolean isPaused = false;
-
     public StageManager(Game game, TowerBar towerBar, Settings settings) {
         super(game);
         MapLoader();
         importImage();
         initButtons();
         MapLoader();
-
         this.towerBar = towerBar;
         this.settings = settings;
         enemyManager = new EnemyManager(this);
@@ -54,7 +55,6 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     protected abstract void MapLoader();
@@ -67,9 +67,10 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     @Override
     public void render(Graphics g) {
         drawLevel(g);
-        towerBar.draw(g);
         enemyManager.draw(g);
         drawButtonPaused(g);
+        towerBar.draw(g);
+        drawLife(g);
 
     }
 
@@ -99,10 +100,6 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
         int id = level[y / 32][x / 32];
         return game.getTileManager().getTile(id).getTileType();
-        // return tileManager.getTile(id).getTileType()
-        // return Tile.get(id).getTileType()
-        // return tile[x].getTileType()
-        // return tileType.
     }
 
     @Override
@@ -129,7 +126,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         }
 
         if(y>=530) {
-            towerBar.mouseClicked(x, y);
+            towerBar.mouseClicked(GameStates.STAGE1,x, y);
         }
     }
 
@@ -138,9 +135,9 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         if (y >= 530)
             towerBar.mouseMoved(x, y);
         else {
-            mouseX = (x / 32) * 32;
-            mouseY = (y / 32) * 32;
+            towerBar.mouseMoved(x, y);
         }
+//        System.out.println("x = " + x + ", y = " + y);
     }
 
     @Override
@@ -175,6 +172,14 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
     @Override
     public void keyPressed(int key) {}
+
+
+    public void drawLife(Graphics g) {
+        int life = enemyManager.getLifeSystem().getLife();
+        for(int i = 0; i < life; i++) {
+            g.drawImage(enemyManager.getLifeSystem().getImage(),55 + 20*i,0,null );
+        }
+    }
 
 
 

@@ -30,4 +30,5 @@ public class Stage1 extends StageManager  {
         enemyManager.addEnemy(OSTER, 0 * 32, 14 * 32);
     }
 
+
 }
