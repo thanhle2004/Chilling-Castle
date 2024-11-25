@@ -38,4 +38,11 @@ còn - speed thì tại gốc tọa độ của tile nằm sẵn góc phải tr�
             }
         }
         enemies.removeAll(toRemove); 
-    } 
+    }
+
+ ------------------------------------------------------------------------------------------------------------------------------------------
+
+ fix spawn khi replay. (Done)
+ update spawn time interval giữa các loài quái vật (Done)
+ update lifeSystem. (Done)
+ fix notiBoard.

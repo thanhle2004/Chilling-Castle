@@ -1,9 +1,8 @@
 package enemies;
 
+import helpz.Constants;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.nio.Buffer;
-
 import static helpz.Constants.Direction.*;
 
 public class Enemy {
@@ -11,14 +10,16 @@ public class Enemy {
 	private float x, y;
 	private Rectangle bounds;
 	private int health;
+	private int maxHealth;
 	private int ID;
 	private int enemyType;
 	private int lastDir;
 	
-	private int imgIndex = 0; // Chỉ số ảnh hiện tại
-    private int animationSpeed = 5; // Điều chỉnh tốc độ thay đổi ảnh
-    private int animationCounter = 0; // Bộ đếm để điều khiển thời gian đổi ảnh
+	private int imgIndex = 0;
+    private int animationSpeed = 5;
+    private int animationCounter = 0;
 	private BufferedImage[] images;
+
 	public Enemy(float x, float y, int ID, int enemyType) {
 		this.x = x;
 		this.y = y;
@@ -26,6 +27,12 @@ public class Enemy {
 		this.enemyType = enemyType;
 		bounds = new Rectangle((int) x, (int) y, 32, 32);
 		lastDir = -1;
+		healthBarOfEach();
+
+	}
+	private void healthBarOfEach() {
+		health = Constants.Enemy.Health(enemyType);
+		maxHealth = health;
 	}
 
 	public void move(float speed, int dir) {
@@ -85,7 +92,7 @@ public class Enemy {
     }
     
     public void updateAnimation() {
-    	//Following UPS
+
         animationCounter++;
         if (animationCounter >= animationSpeed) {
             imgIndex = (imgIndex + 1) % 6; 
@@ -101,5 +108,7 @@ public class Enemy {
 		return images;
 	}
 
-
+	public int getMaxHealth() {
+		return maxHealth;
+	}
 }

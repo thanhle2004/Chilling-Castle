@@ -20,6 +20,22 @@ public class Constants {
 		public static final int SLIME = 1;
 		public static final int DUDE = 2;
 		public static final int PINKY = 3;
+
+
+
+		public static int Health(int enemyType) {
+			switch (enemyType) {
+				case OSTER:
+					return 25;
+				case SLIME:
+					return 10;
+				case DUDE:
+					return 50;
+				case PINKY:
+					return 110;
+			}
+			return 0;
+		}
 	}
 
 }

@@ -1,13 +1,14 @@
 package managers;
 
-import events.LifeSystem;
+
+import helpz.LoadPathImage;
 import main.Game;
 import main.GameStates;
 import objects.SoundEffect;
 import scenes.GameScene;
 import scenes.SceneMethods;
 import scenes.Settings;
-import stages.Stage1;
+import ui.NotificationGameOver;
 import ui.SettingBoardUI;
 import ui.Button;
 import ui.TowerBar;
@@ -19,9 +20,7 @@ import static helpz.Constants.Tiles.WATER_TILE;
 
 public abstract class StageManager extends GameScene implements SceneMethods {
 
-
     protected int[][] level;
-    protected int mouseX, mouseY;
     protected EnemyManager enemyManager;
     protected Settings settings;
     protected SettingBoardUI SettingBoardUI;
@@ -29,8 +28,12 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     protected SoundEffect soundEffect;
     protected BufferedImage optionButton;
     protected Button bOption;
-    public static boolean isPaused = false;
-    public StageManager(Game game, TowerBar towerBar, Settings settings) {
+    public  boolean isPaused = false;
+    public boolean isLose;
+    private NotificationGameOver notiBoard;
+    protected abstract NotificationGameOver createNotificationGameOver();
+    protected abstract SettingBoardUI createSettingBoardUI();
+    public StageManager(Game game, TowerBar towerBar, Settings settings, boolean isLose, boolean isPaused) {
         super(game);
         MapLoader();
         importImage();
@@ -38,10 +41,13 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         MapLoader();
         this.towerBar = towerBar;
         this.settings = settings;
+        this.isLose = isLose;
         enemyManager = new EnemyManager(this);
         soundEffect = new SoundEffect();
-        SettingBoardUI = new SettingBoardUI(37, 15, 560, 555, settings);
-        
+        SettingBoardUI = createSettingBoardUI();
+//      notiBoard = new NotificationGameOver(0,0,100,100, this);
+        notiBoard = createNotificationGameOver();
+
     }
 
     private void initButtons() {
@@ -60,22 +66,34 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     protected abstract void MapLoader();
 
     public void update() {
-        updateTick();
-        enemyManager.update();
+        if(!isPaused && !isLose) {
+            updateTick();
+            enemyManager.update();
+            loseGame();
+        }
     }
 
     @Override
     public void render(Graphics g) {
         drawLevel(g);
         enemyManager.draw(g);
-        drawButtonPaused(g);
+        if (GameStates.GetGameState() == GameStates.STAGE1) {
+            game.getStage1().drawButtonPaused(g);
+        } else if (GameStates.GetGameState() == GameStates.STAGE2) {
+            game.getStage2().drawButtonPaused(g);
+        }
         towerBar.draw(g);
-        drawLife(g);
-
+//        drawHealthBarMainHouse(g);
+        drawTestHouse(g);
     }
 
-    private void drawLevel(Graphics g) {
+    private void drawTestHouse(Graphics g) {
+        BufferedImage testHouse = LoadPathImage.getTestHouse();
+        g.drawImage(testHouse, 18*32, 224, null);
+    }
 
+
+    private void drawLevel(Graphics g) {
         for (int y = 0; y < level.length; y++) {
             for (int x = 0; x < level[y].length; x++) {
                 int id = level[y][x];
@@ -104,25 +122,19 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
     @Override
     public void mouseClicked(int x, int y) {
-
+        if(isLose) {
+            notiBoard.mouseClicked(x, y);
+            System.out.println("Hello im here");
+        }
         if (bOption.getBounds().contains(x, y)) {
             isPaused = !isPaused;
+            SettingBoardUI.setIsOpen(true);
             soundEffect.playEffect(1);
         }
 
         if(isPaused && x >= 30 && x <= 590 && y >= 15 && y <= 570) {
             soundEffect.playEffect(1);
             SettingBoardUI.mouseClicked(x, y);
-        }
-
-        if (isPaused && SettingBoardUI.bContinue.getBounds().contains(x, y)) {
-            isPaused = false;
-            soundEffect.playEffect(1);
-        }
-
-        if (isPaused && SettingBoardUI.bReplay.getBounds().contains(x, y)) {
-            soundEffect.playEffect(1);
-            resetGame();
         }
 
         if(y>=530) {
@@ -137,7 +149,6 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         else {
             towerBar.mouseMoved(x, y);
         }
-//        System.out.println("x = " + x + ", y = " + y);
     }
 
     @Override
@@ -157,30 +168,28 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         SettingBoardUI.mouseDragged(x,y);
     }
 
-    private void drawButtonPaused(Graphics g) {
+    public void drawButtonPaused(Graphics g) {
+        if (isLose) {
+            notiBoard.draw(g);
+        }
         if (!isPaused) {
             bOption.draw(g);
         } else {
-            SettingBoardUI.drawSettings(g);
+            if(SettingBoardUI.getIsOpen())
+                SettingBoardUI.drawSettings(g);
         }
     }
 
-
-    protected void resetGame() {
+    public void resetGame() {
         enemyManager.resetEnemies();
     }
 
     @Override
     public void keyPressed(int key) {}
 
-
-    public void drawLife(Graphics g) {
-        int life = enemyManager.getLifeSystem().getLife();
-        for(int i = 0; i < life; i++) {
-            g.drawImage(enemyManager.getLifeSystem().getImage(),55 + 20*i,0,null );
+    public void loseGame() {
+        if(enemyManager.getLifeBar() <= 0) {
+            isLose = true;
         }
     }
-
-
-
 }

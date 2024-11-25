@@ -14,8 +14,8 @@ public class Game extends JFrame implements Runnable {
 	private GameScreen gameScreen;
 	private Thread gameThread;
 
-	private final double FPS_SET = 120.0;
-	private final double UPS_SET = 60.0;
+	private final double FPS_SET = 60;
+	private final double UPS_SET = 60;
 
 	// Classes
 	private Render render;
@@ -27,7 +27,7 @@ public class Game extends JFrame implements Runnable {
 	private SoundEffect soundEffect;
 	private Stage1 stage1;
 	private TileManager tileManager;
-	private StageManager stageManager;
+
 
 	public Game() {
 		initClasses();
@@ -101,14 +101,21 @@ public class Game extends JFrame implements Runnable {
 		while (true) {
 			now = System.nanoTime();
 
-			// Update
-			if(StageManager.isPaused == false) {
+
+			//Update
+//			if (now - lastUpdate >= timePerUpdate) {
+//				updateGame();
+//				lastUpdate = now;
+//				updates++;
+//			}
+
+//			if (!stage1.isPaused() || !stage2.isPaused()) {
 				if (now - lastUpdate >= timePerUpdate) {
 					updateGame();
 					lastUpdate = now;
 					updates++;
 				}
-			}
+//			}
 
 			// Render
 			if (now - lastFrame >= timePerFrame) {
@@ -116,7 +123,6 @@ public class Game extends JFrame implements Runnable {
 				lastFrame = now;
 				frames++;
 			}
-
 			if (System.currentTimeMillis() - lastTimeCheck >= 1000) {
 				frames = 0;
 				updates = 0;
@@ -124,7 +130,6 @@ public class Game extends JFrame implements Runnable {
 			}
 
 		}
-
 	}
 
 	// Getters and setters
@@ -148,5 +153,7 @@ public class Game extends JFrame implements Runnable {
 	}
 	public Towers getTowers() { return towers; }
 	public Stage1 getStage1() { return stage1; }
+
+
 
 }

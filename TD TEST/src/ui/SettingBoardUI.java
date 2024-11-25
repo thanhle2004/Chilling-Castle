@@ -1,6 +1,7 @@
 package ui;
 
 import managers.SoundEffectManager;
+import managers.StageManager;
 import objects.SoundEffect;
 import scenes.SceneMethods;
 import scenes.Settings;
@@ -10,13 +11,14 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
 import static main.GameStates.MENU;
 import static main.GameStates.SetGameState;
 
-public class SettingBoardUI {
+public class SettingBoardUI extends Board {
 
-    private int x, y, width, height;
+
 
     private BufferedImage img, MusicStatus, SoundStatus, onButton, offButton;
     private BufferedImage sliderHandle, slider1, HomeButton, ContinueButton, ReplayButton;
@@ -30,13 +32,10 @@ public class SettingBoardUI {
 
     public int musicX, musicY;
     public int soundX, soundY;
-
-    public SettingBoardUI(int x, int y, int width, int height, Settings settings) {
-
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+    private boolean isOpen = false;
+    private StageManager stageManager;
+    public SettingBoardUI(int x, int y, int width, int height, Settings settings, StageManager stageManager) {
+        super(x,y,width,height);
         this.settings = settings;
         this.MusicStatus = settings.getMusicStatus();
         this.SoundStatus = settings.getSoundStatus();
@@ -45,7 +44,7 @@ public class SettingBoardUI {
 
         importImage();
         initButtons();
-
+        this.stageManager = stageManager;
         this.musicX = settings.getMusicX();
         this.musicY = settings.getMusicY();
         this.soundX = settings.getSoundX();
@@ -60,7 +59,7 @@ public class SettingBoardUI {
 
     private void importImage() {
         try {
-            img = ImageIO.read(getClass().getResourceAsStream("/InGameSetting.png"));
+            img = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/InGameSetting.png")));
 //            onButton = ImageIO.read(getClass().getResourceAsStream("/onButton.png"));
 //            offButton = ImageIO.read(getClass().getResourceAsStream("/offButton.png"));
             onButton = settings.onButton;
@@ -122,6 +121,19 @@ public class SettingBoardUI {
     public void mouseClicked(int x, int y) {
         if(bHome.getBounds().contains(x, y)) {
             SetGameState(MENU);
+            isOpen = false;
+            stageManager.isPaused = false;
+        }
+
+        if (stageManager.isPaused && bContinue.getBounds().contains(x, y)) {
+            stageManager.isPaused = false;
+            soundEffect.playEffect(1);
+        }
+
+        if (stageManager.isPaused && bReplay.getBounds().contains(x, y)) {
+            soundEffect.playEffect(1);
+            stageManager.resetGame();
+            stageManager.isPaused = false;
         }
 
         if(bMusic.getBounds().contains(x, y)) {
@@ -186,5 +198,11 @@ public class SettingBoardUI {
         bSoundHandle.draw(g);
     }
 
+    public void setIsOpen(boolean isOpen) {
+        this.isOpen = isOpen;
+    }
 
+    public boolean getIsOpen() {
+        return isOpen;
+    }
 }
