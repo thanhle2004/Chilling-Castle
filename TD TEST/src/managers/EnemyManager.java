@@ -9,14 +9,11 @@ import java.awt.*;
 																							import enemies.OSTER;
 																							import enemies.PINKY;
 																							import enemies.SLIME;
-																							import events.LifeSystem;
-																							import events.Wave;
-																							import helpz.Constants;
-																							import helpz.LoadPathImage;
+import events.Wave;
+import helpz.LoadPathImage;
 																							import main.GameStates;
 																							import scenes.GameScene;
-																							import scenes.Stages;
-																							import stages.Stage2;
+import stages.Stage2;
 																							import stages.Stage1;
 
 																							import static helpz.Constants.Enemy.*;
@@ -27,16 +24,10 @@ private ArrayList<Enemy> enemies = new ArrayList<>();
 private MoveManager moveManager;
 private int xTarget, yTarget;
 private Wave wave;
-private long lastSpawnTime;
-private static final long SPAWN_INTERVAL = 2000;
-private long tempTime;
-private ArrayList<int[]> spawnPoints = new ArrayList<>();
-private LifeSystem lifeSystem;
-private long lastSpawnTime1;
-private int spawnedEnemy = 0;
+private ArrayList<long[]> spawnPoints = new ArrayList<>(); //contains spawnPoint and type enemies
+private ArrayList<Long> initSpawnAmount =  new ArrayList<>();
 private float lifeBar;
 private int tempLife;
-
 public EnemyManager(GameScene stage) {
 	wave = new Wave(this);
 	enemyImgs = new BufferedImage[6];
@@ -44,25 +35,21 @@ public EnemyManager(GameScene stage) {
 	tempLife = (int) lifeBar;
 	if (stage instanceof Stage1) {
 		moveManager = new MoveManager((Stage1) stage);
-		spawnPoints.add(new int[]{1, 4 ,DUDE});
-		spawnPoints.add(new int[]{1, 14, OSTER});
+		spawnPoints.add(new long[]{1, 4, DUDE, 15, 1000, 1000, 2000});
+		spawnPoints.add(new long[]{1, 14, OSTER, 5, 2000, 2000, 2000});
 		xTarget = 17 * 32;
 		yTarget = 9 * 32;
-		wave.setNumInOneWave(10);
 	}
 	if (stage instanceof Stage2) {
 		moveManager = new MoveManager((Stage2) stage);
-		//spawnPoints.add(new int[]{0, 1 ,DUDE});
-		spawnPoints.add(new int[]{0, 10, SLIME});
+		spawnPoints.add(new long[]{0, 10, SLIME, 12,5000,5000,2000});
 		xTarget = 19 * 32;
 		yTarget = 1 * 32;
-		wave.setNumInOneWave(30);
 	}
 }
 public void update() {
 	if(GameStates.GetGameState() == GameStates.STAGE1 || GameStates.GetGameState() == GameStates.STAGE2){
-		lastSpawnTime = System.currentTimeMillis();
-		spawningInterval(wave.numInOneWave());
+		spawningInterval();
 	}
 
 	ArrayList <Integer> tempLife = new ArrayList<>();
@@ -82,14 +69,25 @@ public void update() {
 
 	enemies.removeAll(toRemove);
 }
-private void spawnEnemyWave() {
-	for(int [] spawnPoint : spawnPoints) {
-		for (int i = 0; i < wave.numInOneWave(); i++) {
-			addEnemy(spawnPoint[2], spawnPoint[0]*32, spawnPoint[1]*32); // Example spawn point and enemy type
+
+	private void spawningInterval() {
+		long currentTime = System.currentTimeMillis();
+
+		for (long[] spawnPoint : spawnPoints) {
+			long nextSpawnTime = spawnPoint[5];
+			long interval = spawnPoint[6];
+			long spawnedEnemy = spawnPoint[3];
+			initSpawnAmount.add(spawnPoint[3]);
+			if (currentTime >= nextSpawnTime && spawnedEnemy > 0) {
+				addEnemy((int)spawnPoint[2], (int)spawnPoint[0] * 32, (int)spawnPoint[1] * 32);
+				spawnPoint[5] = currentTime + interval;
+				spawnPoint[3] = spawnedEnemy - 1;
+			}
 		}
+
 	}
-}
-public void addEnemy(int EnemyTypes, int PointSpawnX, int PointSpawnY) {
+
+	public void addEnemy(int EnemyTypes, int PointSpawnX, int PointSpawnY) {
 	BufferedImage atlas = null;
 	Enemy enemy = null;
 	switch (EnemyTypes) {
@@ -138,22 +136,14 @@ private void drawEnemy(Enemy e, Graphics g) {
 }
 public void resetEnemies() {
 	enemies.clear();
-	spawnedEnemy = 0;
+	for (int i = 0; i < spawnPoints.size(); i++) {
+		spawnPoints.get(i)[3] = initSpawnAmount.get(i);
+		spawnPoints.get(i)[5] = spawnPoints.get(i)[4];
+	}
 	lifeBar = 550;
 }
-private void spawningInterval(int numberOfEnemies) {
-		long currentTime = System.currentTimeMillis();
-		if(tempTime == 0) {
-			tempTime = lastSpawnTime;
-		}
-		if(spawnedEnemy  < numberOfEnemies) {
-			if (currentTime - lastSpawnTime1 >= SPAWN_INTERVAL) {
-				spawnEnemyWave();
-				lastSpawnTime1 = currentTime;
-				spawnedEnemy++;
-			}
-		}
-}
+
+
 public void drawHealthBar(Enemy enemy, Graphics g) {
 	g.setColor(Color.RED);
 	g.fillRect((int) enemy.getX(), (int) enemy.getY() - 2, ratioHealth(enemy), 2 );
