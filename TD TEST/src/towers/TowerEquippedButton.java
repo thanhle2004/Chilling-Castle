@@ -106,4 +106,31 @@ public class TowerEquippedButton {
         return num;
     }
 
+    public BufferedImage getImg() {
+        return img;
+    }
+
+    public double getCD() {
+        return CD;
+    }
+
+    public double getDMG() {
+        return DMG;
+    }
+
+    public double getRNG() {
+        return RNG;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
 }

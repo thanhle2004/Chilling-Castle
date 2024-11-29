@@ -1,19 +1,11 @@
 package events;
 
-import managers.EnemyManager;
-
 public class Wave {
-    private int numInOneWave;
-    private EnemyManager enemyManager;
-    public Wave(EnemyManager enemyManager) {
-        this.enemyManager = enemyManager;
+
+    public Wave() {
     }
 
-    public int numInOneWave() {
-        return numInOneWave;
-    }
-
-    public void setNumInOneWave(int numInOneWave) {
-        this.numInOneWave = numInOneWave;
+    public long[] WaveInTurn(int spawnX, int spawnY, int EnemyType,int numberPerTurn, long startTime, long nextSpawnTime, long timeSpawnInterval) {
+        return new long[] {spawnX, spawnY, EnemyType,numberPerTurn, startTime, nextSpawnTime, timeSpawnInterval};
     }
 }

@@ -1,8 +1,5 @@
 package stages;
 
-
-
-
 import Map.Level2;
 import main.Game;
 

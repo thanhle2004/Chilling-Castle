@@ -63,7 +63,7 @@ public class LoadPathImage {
 	
 	public static BufferedImage getPinkPath() {
 		BufferedImage img = null;
-		InputStream is = LoadPathImage.class.getClassLoader().getResourceAsStream("Pink_Monster_Walk.png");
+		InputStream is = LoadPathImage.class.getClassLoader().getResourceAsStream("Pink_Monster_Walk_6.png");
 
 		try {
 			img = ImageIO.read(is);

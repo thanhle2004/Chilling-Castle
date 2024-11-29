@@ -19,12 +19,13 @@ public class Enemy {
     private int animationSpeed = 5;
     private int animationCounter = 0;
 	private BufferedImage[] images;
-
+	private boolean dead;
 	public Enemy(float x, float y, int ID, int enemyType) {
 		this.x = x;
 		this.y = y;
 		this.ID = ID;
 		this.enemyType = enemyType;
+		dead = false;
 		bounds = new Rectangle((int) x, (int) y, 32, 32);
 		lastDir = -1;
 		healthBarOfEach();
@@ -33,6 +34,13 @@ public class Enemy {
 	private void healthBarOfEach() {
 		health = Constants.Enemy.Health(enemyType);
 		maxHealth = health;
+	}
+
+	public void getHurt() {
+		health = health - 20;
+		if (health <= 0) {
+			dead = true;
+		}
 	}
 
 	public void move(float speed, int dir) {
@@ -110,5 +118,12 @@ public class Enemy {
 
 	public int getMaxHealth() {
 		return maxHealth;
+	}
+
+    public boolean dead() {
+		return dead;
+    }
+	public void setDead(boolean dead) {
+		this.dead = dead;
 	}
 }

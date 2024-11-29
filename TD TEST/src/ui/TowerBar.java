@@ -1,7 +1,5 @@
 package ui;
 
-import Map.Level1;
-import Map.Level2;
 import main.GameStates;
 import scenes.Towers;
 import towers.TowerEquippedButton;
@@ -13,21 +11,19 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import static helpz.Constants.Tiles.GRASS_TILE;
-
 public class TowerBar extends Bar{
 
     private BufferedImage towerFrame;
     private TowerEquippedButton[] towerEquippedButtons = new TowerEquippedButton[3];
+    private TowerEquippedButton towerSelected;
     private Towers towers;
+    private boolean selected = true;
 
-    private int mouseX, mouseY;
     public TowerBar(int x, int y, int width, int height, Towers towers) {
         super(x,y,width,height);
         this.towers = towers;
         importImg();
         initButtons();
-
     }
 
     private void importImg() {
@@ -47,18 +43,13 @@ public class TowerBar extends Bar{
 
     public void equipTower(TowerInfo selectedTower, TowerButton bSelectedTower, int position) {
         if (position >= 0 && position < towerEquippedButtons.length) {
-            towerEquippedButtons[position] = new TowerEquippedButton(bSelectedTower.getImage(), 180 + position * 100, 530, 80, 80, selectedTower.getTowerDamage(), selectedTower.getTowerCooldown(), selectedTower.getTowerRange(), selectedTower.getTowerCost(), selectedTower.getId());
+            towerEquippedButtons[position] = new TowerEquippedButton(bSelectedTower.getImage(), 180 + position * 100, 530, 80, 80, selectedTower.getTowerDamage(), selectedTower.getTowerCooldown(), selectedTower.getTowerRange(), selectedTower.getTowerCost(), selectedTower.getNumber());
         }
     }
 
     public void draw(Graphics g) {
         drawButtons(g);
-
-
     }
-
-
-
 
     public void removeTower(int slot) {
         if (slot >= 0 && slot < 3) {
@@ -73,12 +64,24 @@ public class TowerBar extends Bar{
         }
     }
 
-    public void mouseClicked(GameStates gameStates ,int x, int y) {
+    public void mouseClicked(GameStates gameStates, int x, int y) {
+        if(towerEquippedButtons[0].getBounds().contains(x, y) && towerEquippedButtons[0].getTowerNum() != 0) {
+            towerSelected = towerEquippedButtons[0];
+        } else if(towerEquippedButtons[1].getBounds().contains(x, y) && towerEquippedButtons[1].getTowerNum() != 0) {
+            towerSelected = towerEquippedButtons[1];
+        } else if(towerEquippedButtons[2].getBounds().contains(x, y) && towerEquippedButtons[2].getTowerNum() != 0) {
+            towerSelected = towerEquippedButtons[2];
+        } else if(selected) {
+            towerSelected = null;
+        }
+    }
+
+    public void mouseRightClicked(int x, int y) {
+        towerSelected = null;
     }
 
     public void mouseMoved(int x, int y) {
-            mouseX = (x / 32) * 32;
-            mouseY = (y / 32) * 32;
+
     }
 
     public void mousePressed(int x, int y) {
@@ -94,8 +97,10 @@ public class TowerBar extends Bar{
             case 0:
                 return towerEquippedButtons[0];
 
+
             case 1:
                 return towerEquippedButtons[1];
+
 
             case 2:
                 return towerEquippedButtons[2];
@@ -103,6 +108,7 @@ public class TowerBar extends Bar{
             default:
                 break;
         }
+
         return null;
     }
 
@@ -113,5 +119,37 @@ public class TowerBar extends Bar{
             }
         }
         return false;
+    }
+
+    public BufferedImage getTowerImg(int i) {
+        switch (i) {
+            case 0:
+                return towerEquippedButtons[0].getImg();
+
+
+            case 1:
+                return towerEquippedButtons[1].getImg();
+
+
+            case 2:
+                return towerEquippedButtons[2].getImg();
+
+            default:
+                break;
+        }
+
+        return null;
+    }
+
+    public TowerEquippedButton getSelectedTower() {
+        return towerSelected;
+    }
+
+    public void setTowerSelected(TowerEquippedButton selectedTower) {
+        this.towerSelected = selectedTower;
+    }
+
+    public BufferedImage getSelectedTowerImg() {
+        return towerSelected.getImg();
     }
 }

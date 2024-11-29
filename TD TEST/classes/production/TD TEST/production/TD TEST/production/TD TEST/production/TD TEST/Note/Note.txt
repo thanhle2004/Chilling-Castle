@@ -45,4 +45,8 @@ còn - speed thì tại gốc tọa độ của tile nằm sẵn góc phải tr�
  fix spawn khi replay. (Done)
  update spawn time interval giữa các loài quái vật (Done)
  update lifeSystem. (Done)
- fix notiBoard.
+ fix notiBoard. (done)
+ fix and optimize logic spawn (done)
+ -------------------------------------------------------
+ create dead state enemy (done)
+

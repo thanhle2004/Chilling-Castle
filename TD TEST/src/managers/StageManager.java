@@ -8,6 +8,7 @@ import objects.SoundEffect;
 import scenes.GameScene;
 import scenes.SceneMethods;
 import scenes.Settings;
+import towers.TowerEquippedButton;
 import ui.NotificationGameOver;
 import ui.SettingBoardUI;
 import ui.Button;
@@ -16,11 +17,14 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
+import static helpz.Constants.Tiles.GRASS_TILE;
 import static helpz.Constants.Tiles.WATER_TILE;
 
 public abstract class StageManager extends GameScene implements SceneMethods {
 
     protected int[][] level;
+    protected int mouseX, mouseY;
     protected EnemyManager enemyManager;
     protected Settings settings;
     protected SettingBoardUI SettingBoardUI;
@@ -31,8 +35,10 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     public  boolean isPaused = false;
     public boolean isLose;
     private NotificationGameOver notiBoard;
+    private TowerManager towerManager;
     protected abstract NotificationGameOver createNotificationGameOver();
     protected abstract SettingBoardUI createSettingBoardUI();
+
     public StageManager(Game game, TowerBar towerBar, Settings settings, boolean isLose, boolean isPaused) {
         super(game);
         MapLoader();
@@ -44,8 +50,8 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         this.isLose = isLose;
         enemyManager = new EnemyManager(this);
         soundEffect = new SoundEffect();
+        towerManager = new TowerManager(this);
         SettingBoardUI = createSettingBoardUI();
-//      notiBoard = new NotificationGameOver(0,0,100,100, this);
         notiBoard = createNotificationGameOver();
 
     }
@@ -70,6 +76,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
             updateTick();
             enemyManager.update();
             loseGame();
+            towerManager.update();
         }
     }
 
@@ -77,14 +84,23 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     public void render(Graphics g) {
         drawLevel(g);
         enemyManager.draw(g);
+        towerManager.draw(g);
+        drawSelectedTower(g);
         if (GameStates.GetGameState() == GameStates.STAGE1) {
             game.getStage1().drawButtonPaused(g);
         } else if (GameStates.GetGameState() == GameStates.STAGE2) {
             game.getStage2().drawButtonPaused(g);
         }
+
         towerBar.draw(g);
-//        drawHealthBarMainHouse(g);
         drawTestHouse(g);
+
+    }
+
+    private void drawSelectedTower(Graphics g) {
+        if (towerBar.getSelectedTower() != null) {
+            g.drawImage(towerBar.getSelectedTowerImg(), mouseX, mouseY, 32, 32, null);
+        }
     }
 
     private void drawTestHouse(Graphics g) {
@@ -124,7 +140,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     public void mouseClicked(int x, int y) {
         if(isLose) {
             notiBoard.mouseClicked(x, y);
-            System.out.println("Hello im here");
+
         }
         if (bOption.getBounds().contains(x, y)) {
             isPaused = !isPaused;
@@ -139,15 +155,40 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
         if(y>=530) {
             towerBar.mouseClicked(GameStates.STAGE1,x, y);
+        }else {
+
+            if (towerBar.getSelectedTower() != null) {
+                // Trying to place a tower
+                if (isTileGrass(mouseX, mouseY)) {
+                    if (getTowerAt(mouseX, mouseY) == null) {
+                        towerManager.addTower(towerBar.getSelectedTower(), mouseX, mouseY);
+                        towerBar.setTowerSelected(null);
+                    }
+                }
+            } else {
+                // Not trying to place a tower
+                // Checking if a tower exists at x,y
+                TowerEquippedButton t = getTowerAt(mouseX, mouseY);
+            }
         }
     }
+
+//    @Override
+//    public void mouseMoved(int x, int y) {
+//        if (y >= 530)
+//            towerBar.mouseMoved(x, y);
+//        else {
+//            towerBar.mouseMoved(x, y);
+//        }
+//    }
 
     @Override
     public void mouseMoved(int x, int y) {
         if (y >= 530)
             towerBar.mouseMoved(x, y);
         else {
-            towerBar.mouseMoved(x, y);
+            mouseX = (x / 32) * 32;
+            mouseY = (y / 32) * 32;
         }
     }
 
@@ -191,5 +232,23 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         if(enemyManager.getLifeBar() <= 0) {
             isLose = true;
         }
+    }
+
+    public EnemyManager getEnemyManager() {
+        return enemyManager;
+    }
+    private TowerEquippedButton getTowerAt(int x, int y) {
+        return towerManager.getTowerAt(x, y);
+    }
+
+    private boolean isTileGrass(int x, int y) {
+        int id = level[y / 32][x / 32];
+        int tileType = game.getTileManager().getTile(id).getTileType();
+        return tileType == GRASS_TILE;
+    }
+
+    @Override
+    public void mouseRightClicked(int x, int y) {
+        towerBar.mouseRightClicked(x, y);
     }
 }

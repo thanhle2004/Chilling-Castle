@@ -144,6 +144,11 @@ public class Menu extends GameScene implements SceneMethods {
 
 	}
 
+	@Override
+	public void mouseRightClicked(int x, int y) {
+
+	}
+
 	private void drawBackground(Graphics g) {
 		g.drawImage(background, 0, 0, game);
 	}

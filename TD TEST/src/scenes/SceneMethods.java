@@ -18,5 +18,7 @@ public interface SceneMethods {
 	public void mouseDragged(int x, int y);
 
 	public void keyPressed(int key);
+	
+	public void mouseRightClicked(int x, int y);
 
 }

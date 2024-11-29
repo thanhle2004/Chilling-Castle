@@ -73,26 +73,49 @@ public class MyMouseListener implements MouseListener, MouseMotionListener {
 	public void mouseClicked(MouseEvent e) {
 		if (e.getButton() == MouseEvent.BUTTON1) {
 			switch (GameStates.gameState) {
-			case MENU:
-				game.getMenu().mouseClicked(e.getX(), e.getY());
-				break;
-			case STAGES:
-				game.getStages().mouseClicked(e.getX(), e.getY());
-				break;
-			case STAGE1:
-				game.getStage1().mouseClicked(e.getX(), e.getY());
-				break;
-			case STAGE2:
-				game.getStage2().mouseClicked(e.getX(), e.getY());
-				break;
-			case SETTINGS:
-				game.getSettings().mouseClicked(e.getX(), e.getY());
-				break;
-			case TOWER:
-				game.getTowers().mouseClicked(e.getX(), e.getY());
-				break;
-			default:
-				break;
+				case MENU:
+					game.getMenu().mouseClicked(e.getX(), e.getY());
+					break;
+				case STAGES:
+					game.getStages().mouseClicked(e.getX(), e.getY());
+					break;
+				case STAGE1:
+					game.getStage1().mouseClicked(e.getX(), e.getY());
+					break;
+				case STAGE2:
+					game.getStage2().mouseClicked(e.getX(), e.getY());
+					break;
+				case SETTINGS:
+					game.getSettings().mouseClicked(e.getX(), e.getY());
+					break;
+				case TOWER:
+					game.getTowers().mouseClicked(e.getX(), e.getY());
+					break;
+				default:
+					break;
+			}
+		}else if (e.getButton() == MouseEvent.BUTTON3) { // Right-click
+			switch (GameStates.gameState) {
+				case MENU:
+					game.getMenu().mouseRightClicked(e.getX(), e.getY());
+					break;
+				case STAGES:
+					game.getStages().mouseRightClicked(e.getX(), e.getY());
+					break;
+				case STAGE1:
+					game.getStage1().mouseRightClicked(e.getX(), e.getY());
+					break;
+				case STAGE2:
+					game.getStage2().mouseRightClicked(e.getX(), e.getY());
+					break;
+				case SETTINGS:
+					game.getSettings().mouseRightClicked(e.getX(), e.getY());
+					break;
+				case TOWER:
+					game.getTowers().mouseRightClicked(e.getX(), e.getY());
+					break;
+				default:
+					break;
 			}
 		}
 	}

@@ -198,5 +198,10 @@ public class Stages extends GameScene implements SceneMethods {
     public void keyPressed(int key) {
     }
 
+    @Override
+    public void mouseRightClicked(int x, int y) {
+
+    }
+
 
 }

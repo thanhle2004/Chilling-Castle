@@ -1,16 +1,19 @@
 package towers;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+
+import javax.swing.JButton;
 
 public class TowerInfo {
 
     private String towerName;
     private double DMG, CD, RNG;
-    private int id, posX, posY, cost;
+    private int num, posX, posY, cost;
     private BufferedImage img;
 
-    public TowerInfo(BufferedImage img, String towerName, int posX, int posY, double DMG, double CD, double RNG, int cost, int id) {
+    public TowerInfo(BufferedImage img, String towerName, int posX, int posY, double DMG, double CD, double RNG, int cost, int num) {
 
         this.img = img;
         this.towerName = towerName;
@@ -20,11 +23,9 @@ public class TowerInfo {
         this.CD = CD;
         this.RNG = RNG;
         this.cost = cost;
-        this.id = id;
+        this.num = num;
 
     }
-
-
 
     public void drawInfo(Graphics g) {
         if(posX <= 400) {
@@ -51,20 +52,12 @@ public class TowerInfo {
         return RNG;
     }
 
-    public int getId() {
-        return id;
+    public int getNumber() {
+        return num;
     }
 
     public int getTowerCost() {
         return cost;
-    }
-
-    public int getPosX() {
-        return posX;
-    }
-
-    public int getPosY() {
-        return posY;
     }
 
 }
