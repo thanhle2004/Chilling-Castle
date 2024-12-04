@@ -20,6 +20,7 @@ public class Enemy {
     private int animationCounter = 0;
 	private BufferedImage[] images;
 	private boolean dead;
+	private int coinEnemy;
 	public Enemy(float x, float y, int ID, int enemyType) {
 		this.x = x;
 		this.y = y;
@@ -29,8 +30,14 @@ public class Enemy {
 		bounds = new Rectangle((int) x, (int) y, 32, 32);
 		lastDir = -1;
 		healthBarOfEach();
+		CoinEachEnemies();
 
 	}
+
+	private void CoinEachEnemies() {
+		coinEnemy = Constants.Enemy.CoinReward(enemyType);
+	}
+
 	private void healthBarOfEach() {
 		health = Constants.Enemy.Health(enemyType);
 		maxHealth = health;
@@ -83,10 +90,6 @@ public class Enemy {
 		return health;
 	}
 
-	public int getID() {
-		return ID;
-	}
-
 	public int getEnemyType() {
 		return enemyType;	
 	}
@@ -125,5 +128,10 @@ public class Enemy {
     }
 	public void setDead(boolean dead) {
 		this.dead = dead;
+	}
+
+
+	public int getCoin() {
+		return coinEnemy;
 	}
 }

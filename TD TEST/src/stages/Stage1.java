@@ -14,7 +14,7 @@ import java.awt.*;
 public class Stage1 extends StageManager  {
 
     public Stage1(Game game, TowerBar towerBar, Settings settings) {
-        super(game, towerBar, settings, false, false);
+        super(game, towerBar, settings, false);
         MapLoader();
     }
 

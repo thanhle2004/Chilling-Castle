@@ -223,7 +223,6 @@ public class Towers extends GameScene implements SceneMethods {
         if (bMenu.getBounds().contains(x, y)) {
             bMenu.setMouseOver(true);
         }else {
-
             for (int i = 0; i < 5; i++) {
                 if (bTower[i].getBounds().contains(x, y)) {
                     bTower[i].setMouseOver(true);

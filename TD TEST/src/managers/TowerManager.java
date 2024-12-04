@@ -22,9 +22,8 @@ public class TowerManager {
     public boolean addTower(TowerEquippedButton selectedTower, int xPos, int yPos) {
         Point position = new Point(xPos, yPos);
 
-        // Kiểm tra nếu đã có tháp tại vị trí này
         if (towerMap.containsKey(position)) {
-            return false; // Không thể thêm tháp
+            return false;
         }
 
         TowerEquippedButton newTower = new TowerEquippedButton(
@@ -39,7 +38,7 @@ public class TowerManager {
         );
         towerMap.put(position, newTower);
         towerAmount++;
-        return true; // Thêm thành công
+        return true;
     }
 
     public void update() {
@@ -59,13 +58,18 @@ public class TowerManager {
         Point position = new Point(x, y);
         if (towerMap.remove(position) != null) {
             towerAmount--;
-            return true; // Xóa thành công
+            return true;
         }
-        return false; // Không có tháp để xóa
+        return false;
     }
 
     public TowerEquippedButton getTowerAt(int x, int y) {
         return towerMap.get(new Point(x, y));
+    }
+
+    public void clearTowers() {
+        towerMap.clear();
+        towerAmount = 0;
     }
 
 }

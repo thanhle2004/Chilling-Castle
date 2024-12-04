@@ -15,7 +15,7 @@ import ui.TowerBar;
 public class Stage2 extends StageManager {
 
 	public Stage2(Game game, TowerBar towerBar, Settings settings) {
-		super(game, towerBar, settings, false, false);
+		super(game, towerBar, settings, false);
 		MapLoader();
 	}
 

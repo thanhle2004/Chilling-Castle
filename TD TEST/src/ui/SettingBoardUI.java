@@ -33,7 +33,10 @@ public class SettingBoardUI extends Board {
     public int musicX, musicY;
     public int soundX, soundY;
     private boolean isOpen = false;
+    private boolean openConfirmDialog = false;
     private StageManager stageManager;
+    private NotificationGameConfirm notificationGameConfirm;
+
     public SettingBoardUI(int x, int y, int width, int height, Settings settings, StageManager stageManager) {
         super(x,y,width,height);
         this.settings = settings;
@@ -50,11 +53,13 @@ public class SettingBoardUI extends Board {
         this.soundX = settings.getSoundX();
         this.soundY = settings.getSoundY();
 
+        notificationGameConfirm = new NotificationGameConfirm(x,y,width,height,this);
         bMusicHandle = new SettingButton(null, musicX, musicY, 20, 20, sliderHandle);
         bSoundHandle = new SettingButton(null, soundX, soundY, 20, 20, sliderHandle);
         bHome = new SettingButton(null, 90, 380, 130, 75, HomeButton);
         bReplay = new SettingButton(null, 255, 380, 130, 75, ReplayButton);
         bContinue = new SettingButton(null, 420, 380, 130, 75, ContinueButton);
+
     }
 
     private void importImage() {
@@ -65,13 +70,13 @@ public class SettingBoardUI extends Board {
             onButton = settings.onButton;
             offButton = settings.offButton;
 
-            slider1 = ImageIO.read(getClass().getResourceAsStream("/slider1.png"));
+            slider1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/slider1.png")));
 //            slider2 = ImageIO.read(getClass().getResourceAsStream("/slider2.png"));
-            sliderHandle = ImageIO.read(getClass().getResourceAsStream("/sliderHandle.png"));
+            sliderHandle = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/sliderHandle.png")));
 
-            HomeButton = ImageIO.read(getClass().getResourceAsStream("/HomeButton.png"));
-            ContinueButton = ImageIO.read(getClass().getResourceAsStream("/ContinueButton.png"));
-            ReplayButton = ImageIO.read(getClass().getResourceAsStream("/ReplayButton.png"));
+            HomeButton = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/HomeButton.png")));
+            ContinueButton = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ContinueButton.png")));
+            ReplayButton = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ReplayButton.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -120,20 +125,24 @@ public class SettingBoardUI extends Board {
 
     public void mouseClicked(int x, int y) {
         if(bHome.getBounds().contains(x, y)) {
-            SetGameState(MENU);
+            openConfirmDialog = true;
+
             isOpen = false;
             stageManager.isPaused = false;
         }
 
+
         if (stageManager.isPaused && bContinue.getBounds().contains(x, y)) {
             stageManager.isPaused = false;
             soundEffect.playEffect(1);
+            stageManager.getEnemyManager().setPauseGame(false);
         }
 
         if (stageManager.isPaused && bReplay.getBounds().contains(x, y)) {
             soundEffect.playEffect(1);
             stageManager.resetGame();
             stageManager.isPaused = false;
+            stageManager.getEnemyManager().setPauseGame(false);
         }
 
         if(bMusic.getBounds().contains(x, y)) {
@@ -165,6 +174,7 @@ public class SettingBoardUI extends Board {
 				settings.setSoundStatus(onButton);
 				soundX = 500;
 				soundY = 312;
+                SoundEffectManager.unmuteAllSounds();
 				soundEffect.playEffect(1);
 			}
 
@@ -203,6 +213,30 @@ public class SettingBoardUI extends Board {
     }
 
     public boolean getIsOpen() {
+
         return isOpen;
     }
+
+
+    public NotificationGameConfirm getConfirmDialog() {
+        return notificationGameConfirm;
+    }
+
+    public void openConfirmDialog(boolean open) {
+        openConfirmDialog = open;
+    }
+
+    public boolean getOpenConfirmDialog()  {
+        return openConfirmDialog;
+    }
+
+    public StageManager getStageManager() {
+        return stageManager;
+    }
+
+    public SoundEffect getSoundEffect() {
+        return soundEffect;
+    }
+
+
 }

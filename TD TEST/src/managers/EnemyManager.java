@@ -15,8 +15,10 @@ import helpz.LoadPathImage;
 																							import scenes.GameScene;
 import stages.Stage2;
 																							import stages.Stage1;
+import stages.Stage3;
+import ui.SettingBoardUI;
 
-																							import static helpz.Constants.Enemy.*;
+import static helpz.Constants.Enemy.*;
 public class EnemyManager {
 
 BufferedImage[] enemyImgs;
@@ -26,16 +28,17 @@ private int xTarget, yTarget;
 private ArrayList<long[]> spawnPoints = new ArrayList<>(); //contains spawnPoint and type enemies
 private ArrayList<Long> initSpawnAmount =  new ArrayList<>();
 private float lifeBar;
-private int tempLife;
 private Wave wave;
 private long tempTime;
-
+private long pauseTime;
+private int coin;
+private boolean pauseGame = false;
 
 public EnemyManager(GameScene stage) {
 
 	enemyImgs = new BufferedImage[6];
 	lifeBar = 550;
-	tempLife = (int) lifeBar;
+	coin = 100;
 	wave = new Wave();
 
 	if (stage instanceof Stage1) {
@@ -47,33 +50,51 @@ public EnemyManager(GameScene stage) {
 	}
 	if (stage instanceof Stage2) {
 		moveManager = new MoveManager((Stage2) stage);
-//		spawnPoints.add(new long[]{0, 10, SLIME, 12,5000,5000,2000});
-		// Next spawn time is used to contain the value
 		spawnPoints.add(wave.WaveInTurn(0, 10, PINKY, 12, 1000,1000,2000));
 		spawnPoints.add(wave.WaveInTurn(0, 10, SLIME, 3, 12000,12000,2000));
 		xTarget = 19 * 32;
 		yTarget = 1 * 32;
 	}
+	if (stage instanceof Stage3) {
+		moveManager = new MoveManager((Stage3) stage);
+		spawnPoints.add(wave.WaveInTurn(1, 4, DUDE, 15, 1000,1000,2000));
+		spawnPoints.add(wave.WaveInTurn(1, 14, OSTER, 5, 1000,1000,5000));
+		xTarget = 17 * 32;
+		yTarget = 9 * 32;
+	}
 }
 public void update() {
-	if(GameStates.GetGameState() == GameStates.STAGE1 || GameStates.GetGameState() == GameStates.STAGE2){
+
+
+	if (pauseGame) {
+		timePauseSyn();
+		return;
+	}
+
+	if(GameStates.GetGameState() == GameStates.STAGE1
+			|| GameStates.GetGameState() == GameStates.STAGE2
+			|| GameStates.GetGameState() == GameStates.STAGE3){
 		spawningInterval();
 	}
 
-	ArrayList <Integer> tempLife = new ArrayList<>();
+//	ArrayList <Integer> tempLife = new ArrayList<>();
 	ArrayList<Enemy> toRemove = new ArrayList<>();
 	ArrayList<Enemy> deadEnemies = new ArrayList<>();
 	for (Enemy e : enemies) {
 		if (Math.abs(e.getX() - xTarget) < 1 && Math.abs(e.getY() - yTarget) < 1) {
 			substractLifeBar(e);
-			tempLife.add((int) lifeBar);
 			toRemove.add(e);
-			lifeBar = tempLife.get(0);
-		} else if(e.dead()) {
-			deadEnemies.add(e);
-		} else {
+			e.setDead(true);
+
+		}  else {
 			e.updateAnimation();
 			moveManager.isNextTileRoad(e, xTarget, yTarget);
+		}
+
+		if(e.dead()) {
+			deadEnemies.add(e);
+			coin += e.getCoin();
+
 		}
 	}
 
@@ -81,23 +102,24 @@ public void update() {
 	enemies.removeAll(deadEnemies);
 }
 
-public void getDame() {
 
-}
 
 
 private void spawningInterval() {
 	long currentTime = System.currentTimeMillis();
-	System.out.println("Current time: " + currentTime);
+
 	if (tempTime == 0) {
 		tempTime = currentTime;
 	}
+
+
 	for (long[] spawnPoint : spawnPoints) {
 		long startTime = spawnPoint[4];
 		long nextSpawnTime = spawnPoint[5];
 		long interval = spawnPoint[6];
 		long spawnedEnemy = spawnPoint[3];
 		initSpawnAmount.add(spawnPoint[3]);
+
 		if (currentTime - tempTime >= startTime  && spawnedEnemy > 0 && currentTime >= nextSpawnTime) {
 			addEnemy((int)spawnPoint[2], (int)spawnPoint[0] * 32, (int)spawnPoint[1] * 32);
 			spawnPoint[5] = currentTime + interval;
@@ -156,12 +178,15 @@ private void drawEnemy(Enemy e, Graphics g) {
 }
 public void resetEnemies() {
 	enemies.clear();
+//	pauseTime = 0;
 	for (int i = 0; i < spawnPoints.size(); i++) {
 		spawnPoints.get(i)[3] = initSpawnAmount.get(i);
 		spawnPoints.get(i)[5] = spawnPoints.get(i)[4];
 	}
-	lifeBar = 550;
+
 	tempTime = System.currentTimeMillis();
+	lifeBar = 550;
+	coin = 100;
 }
 
 
@@ -187,11 +212,53 @@ public float getLifeBar() {
 		return lifeBar;
 }
 
-public ArrayList<Enemy> getEnemies() {
-	return enemies;
+
+public int getCoin() {
+	return coin;
 }
 
 
+//Make time syn
+
+private void timePauseSyn() {
+	if (pauseTime == 0) { //pause at one time
+		pauseTime = System.currentTimeMillis();
+	}
+	System.out.println("startPause: " + pauseTime);
+}
+
+public void setPauseGame(boolean pauseGame) {
+	this.pauseGame = pauseGame;
+	if (!pauseGame) {
+		resumeFromPause();
+	}
+}
+
+	private void resumeFromPause() {
+		if (pauseTime > 0) {// avoid case when  first time running the game
+			long currentTime = System.currentTimeMillis();
+			long pauseDuration = currentTime - pauseTime;
+
+
+			tempTime = Math.min(tempTime + pauseDuration, currentTime);
+
+
+			for (long[] spawnPoint : spawnPoints) {
+				spawnPoint[5] = Math.min(spawnPoint[5] + pauseDuration, currentTime);
+			}
+
+			pauseTime = 0;
+		}
+	}
+
+
+public long getTempTime() {
+	return tempTime;
+}
+
+public void setTempTime(long tempTime) {
+	this.tempTime = tempTime;
+}
 }
 
 

@@ -49,4 +49,14 @@ còn - speed thì tại gốc tọa độ của tile nằm sẵn góc phải tr�
  fix and optimize logic spawn (done)
  -------------------------------------------------------
  create dead state enemy (done)
+adding placing tower(done)
+------------------------------------------------
+hit and hurt(notyet)
+test dead(notyet)
+----------------------
 
+fix bug currentTime when pausing game (done)
+fix sound effect(done)
+------------------------------------------
+
+make a board to confirm when click home button  

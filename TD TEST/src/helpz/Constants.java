@@ -36,6 +36,20 @@ public class Constants {
 			}
 			return 0;
 		}
+
+		public static int CoinReward (int enemyType) {
+			switch (enemyType) {
+				case OSTER:
+					return 50;
+				case SLIME:
+					return 20;
+				case DUDE:
+					return 100;
+				case PINKY:
+					return 220;
+			}
+			return 0;
+		}
 	}
 
 }

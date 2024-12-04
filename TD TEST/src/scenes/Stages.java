@@ -123,14 +123,18 @@ public class Stages extends GameScene implements SceneMethods {
                                 case 0:
                                     SetGameState(STAGE1);
                                     soundEffect.playEffect(1);
+                                    game.getStage1().getEnemyManager().setPauseGame(false);
                                     break;
                                 case 1:
                                     SetGameState(STAGE2);
                                     soundEffect.playEffect(1);
+                                    game.getStage2().getEnemyManager().setPauseGame(false);
+
                                     break;
-//                                case 2:
-//                                    SetGameState(STAGE1);
-//                                    break;
+                                case 2:
+                                    SetGameState(STAGE3);
+                                    game.getStage3().getEnemyManager().setPauseGame(false);
+                                    break;
 //	                    		case 3:
 //	                        		SetGameState(STAGE4);
 //	                        		break;

@@ -44,6 +44,12 @@ public class Render {
 			game.getStage1().render(g);
 
 			break;
+		case STAGE3:
+
+			game.getStage3().render(g);
+
+			break;
+
 		default:
 			break;
 

@@ -1,6 +1,6 @@
 package ui;
 
-import main.GameStates;
+
 import scenes.Towers;
 import towers.TowerEquippedButton;
 import towers.TowerInfo;
@@ -64,7 +64,7 @@ public class TowerBar extends Bar{
         }
     }
 
-    public void mouseClicked(GameStates gameStates, int x, int y) {
+    public void mouseClicked( int x, int y) {
         if(towerEquippedButtons[0].getBounds().contains(x, y) && towerEquippedButtons[0].getTowerNum() != 0) {
             towerSelected = towerEquippedButtons[0];
         } else if(towerEquippedButtons[1].getBounds().contains(x, y) && towerEquippedButtons[1].getTowerNum() != 0) {

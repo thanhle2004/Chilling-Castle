@@ -9,13 +9,13 @@ import stages.Stage2;
 import Map.Level2;
 import stages.Stage1;
 import Map.Level1;
-
-
+import stages.Stage3;
 
 
 public class MoveManager {
     private Stage1 stage1;
     private Stage2 stage2;
+    private Stage3 stage3;
     private float speed = 0.5f;
     private int tileValue = 0;
 
@@ -24,6 +24,9 @@ public class MoveManager {
     }
     public MoveManager(Stage2 stage2) {
         this.stage2 = stage2;
+    }
+    public MoveManager(Stage3 stage3) {
+        this.stage3 = stage3;
     }
 
 
@@ -176,6 +179,9 @@ public class MoveManager {
         }
         if (stage2 != null) {
             return stage2.getTileType(x, y);
+        }
+        if (stage3 != null) {
+            return stage3.getTileType(x, y);
         }
         return -1;
     }

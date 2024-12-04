@@ -8,6 +8,7 @@ import objects.SoundEffect;
 import scenes.*;
 import stages.Stage1;
 import stages.Stage2;
+import stages.Stage3;
 
 public class Game extends JFrame implements Runnable {
 
@@ -26,6 +27,7 @@ public class Game extends JFrame implements Runnable {
 	private Towers towers;
 	private SoundEffect soundEffect;
 	private Stage1 stage1;
+	private Stage3 stage3;
 	private TileManager tileManager;
 
 
@@ -50,6 +52,7 @@ public class Game extends JFrame implements Runnable {
 		stages = new Stages(this,towers.getBottomBar());
 		stage1 = new Stage1(this, towers.getBottomBar(), settings);
 		stage2 = new Stage2(this, towers.getBottomBar(), settings);
+		stage3 = new Stage3(this, towers.getBottomBar(), settings);
 		soundEffect = new SoundEffect();
 	}
 
@@ -71,6 +74,9 @@ public class Game extends JFrame implements Runnable {
 			break;
 		case STAGE2:
 			stage2.update();
+			break;
+		case STAGE3:
+			stage3.update();
 			break;
 		case SETTINGS:
 			break;
@@ -102,20 +108,14 @@ public class Game extends JFrame implements Runnable {
 			now = System.nanoTime();
 
 
-			//Update
-//			if (now - lastUpdate >= timePerUpdate) {
-//				updateGame();
-//				lastUpdate = now;
-//				updates++;
-//			}
 
-//			if (!stage1.isPaused() || !stage2.isPaused()) {
+
 				if (now - lastUpdate >= timePerUpdate) {
 					updateGame();
 					lastUpdate = now;
 					updates++;
 				}
-//			}
+
 
 			// Render
 			if (now - lastFrame >= timePerFrame) {
@@ -150,6 +150,10 @@ public class Game extends JFrame implements Runnable {
 	}
 	public Stage2 getStage2() {
 		return stage2;
+	}
+
+	public Stage3 getStage3() {
+		return stage3;
 	}
 	public Towers getTowers() { return towers; }
 	public Stage1 getStage1() { return stage1; }

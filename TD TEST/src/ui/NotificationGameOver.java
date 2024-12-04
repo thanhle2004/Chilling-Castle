@@ -12,7 +12,7 @@ import java.util.Objects;
 
 import static main.GameStates.MENU;
 
-public class NotificationGameOver extends Bar{
+public class NotificationGameOver extends Board{
 
     private BufferedImage img,HomeButton, ReplayButton;
     private SettingButton replayButton, homeButton;

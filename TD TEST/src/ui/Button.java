@@ -25,6 +25,16 @@ public class Button {
         initBounds();
     }
 
+	public Button(String text, int x, int y, int width, int height) {
+		this.text = text;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+
+		initBounds();
+	}
+
 	public int getX() {
 		return x;
 	}

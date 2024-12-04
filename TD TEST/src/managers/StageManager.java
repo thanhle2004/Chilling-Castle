@@ -9,14 +9,14 @@ import scenes.GameScene;
 import scenes.SceneMethods;
 import scenes.Settings;
 import towers.TowerEquippedButton;
-import ui.NotificationGameOver;
-import ui.SettingBoardUI;
+import ui.*;
 import ui.Button;
-import ui.TowerBar;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Objects;
 
 import static helpz.Constants.Tiles.GRASS_TILE;
 import static helpz.Constants.Tiles.WATER_TILE;
@@ -34,17 +34,21 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     protected Button bOption;
     public  boolean isPaused = false;
     public boolean isLose;
-    private NotificationGameOver notiBoard;
+    private NotificationGameOver notiLosing;
     private TowerManager towerManager;
+
+
     protected abstract NotificationGameOver createNotificationGameOver();
     protected abstract SettingBoardUI createSettingBoardUI();
+    private int coinTemp;
 
-    public StageManager(Game game, TowerBar towerBar, Settings settings, boolean isLose, boolean isPaused) {
+    public StageManager(Game game, TowerBar towerBar, Settings settings, boolean isLose) {
         super(game);
         MapLoader();
         importImage();
         initButtons();
         MapLoader();
+
         this.towerBar = towerBar;
         this.settings = settings;
         this.isLose = isLose;
@@ -52,7 +56,8 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         soundEffect = new SoundEffect();
         towerManager = new TowerManager(this);
         SettingBoardUI = createSettingBoardUI();
-        notiBoard = createNotificationGameOver();
+        notiLosing = createNotificationGameOver();
+
 
     }
 
@@ -62,7 +67,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
     private void importImage() {
         try {
-            optionButton = ImageIO.read(getClass().getResourceAsStream("/bOption.png"));
+            optionButton = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/bOption.png")));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -72,11 +77,14 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     protected abstract void MapLoader();
 
     public void update() {
-        if(!isPaused && !isLose) {
-            updateTick();
+        if(!isLose) {
+            if(!isPaused) {
+                updateTick();
+                loseGame();
+                towerManager.update();
+            }
             enemyManager.update();
-            loseGame();
-            towerManager.update();
+
         }
     }
 
@@ -90,8 +98,10 @@ public abstract class StageManager extends GameScene implements SceneMethods {
             game.getStage1().drawButtonPaused(g);
         } else if (GameStates.GetGameState() == GameStates.STAGE2) {
             game.getStage2().drawButtonPaused(g);
+        } else if (GameStates.GetGameState() == GameStates.STAGE3) {
+            game.getStage3().drawButtonPaused(g);
         }
-
+        findEachNum(g);
         towerBar.draw(g);
         drawTestHouse(g);
 
@@ -139,12 +149,14 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     @Override
     public void mouseClicked(int x, int y) {
         if(isLose) {
-            notiBoard.mouseClicked(x, y);
-
+            notiLosing.mouseClicked(x, y);
         }
+
+
         if (bOption.getBounds().contains(x, y)) {
             isPaused = !isPaused;
             SettingBoardUI.setIsOpen(true);
+            enemyManager.setPauseGame(true);
             soundEffect.playEffect(1);
         }
 
@@ -153,8 +165,12 @@ public abstract class StageManager extends GameScene implements SceneMethods {
             SettingBoardUI.mouseClicked(x, y);
         }
 
+        if (SettingBoardUI.getOpenConfirmDialog())  {
+            SettingBoardUI.getConfirmDialog().mouseClicked(x, y);
+        }
+
         if(y>=530) {
-            towerBar.mouseClicked(GameStates.STAGE1,x, y);
+            towerBar.mouseClicked(x, y);
         }else {
 
             if (towerBar.getSelectedTower() != null) {
@@ -166,21 +182,11 @@ public abstract class StageManager extends GameScene implements SceneMethods {
                     }
                 }
             } else {
-                // Not trying to place a tower
-                // Checking if a tower exists at x,y
                 TowerEquippedButton t = getTowerAt(mouseX, mouseY);
             }
         }
     }
 
-//    @Override
-//    public void mouseMoved(int x, int y) {
-//        if (y >= 530)
-//            towerBar.mouseMoved(x, y);
-//        else {
-//            towerBar.mouseMoved(x, y);
-//        }
-//    }
 
     @Override
     public void mouseMoved(int x, int y) {
@@ -211,18 +217,26 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
     public void drawButtonPaused(Graphics g) {
         if (isLose) {
-            notiBoard.draw(g);
+            notiLosing.draw(g);
         }
+
         if (!isPaused) {
             bOption.draw(g);
         } else {
             if(SettingBoardUI.getIsOpen())
                 SettingBoardUI.drawSettings(g);
         }
+
+        if(SettingBoardUI.getOpenConfirmDialog()) {
+            SettingBoardUI.getConfirmDialog().draw(g);
+        }
+
+
     }
 
     public void resetGame() {
         enemyManager.resetEnemies();
+        towerManager.clearTowers();
     }
 
     @Override
@@ -251,4 +265,53 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     public void mouseRightClicked(int x, int y) {
         towerBar.mouseRightClicked(x, y);
     }
+
+
+
+    public int  changeCoinValue() {
+        return enemyManager.getCoin();
+    }
+
+
+    private void findEachNum(Graphics g) {
+        coinTemp = changeCoinValue();
+        int coin = coinTemp;
+        int count = 0;
+        int x = 0;
+
+        // Count the digits
+        while (coinTemp != 0) {
+            coinTemp /= 10;
+            count++;
+        }
+
+
+        int divisor = (int) Math.pow(10, count - 1);
+
+
+        while (divisor > 0) {
+            int digit = coin / divisor;
+            coin %= divisor;
+            divisor /= 10;
+            x += 24;
+            drawNumCoin(g, digit, x);
+        }
+    }
+
+    private void drawNumCoin(Graphics g, int digit, int x)  {
+        BufferedImage img = null;
+        try {
+            img = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Number" + digit + ".png")));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        g.drawImage(img,50 + x,550, 24, 24, null);
+    }
+
+
+
+
+
+
 }
