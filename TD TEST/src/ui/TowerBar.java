@@ -1,6 +1,6 @@
 package ui;
 
-
+import main.GameStates;
 import scenes.Towers;
 import towers.TowerEquippedButton;
 import towers.TowerInfo;
@@ -13,7 +13,8 @@ import java.io.IOException;
 
 public class TowerBar extends Bar{
 
-    private BufferedImage towerFrame;
+    private BufferedImage towerFrame, fireT, iceT, lightningT, buffT;
+    private BufferedImage fireBullet, iceBullet, lightningBullet;
     private TowerEquippedButton[] towerEquippedButtons = new TowerEquippedButton[3];
     private TowerEquippedButton towerSelected;
     private Towers towers;
@@ -29,6 +30,14 @@ public class TowerBar extends Bar{
     private void importImg() {
         try {
             towerFrame = ImageIO.read(getClass().getResourceAsStream("/TowerFrame.png"));
+            fireT = ImageIO.read(getClass().getResourceAsStream("/FireT.png"));
+            iceT = ImageIO.read(getClass().getResourceAsStream("/IceT.png"));
+            lightningT = ImageIO.read(getClass().getResourceAsStream("/LightningT.png"));
+            buffT = ImageIO.read(getClass().getResourceAsStream("/BuffT.png"));
+
+            fireBullet = ImageIO.read(getClass().getResourceAsStream("/FireBullet.png"));
+            iceBullet = ImageIO.read(getClass().getResourceAsStream("/IceBullet.png"));
+            lightningBullet = ImageIO.read(getClass().getResourceAsStream("/LightningBullet.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,7 +73,33 @@ public class TowerBar extends Bar{
         }
     }
 
-    public void mouseClicked( int x, int y) {
+    public BufferedImage getTowerFrame(int num) {
+        switch (num) {
+            case 1:
+                return fireT;
+            case 2:
+                return iceT;
+            case 3:
+                return lightningT;
+            case 4:
+                return buffT;
+        }
+        return null;
+    }
+
+    public BufferedImage getTowerBullet(int num) {
+        switch (num) {
+            case 1:
+                return fireBullet;
+            case 2:
+                return iceBullet;
+            case 3:
+                return lightningBullet;
+        }
+        return null;
+    }
+
+    public void mouseClicked(int x, int y) {
         if(towerEquippedButtons[0].getBounds().contains(x, y) && towerEquippedButtons[0].getTowerNum() != 0) {
             towerSelected = towerEquippedButtons[0];
         } else if(towerEquippedButtons[1].getBounds().contains(x, y) && towerEquippedButtons[1].getTowerNum() != 0) {
@@ -151,5 +186,9 @@ public class TowerBar extends Bar{
 
     public BufferedImage getSelectedTowerImg() {
         return towerSelected.getImg();
+    }
+
+    public int getSelectedTowerNum() {
+        return towerSelected.getTowerNum();
     }
 }

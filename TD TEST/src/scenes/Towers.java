@@ -82,11 +82,11 @@ public class Towers extends GameScene implements SceneMethods {
 
     private void showTowerInfo() {
 
-        tower[0] = new TowerInfo(towerInfo[0], "Arrow Tower", bTower[0].getX(), bTower[0].getY(), 30, 3, 30, 25, 1);
-        tower[1] = new TowerInfo(towerInfo[1], "Mage Tower", bTower[1].getX(), bTower[1].getY(), 30, 3, 30, 35, 2);
-        tower[2] = new TowerInfo(towerInfo[2], "Support Tower", bTower[2].getX(), bTower[2].getY(), 30, 3, 30, 45, 3);
-        tower[3] = new TowerInfo(towerInfo[3], "Recall Tower", bTower[3].getX(), bTower[3].getY(), 30, 3, 30, 50, 4);
-        tower[4] = new TowerInfo(towerInfo[4], "Cooming Soon", bTower[4].getX(), bTower[4].getY(), 30, 3, 30, 0, 5);
+        tower[0] = new TowerInfo(towerInfo[0], "Arrow Tower", bTower[0].getX(), bTower[0].getY(), 30, 1, 80, 25, 1);
+        tower[1] = new TowerInfo(towerInfo[1], "Mage Tower", bTower[1].getX(), bTower[1].getY(), 30, 1, 80, 35, 2);
+        tower[2] = new TowerInfo(towerInfo[2], "Support Tower", bTower[2].getX(), bTower[2].getY(), 30, 1, 80, 45, 3);
+        tower[3] = new TowerInfo(towerInfo[3], "Recall Tower", bTower[3].getX(), bTower[3].getY(), 30, 1, 80, 50, 4);
+        tower[4] = new TowerInfo(towerInfo[4], "Cooming Soon", bTower[4].getX(), bTower[4].getY(), 30, 1, 80, 0, 5);
     }
 
     @Override
@@ -106,7 +106,6 @@ public class Towers extends GameScene implements SceneMethods {
     }
 
     private void drawButtons(Graphics g) {
-        //Menu Button
         bMenu.draw(g);
 
         for (int i = 0; i < bTower.length; i++) {
@@ -223,6 +222,7 @@ public class Towers extends GameScene implements SceneMethods {
         if (bMenu.getBounds().contains(x, y)) {
             bMenu.setMouseOver(true);
         }else {
+
             for (int i = 0; i < 5; i++) {
                 if (bTower[i].getBounds().contains(x, y)) {
                     bTower[i].setMouseOver(true);

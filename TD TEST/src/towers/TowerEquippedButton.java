@@ -14,6 +14,7 @@ public class TowerEquippedButton {
     private BufferedImage img;
     private int posX, posY, width, height, cost, num;
     private double DMG, CD, RNG;
+    private long lastShotTime;
 
     private Rectangle bounds;
     private boolean mouseOver, mousePressed, mouseClicked;
@@ -35,7 +36,7 @@ public class TowerEquippedButton {
         this.RNG = RNG;
         this.cost = cost;
         this.num = num;
-
+        this.lastShotTime = 0;
         initBounds();
 
     }
@@ -110,6 +111,10 @@ public class TowerEquippedButton {
         return img;
     }
 
+    public void setImg(BufferedImage img) {
+        this.img = img;
+    }
+
     public double getCD() {
         return CD;
     }
@@ -132,5 +137,13 @@ public class TowerEquippedButton {
 
     public int getPosY() {
         return posY;
+    }
+
+    public boolean canShoot() {
+        return (System.currentTimeMillis() - lastShotTime) >= CD * 1000;
+    }
+
+    public void resetCooldown() {
+        this.lastShotTime = System.currentTimeMillis();
     }
 }

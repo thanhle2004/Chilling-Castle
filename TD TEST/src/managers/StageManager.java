@@ -1,6 +1,7 @@
 package managers;
 
 
+import enemies.Enemy;
 import helpz.LoadPathImage;
 import main.Game;
 import main.GameStates;
@@ -54,7 +55,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         this.isLose = isLose;
         enemyManager = new EnemyManager(this);
         soundEffect = new SoundEffect();
-        towerManager = new TowerManager(this);
+        towerManager = new TowerManager(this, towerBar);
         SettingBoardUI = createSettingBoardUI();
         notiLosing = createNotificationGameOver();
 
@@ -78,13 +79,12 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
     public void update() {
         if(!isLose) {
+            enemyManager.update();
             if(!isPaused) {
                 updateTick();
                 loseGame();
                 towerManager.update();
             }
-            enemyManager.update();
-
         }
     }
 
@@ -172,7 +172,6 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         if(y>=530) {
             towerBar.mouseClicked(x, y);
         }else {
-
             if (towerBar.getSelectedTower() != null) {
                 // Trying to place a tower
                 if (isTileGrass(mouseX, mouseY)) {
@@ -185,6 +184,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
                 TowerEquippedButton t = getTowerAt(mouseX, mouseY);
             }
         }
+        towerManager.mouseClicked(x, y);
     }
 
 
@@ -310,8 +310,17 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     }
 
 
+    public Enemy getClosestEnemy(int x, int y, double range) {
+        Enemy closest = null;
+        double closestDistance = Double.MAX_VALUE;
 
-
-
-
+        for (Enemy enemy : enemyManager.getEnemies()) {
+            double distance = Math.hypot(enemy.getX() - x, enemy.getY() - y);
+            if (distance <= range && distance < closestDistance) {
+                closest = enemy;
+                closestDistance = distance;
+            }
+        }
+        return closest;
+    }
 }

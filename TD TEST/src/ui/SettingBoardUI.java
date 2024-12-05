@@ -126,7 +126,6 @@ public class SettingBoardUI extends Board {
     public void mouseClicked(int x, int y) {
         if(bHome.getBounds().contains(x, y)) {
             openConfirmDialog = true;
-
             isOpen = false;
             stageManager.isPaused = false;
         }

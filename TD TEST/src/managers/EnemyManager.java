@@ -34,6 +34,7 @@ private long pauseTime;
 private int coin;
 private boolean pauseGame = false;
 
+
 public EnemyManager(GameScene stage) {
 
 	enemyImgs = new BufferedImage[6];
@@ -57,14 +58,13 @@ public EnemyManager(GameScene stage) {
 	}
 	if (stage instanceof Stage3) {
 		moveManager = new MoveManager((Stage3) stage);
-		spawnPoints.add(wave.WaveInTurn(1, 4, DUDE, 15, 1000,1000,2000));
-		spawnPoints.add(wave.WaveInTurn(1, 14, OSTER, 5, 1000,1000,5000));
+		spawnPoints.add(wave.WaveInTurn(1, 4, DUDE, 1, 1000,1000,2000));
+//		spawnPoints.add(wave.WaveInTurn(1, 14, OSTER, 5, 1000,1000,5000));
 		xTarget = 17 * 32;
 		yTarget = 9 * 32;
 	}
 }
 public void update() {
-
 
 	if (pauseGame) {
 		timePauseSyn();
@@ -84,7 +84,6 @@ public void update() {
 		if (Math.abs(e.getX() - xTarget) < 1 && Math.abs(e.getY() - yTarget) < 1) {
 			substractLifeBar(e);
 			toRemove.add(e);
-			e.setDead(true);
 
 		}  else {
 			e.updateAnimation();
@@ -96,6 +95,7 @@ public void update() {
 			coin += e.getCoin();
 
 		}
+
 	}
 
 	enemies.removeAll(toRemove);
@@ -125,7 +125,7 @@ private void spawningInterval() {
 			spawnPoint[5] = currentTime + interval;
 			spawnPoint[3] = spawnedEnemy - 1;
 		}
-		System.out.println("Substract is " + (currentTime - tempTime));
+
 	}
 }
 
@@ -195,8 +195,10 @@ public void drawHealthBar(Enemy enemy, Graphics g) {
 	g.fillRect((int) enemy.getX(), (int) enemy.getY() - 2, ratioHealth(enemy), 2 );
 }
 public int ratioHealth(Enemy enemy) {
-	float ratio = enemy.getHealth() / enemy.getMaxHealth() * 100;
+	float ratio = (float) enemy.getHealth() / enemy.getMaxHealth() * 100;
+	System.out.println("ratio" + ratio);
 	float healtBar = ratio * 32 / 100;
+	System.out.println("health" + healtBar);
 	return (int) healtBar;
 }
 
@@ -205,7 +207,6 @@ private void substractLifeBar(Enemy e) {
 		if (lifeBar < 0) {
 			lifeBar = 0;
 		}
-
 }
 
 public float getLifeBar() {
@@ -224,7 +225,7 @@ private void timePauseSyn() {
 	if (pauseTime == 0) { //pause at one time
 		pauseTime = System.currentTimeMillis();
 	}
-	System.out.println("startPause: " + pauseTime);
+
 }
 
 public void setPauseGame(boolean pauseGame) {
@@ -244,7 +245,7 @@ public void setPauseGame(boolean pauseGame) {
 
 
 			for (long[] spawnPoint : spawnPoints) {
-				spawnPoint[5] = Math.min(spawnPoint[5] + pauseDuration, currentTime);
+				spawnPoint[5] = spawnPoint[5] + pauseDuration;
 			}
 
 			pauseTime = 0;
@@ -252,13 +253,13 @@ public void setPauseGame(boolean pauseGame) {
 	}
 
 
-public long getTempTime() {
-	return tempTime;
+
+
+public ArrayList<Enemy> getEnemies() {
+	return enemies;
 }
 
-public void setTempTime(long tempTime) {
-	this.tempTime = tempTime;
-}
+
 }
 
 

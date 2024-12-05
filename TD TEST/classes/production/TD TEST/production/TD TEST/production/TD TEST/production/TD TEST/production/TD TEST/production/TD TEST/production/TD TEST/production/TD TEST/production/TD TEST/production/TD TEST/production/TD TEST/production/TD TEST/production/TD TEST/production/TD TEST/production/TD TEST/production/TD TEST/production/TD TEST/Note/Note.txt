@@ -59,4 +59,10 @@ fix bug currentTime when pausing game (done)
 fix sound effect(done)
 ------------------------------------------
 
-make a board to confirm when click home button  
+make a board to confirm when click home button  (done)
+fix bug time to continue() (done)
+-------------------------------------------
+update tower v2()
+make logic dmg of tower()
+hit and hurt()
+test dead state()

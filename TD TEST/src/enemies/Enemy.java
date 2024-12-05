@@ -43,12 +43,6 @@ public class Enemy {
 		maxHealth = health;
 	}
 
-	public void getHurt() {
-		health = health - 20;
-		if (health <= 0) {
-			dead = true;
-		}
-	}
 
 	public void move(float speed, int dir) {
 		lastDir = dir;
@@ -133,5 +127,12 @@ public class Enemy {
 
 	public int getCoin() {
 		return coinEnemy;
+	}
+
+	public void takeDamage() {
+		health = health - 20;
+		if (health <= 0) {
+			dead = true;
+		}
 	}
 }
