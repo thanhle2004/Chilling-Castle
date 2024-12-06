@@ -105,11 +105,6 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         } else if (GameStates.GetGameState() == GameStates.STAGE3) {
             game.getStage3().drawButtonPaused(g);
         }
-
-
-
-     
-
     }
 
     private void drawSelectedTower(Graphics g) {

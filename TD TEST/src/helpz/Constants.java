@@ -81,13 +81,13 @@ public class Constants {
 		public static double Dmg(int towerTypes) {
 			switch (towerTypes) {
 				case ICE_TOWER:
-					return 15;
+					return 10;
 				case FIRE_TOWER:
-					return 20;
-				case LIGHT_TOWER:
-					return 2;
-				case SUMMON_TOWER:
 					return 30;
+				case LIGHT_TOWER:
+					return 1.5;
+				case SUMMON_TOWER:
+					return 40;
 			}
 			return 0;
 		}
@@ -95,15 +95,15 @@ public class Constants {
 		public static int Range(int towerTypes) {
 			switch (towerTypes) {
 				case ICE_TOWER:
-					return 80;
-				case FIRE_TOWER:
 					return 100;
+				case FIRE_TOWER:
+					return 120;
 				case LIGHT_TOWER:
-					return 200;
+					return 180;
 				case BUFF_TOWER:
-					return 300;
+					return 250;
 				case SUMMON_TOWER:
-					return 50;
+					return 70;
 			}
 			return 0;
 		}
@@ -111,15 +111,15 @@ public class Constants {
 		public static double CD(int towerTypes) {
 			switch (towerTypes) {
 				case ICE_TOWER:
-					return 0.5;
+					return 0.7;
 				case FIRE_TOWER:
-					return 1;
+					return 1.2;
 				case LIGHT_TOWER:
-					return 0.05;
+					return 0.1;
 				case BUFF_TOWER:
-					return 10;
+					return 15;
 				case SUMMON_TOWER:
-					return 30;
+					return 25;
 			}
 			return 0;
 		}
