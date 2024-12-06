@@ -66,5 +66,8 @@ update tower v2() (done)
 make logic dmg of tower() (done)
 hit and hurt() (done)
 test dead state() (done)
-update TowerType.
-make update Tower function .
+update TowerType. (done)
+make update Tower function .(done)
+--------------------------------
+each tower has own mod fire state(done)
+**Note

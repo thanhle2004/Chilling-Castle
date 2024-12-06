@@ -93,8 +93,11 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     public void render(Graphics g) {
         drawLevel(g);
         enemyManager.draw(g);
-        towerManager.draw(g);
         drawSelectedTower(g);
+        towerManager.draw(g);
+        findEachNum(g);
+        towerBar.draw(g);
+        drawTestHouse(g);
         if (GameStates.GetGameState() == GameStates.STAGE1) {
             game.getStage1().drawButtonPaused(g);
         } else if (GameStates.GetGameState() == GameStates.STAGE2) {
@@ -102,9 +105,10 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         } else if (GameStates.GetGameState() == GameStates.STAGE3) {
             game.getStage3().drawButtonPaused(g);
         }
-        findEachNum(g);
-        towerBar.draw(g);
-        drawTestHouse(g);
+
+
+
+     
 
     }
 
@@ -228,8 +232,6 @@ public abstract class StageManager extends GameScene implements SceneMethods {
                 SettingBoardUI.drawSettings(g);
                 System.out.println("Hello i am here");
             }
-
-
         }
 
         if(SettingBoardUI.getOpenConfirmDialog()) {
@@ -313,22 +315,6 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
         g.drawImage(img,50 + x,550, 24, 24, null);
     }
-
-
-//    public Enemy getClosestEnemy(int x, int y, double range) {
-//        Enemy closest = null;
-//        double closestDistance = Double.MAX_VALUE;
-//
-//        for (Enemy enemy : enemyManager.getEnemies()) {
-//            double distance = Math.hypot(enemy.getX() - x, enemy.getY() - y);
-//            if (distance <= range && distance < closestDistance) {
-//                closest = enemy;
-//                closestDistance = distance;
-//            }
-//        }
-//        return closest;
-//    }
-
 
 
 

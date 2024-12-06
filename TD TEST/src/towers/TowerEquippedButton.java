@@ -19,7 +19,7 @@ public class TowerEquippedButton {
     private Rectangle bounds;
     private boolean mouseOver, mousePressed, mouseClicked;
     private double baseDmg, currentDmg;
-
+    private int mod;
     public TowerEquippedButton(BufferedImage img, int posX, int posY, int width, int height, int cost, int TowerTypes) {
 
         this.img = img;
@@ -33,6 +33,7 @@ public class TowerEquippedButton {
         this.cost = cost;
         this.TowerTypes = TowerTypes;
         this.lastShotTime = 0;
+        this.mod = 1;
         initBounds();
 
     }
@@ -163,4 +164,12 @@ public class TowerEquippedButton {
         System.out.println("Base Damage: " + baseDmg);
         System.out.println("Current Damage: " + currentDmg);
     }
+    public int GetmodState() {
+        return mod;
+    }
+
+    public void setMod(int mod) {
+        this.mod = mod;
+    }
+
 }

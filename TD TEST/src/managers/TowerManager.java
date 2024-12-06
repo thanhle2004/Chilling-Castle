@@ -3,6 +3,7 @@ package managers;
 import enemies.Enemy;
 import towers.Bullet;
 import towers.TowerEquippedButton;
+import ui.Button;
 import ui.TowerBar;
 
 import java.awt.*;
@@ -23,15 +24,23 @@ public class TowerManager {
     private TowerEquippedButton towerOnMap = null;
     private ArrayList<Bullet> bullets = new ArrayList<>();
     private Enemy currentTarget;
-
+    private Button First, Last, Strongest, Closet;
+    private boolean OpenModButton    = false;
     public TowerManager(StageManager stageManager, TowerBar towerBar) {
         this.stageManager = stageManager;
         this.towerBar = towerBar;
+        createButtonChooseMod();
+    }
+
+    public void createButtonChooseMod() {
+        First = new Button("First" , 500, 525, 50, 50);
+        Last = new Button("Last" , 500 + 50 + 10, 525, 50, 50);
+        Closet  = new Button("Closet" , 500, 525 + 10 + 50, 50, 50);
+        Strongest = new Button("Strongest" , 500 + 10 + 50, 525 + 10 + 50, 50, 50);
     }
 
     public boolean addTower(TowerEquippedButton selectedTower, int xPos, int yPos) {
         Point position = new Point(xPos, yPos);
-
 
         if (towerMap.containsKey(position)) {
             return false;
@@ -41,9 +50,6 @@ public class TowerManager {
                 towerBar.getTowerFrame(selectedTower.getTowerTypes()),
                 xPos, yPos,
                 32, 32,
-//                selectedTower.getDMG(),
-//                selectedTower.getCD(),
-//                selectedTower.getRNG(),
                 selectedTower.getCost(),
                 selectedTower.getTowerTypes()
         );
@@ -73,9 +79,9 @@ public class TowerManager {
             if (tower.getTowerTypes() == BUFF_TOWER) {
                 applyBuff(tower);
             } else {
-                Enemy target = ChosenTarget(tower.getPosX(), tower.getPosY(), tower.getRNG(), tower.getTowerTypes());
+                Enemy target = ChosenTarget(tower.getPosX(), tower.getPosY(), tower.getRNG(), tower.GetmodState());
                 if (target == null) {
-//                System.out.println("No target found for tower at: " + tower.getPosX() + ", " + tower.getPosY());
+                System.out.println("No target found for tower at: " + tower.getPosX() + ", " + tower.getPosY());
                 } else if (tower.canShoot() && tower.getTowerTypes() < 4) { //nạp đạn
                     shootBullet(tower, target);
                     tower.resetCooldown();
@@ -87,7 +93,26 @@ public class TowerManager {
             currentTarget = null;
         }
 
+        if (stageManager.isLose) {
+            OpenModButton = false;
+        }
+    }
 
+    public void draw(Graphics g) {
+        for (TowerEquippedButton t : towerMap.values()) {
+            drawTower(g, t);
+        }
+
+        if (towerOnMap != null) {
+            drawRange(g, towerOnMap);
+            if (OpenModButton) {
+                drawChooseMod(g);
+            }
+        }
+
+        for (Bullet bullet : bullets) {
+            bullet.draw(g);
+        }
     }
 
     private void drawTower(Graphics g, TowerEquippedButton tower) {
@@ -99,27 +124,17 @@ public class TowerManager {
         int centerX = tower.getPosX() + 16;
         int centerY = tower.getPosY() + 16;
 
-
         int x = centerX - radius;
         int y = centerY - radius;
 
-        // Vẽ hình tròn
         g.drawArc(x, y, radius * 2, radius * 2, 0, 360);
     }
 
-
-    public void draw(Graphics g) {
-        for (TowerEquippedButton t : towerMap.values()) {
-            drawTower(g, t);
-        }
-
-        if (towerOnMap != null) {
-            drawRange(g, towerOnMap);
-        }
-
-        for (Bullet bullet : bullets) {
-            bullet.draw(g);
-        }
+    public void drawChooseMod(Graphics g) {
+        First.draw(g);
+        Last.draw(g);
+        Closet.draw(g);
+        Strongest.draw(g);
     }
 
 
@@ -130,44 +145,114 @@ public class TowerManager {
     public void clearTowers() {
         towerMap.clear();
         towerAmount = 0;
+        towerOnMap = null;
+        currentTarget = null;
     }
 
     public void mouseClicked(int x, int y) {
-        towerOnMap = null;
+        boolean clickedOnTower = false;
 
+        // Check if clicked on any tower
         for (TowerEquippedButton tower : towerMap.values()) {
             if (x >= tower.getPosX() && x <= tower.getPosX() + 32 &&
                     y >= tower.getPosY() && y <= tower.getPosY() + 32) {
                 towerOnMap = tower;
+                clickedOnTower = true;
                 break;
             }
         }
+
+
+        boolean clickedOnModArea = isClickOnModArea(x, y);
+
+        if ((clickedOnTower || clickedOnModArea) && towerOnMap.getTowerTypes() != BUFF_TOWER) {
+            OpenModButton = true;
+            if (clickedOnModArea) {
+                canClicked(x, y);
+            }
+        } else {
+            OpenModButton = false;
+            towerOnMap = null;
+        }
     }
 
-    public Enemy ChosenTarget   (int x, int y, double range,int TowerTypes) {
-        switch (TowerTypes) {
-            case ICE_TOWER:
-                return getFirstE(x, y, range);
-            case FIRE_TOWER:
+    private boolean isClickOnModArea(int x, int y) {
+        return First.getBounds().contains(x, y) ||
+                Last.getBounds().contains(x, y) ||
+                Closet.getBounds().contains(x, y) ||
+                Strongest.getBounds().contains(x, y);
+    }
+
+    private void canClicked(int x, int y) {
+        if (towerOnMap == null) {
+            return;
+        }
+        if (First.getBounds().contains(x, y)) {
+            System.out.println("Changing to First");
+            towerOnMap.setMod(FIRSTE);
+            OpenModButton = true;
+        } else if (Last.getBounds().contains(x, y)) {
+            System.out.println("Changing to Last");
+            towerOnMap.setMod(LASTE);
+            OpenModButton = true;
+        } else if (Closet.getBounds().contains(x, y)) {
+            System.out.println("Changing to Closet");
+            towerOnMap.setMod(CLOSET);
+            OpenModButton = true;
+        } else if (Strongest.getBounds().contains(x, y)) {
+            System.out.println("Changing to Strongest");
+            towerOnMap.setMod(STRONGEST);
+            OpenModButton = true;
+        }
+    }
+
+    public Enemy ChosenTarget (int x, int y, double range,int Mod) {
+        switch (Mod) {
+            case CLOSET:
+                return getClosetTarget(x, y, range);
+            case STRONGEST:
                 return getStrongestEnemy(x, y, range);
-            case LIGHT_TOWER:
+            case FIRSTE:
+                return getFirstE(x, y, range);
+            case LASTE:
+                return getLastEnemy(x,y,range);
+            case RANDOM:
                 return getRandomEnemy(x, y, range);
         }
         return null;
     }
 
+    private Enemy getLastEnemy(int x, int y, double range) {
+        for (int i = stageManager.getEnemyManager().getEnemies().size() - 1; i >= 0; i--) {
+            Enemy enemyTarget = stageManager.getEnemyManager().getEnemies().get(i);
+            if (isInRange(enemyTarget,x,y,range)){
+                return enemyTarget;
+            }
+
+        }
+        return null;
+    }
+
     public Enemy getFirstE (int x, int y, double range) {
-        //set the first one which go in range first
-        if (currentTarget != null) {
-            double distance = Math.hypot(currentTarget.getX() - x, currentTarget.getY() - y);
-            if (distance <= range) {
-                return currentTarget;
-            } else {
-                currentTarget = null;
+        if(currentTarget == null || currentTarget.dead() ||  !isInRange(currentTarget ,x ,y,range)) {
+            currentTarget = null;
+            for (Enemy enemy : stageManager.getEnemyManager().getEnemies()) {
+                if (isInRange(enemy,x,y,range)) {
+                    currentTarget = enemy;
+                    break;
+                }
             }
         }
+        return currentTarget;
 
-        //Find new enemy
+    }
+
+    private boolean isInRange(Enemy currentTarget, int x, int y, double range) {
+        double distance = Math.hypot(currentTarget.getX() - x, currentTarget.getY() - y);
+        return distance <= range;
+    }
+
+    private Enemy getClosetTarget (int x, int y, double range) {
         Enemy closest = null;
         double closestDistance = Double.MAX_VALUE;
 
@@ -179,7 +264,6 @@ public class TowerManager {
             }
         }
 
-        currentTarget = closest;
         return closest;
     }
 
@@ -219,10 +303,12 @@ public class TowerManager {
                 if (distance <= buffTower.getRNG()) {
                     double newDamage = tower.getBaseDamage() * 2;
                     tower.setDamage(newDamage);
-                    tower.printTowerInfo();
                 }
             }
         }
     }
+
+
+
 
 }

@@ -26,9 +26,9 @@ public class Constants {
 		public static int Health(int enemyType) {
 			switch (enemyType) {
 				case OSTER:
-					return 100;
-				case SLIME:
 					return 200;
+				case SLIME:
+					return 100;
 				case DUDE:
 					return 300;
 				case PINKY:
@@ -123,6 +123,13 @@ public class Constants {
 			}
 			return 0;
 		}
+
+		public static final int CLOSET = 1;
+		public static final int STRONGEST = 2;
+		public static final int FIRSTE = 3;
+		public static final int LASTE = 4;
+		public static final int RANDOM = 5;
+
 	}
 
 }
