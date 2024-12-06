@@ -50,14 +50,14 @@ public class NotificationGameConfirm extends Board{
             GameStates.SetGameState(MENU);
             settingBoardUI.getStageManager().resetGame();
             settingBoardUI.openConfirmDialog(false);
+            settingBoardUI.getStageManager().isPaused = false;
 
 
         } else if (Buttonno.getBounds().contains(x,y)) {
             settingBoardUI.openConfirmDialog(false);
             settingBoardUI.getSoundEffect().playEffect(1);
-            settingBoardUI.getStageManager().isPaused = false;
-            settingBoardUI.getStageManager().getEnemyManager().setPauseGame(false);
-
+            settingBoardUI.setIsOpen(true);
+            System.out.println("set is open " + settingBoardUI.getIsOpen());
         }
     }
 

@@ -1,6 +1,5 @@
 package ui;
 
-import main.GameStates;
 import scenes.Towers;
 import towers.TowerEquippedButton;
 import towers.TowerInfo;
@@ -10,6 +9,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+
+import static helpz.Constants.Tower.*;
 
 public class TowerBar extends Bar{
 
@@ -46,13 +47,13 @@ public class TowerBar extends Bar{
     private void initButtons() {
         // Initialize tower buttons with empty state
         for (int i = 0; i < 3; i++) {
-            towerEquippedButtons[i] = new TowerEquippedButton(towerFrame, 180 + i * 100, 530, 80, 80, 0, 0, 0, 0, 0);
+            towerEquippedButtons[i] = new TowerEquippedButton(towerFrame, 180 + i * 100, 530, 80, 80, 0, 0);
         }
     }
 
     public void equipTower(TowerInfo selectedTower, TowerButton bSelectedTower, int position) {
         if (position >= 0 && position < towerEquippedButtons.length) {
-            towerEquippedButtons[position] = new TowerEquippedButton(bSelectedTower.getImage(), 180 + position * 100, 530, 80, 80, selectedTower.getTowerDamage(), selectedTower.getTowerCooldown(), selectedTower.getTowerRange(), selectedTower.getTowerCost(), selectedTower.getNumber());
+            towerEquippedButtons[position] = new TowerEquippedButton(bSelectedTower.getImage(), 180 + position * 100, 530, 80, 80,  selectedTower.getTowerCost(), selectedTower.getNumber());
         }
     }
 
@@ -62,7 +63,7 @@ public class TowerBar extends Bar{
 
     public void removeTower(int slot) {
         if (slot >= 0 && slot < 3) {
-            towerEquippedButtons[slot] = new TowerEquippedButton(towerFrame, 180 + slot * 100, 530, 80, 80, 0, 0, 0, 0, 0);
+            towerEquippedButtons[slot] = new TowerEquippedButton(towerFrame, 180 + slot * 100, 530, 80, 80, 0,  0);
         }
     }
 
@@ -73,38 +74,38 @@ public class TowerBar extends Bar{
         }
     }
 
-    public BufferedImage getTowerFrame(int num) {
-        switch (num) {
-            case 1:
+    public BufferedImage getTowerFrame(int TowerTypes) {
+        switch (TowerTypes) {
+            case FIRE_TOWER:
                 return fireT;
-            case 2:
+            case ICE_TOWER:
                 return iceT;
-            case 3:
+            case LIGHT_TOWER:
                 return lightningT;
-            case 4:
+            case BUFF_TOWER:
                 return buffT;
         }
         return null;
     }
 
-    public BufferedImage getTowerBullet(int num) {
-        switch (num) {
-            case 1:
+    public BufferedImage getTowerBullet(int TowerTypes) {
+        switch (TowerTypes) {
+            case FIRE_TOWER:
                 return fireBullet;
-            case 2:
+            case ICE_TOWER:
                 return iceBullet;
-            case 3:
+            case LIGHT_TOWER:
                 return lightningBullet;
         }
         return null;
     }
 
     public void mouseClicked(int x, int y) {
-        if(towerEquippedButtons[0].getBounds().contains(x, y) && towerEquippedButtons[0].getTowerNum() != 0) {
+        if(towerEquippedButtons[0].getBounds().contains(x, y) && towerEquippedButtons[0].getTowerTypes() != 0) {
             towerSelected = towerEquippedButtons[0];
-        } else if(towerEquippedButtons[1].getBounds().contains(x, y) && towerEquippedButtons[1].getTowerNum() != 0) {
+        } else if(towerEquippedButtons[1].getBounds().contains(x, y) && towerEquippedButtons[1].getTowerTypes() != 0) {
             towerSelected = towerEquippedButtons[1];
-        } else if(towerEquippedButtons[2].getBounds().contains(x, y) && towerEquippedButtons[2].getTowerNum() != 0) {
+        } else if(towerEquippedButtons[2].getBounds().contains(x, y) && towerEquippedButtons[2].getTowerTypes() != 0) {
             towerSelected = towerEquippedButtons[2];
         } else if(selected) {
             towerSelected = null;
@@ -149,7 +150,7 @@ public class TowerBar extends Bar{
 
     public boolean isEquippedTower() {
         for(int i = 0; i < 3; i++) {
-            if(towerEquippedButtons[i].getTowerNum() != 0) {
+            if(towerEquippedButtons[i].getTowerTypes() != 0) {
                 return true;
             }
         }
@@ -189,6 +190,6 @@ public class TowerBar extends Bar{
     }
 
     public int getSelectedTowerNum() {
-        return towerSelected.getTowerNum();
+        return towerSelected.getTowerTypes();
     }
 }

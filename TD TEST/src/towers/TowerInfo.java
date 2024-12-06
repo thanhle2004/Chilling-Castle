@@ -1,5 +1,7 @@
 package towers;
 
+import helpz.Constants;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -10,20 +12,20 @@ public class TowerInfo {
 
     private String towerName;
     private double DMG, CD, RNG;
-    private int num, posX, posY, cost;
+    private int  posX, posY, cost;
     private BufferedImage img;
-
-    public TowerInfo(BufferedImage img, String towerName, int posX, int posY, double DMG, double CD, double RNG, int cost, int num) {
-
+    private int TowerTypes;
+    public TowerInfo(BufferedImage img, String towerName, int posX, int posY, int cost, int TowerType) {
+        this.TowerTypes = TowerType;
         this.img = img;
         this.towerName = towerName;
         this.posX = posX;
         this.posY = posY;
-        this.DMG = DMG;
-        this.CD = CD;
-        this.RNG = RNG;
+        this.DMG = Constants.Tower.Dmg(TowerTypes);
+        this.CD = Constants.Tower.CD(TowerTypes);
+        this.RNG = Constants.Tower.Range(TowerTypes);
         this.cost = cost;
-        this.num = num;
+
 
     }
 
@@ -34,10 +36,6 @@ public class TowerInfo {
             g.drawImage(img, posX - 140, posY + 3, 150, 100, null);
         }
 
-    }
-
-    public String getTowerName() {
-        return towerName;
     }
 
     public double getTowerDamage() {
@@ -53,7 +51,7 @@ public class TowerInfo {
     }
 
     public int getNumber() {
-        return num;
+        return TowerTypes;
     }
 
     public int getTowerCost() {

@@ -5,37 +5,33 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import helpz.Constants;
 import scenes.Towers;
-import ui.TowerButton;
 
 public class TowerEquippedButton {
 
     private Towers towers;
     private BufferedImage img;
-    private int posX, posY, width, height, cost, num;
+    private int posX, posY, width, height, cost, TowerTypes;
     private double DMG, CD, RNG;
     private long lastShotTime;
 
     private Rectangle bounds;
     private boolean mouseOver, mousePressed, mouseClicked;
+    private double baseDmg, currentDmg;
 
-    private TowerButton[] towersEquipped = new TowerButton[3];
-    private TowerInfo[] towersEquipInfo = new TowerInfo[3];
-
-    private int maxEquippedTowers = 3;
-
-    public TowerEquippedButton(BufferedImage img, int posX, int posY, int width, int height, double DMG, double CD, double RNG, int cost, int num) {
+    public TowerEquippedButton(BufferedImage img, int posX, int posY, int width, int height, int cost, int TowerTypes) {
 
         this.img = img;
         this.posX = posX;
         this.posY = posY;
         this.width = width;
         this.height = height;
-        this.DMG = DMG;
-        this.CD = CD;
-        this.RNG = RNG;
+        this.DMG = Constants.Tower.Dmg(TowerTypes);
+        this.CD = Constants.Tower.CD(TowerTypes);
+        this.RNG = Constants.Tower.Range(TowerTypes);
         this.cost = cost;
-        this.num = num;
+        this.TowerTypes = TowerTypes;
         this.lastShotTime = 0;
         initBounds();
 
@@ -66,11 +62,8 @@ public class TowerEquippedButton {
     }
 
     private void drawBorder(Graphics g) {
-
         g.setColor(Color.black);
         g.drawRect(posX, posY, width, height);
-
-
     }
 
     private void drawBody(Graphics g) {
@@ -103,8 +96,8 @@ public class TowerEquippedButton {
         return bounds;
     }
 
-    public int getTowerNum() {
-        return num;
+    public int getTowerTypes() {
+        return TowerTypes;
     }
 
     public BufferedImage getImg() {
@@ -145,5 +138,29 @@ public class TowerEquippedButton {
 
     public void resetCooldown() {
         this.lastShotTime = System.currentTimeMillis();
+    }
+
+
+    public double getBaseDamage() {
+        return baseDmg;
+    }
+
+    public void setDamage(double newDamage) {
+        this.currentDmg = newDamage;
+    }
+
+    public void setBaseDamage(double baseDamage) {
+        this.baseDmg = baseDamage;
+        this.currentDmg  = baseDamage;
+    }
+
+    public double getCurrentDmg() {
+        return currentDmg;
+    }
+
+    public void printTowerInfo() {
+        System.out.println("Tower Type: " + TowerTypes);
+        System.out.println("Base Damage: " + baseDmg);
+        System.out.println("Current Damage: " + currentDmg);
     }
 }

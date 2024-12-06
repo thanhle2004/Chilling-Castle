@@ -1,6 +1,8 @@
 package enemies;
 
 import helpz.Constants;
+import towers.TowerEquippedButton;
+
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import static helpz.Constants.Direction.*;
@@ -21,6 +23,8 @@ public class Enemy {
 	private BufferedImage[] images;
 	private boolean dead;
 	private int coinEnemy;
+	private Rectangle hitbox;
+
 	public Enemy(float x, float y, int ID, int enemyType) {
 		this.x = x;
 		this.y = y;
@@ -29,6 +33,7 @@ public class Enemy {
 		dead = false;
 		bounds = new Rectangle((int) x, (int) y, 32, 32);
 		lastDir = -1;
+		this.hitbox = new Rectangle((int) x, (int) y, 32, 32);
 		healthBarOfEach();
 		CoinEachEnemies();
 
@@ -129,10 +134,18 @@ public class Enemy {
 		return coinEnemy;
 	}
 
-	public void takeDamage() {
-		health = health - 20;
+	public void takeDamage( TowerEquippedButton tower) {
+		health =(int) (health - tower.getCurrentDmg());
 		if (health <= 0) {
 			dead = true;
 		}
+	}
+
+	public void updateHitbox(int posX, int posY) {
+		hitbox.setLocation((int) posX, (int) posY);
+	}
+
+	public Rectangle getHitbox() {
+		return hitbox;
 	}
 }

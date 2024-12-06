@@ -62,7 +62,9 @@ fix sound effect(done)
 make a board to confirm when click home button  (done)
 fix bug time to continue() (done)
 -------------------------------------------
-update tower v2()
-make logic dmg of tower()
-hit and hurt()
-test dead state()
+update tower v2() (done)
+make logic dmg of tower() (done)
+hit and hurt() (done)
+test dead state() (done)
+update TowerType.
+make update Tower function .

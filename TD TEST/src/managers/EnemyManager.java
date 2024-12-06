@@ -81,6 +81,7 @@ public void update() {
 	ArrayList<Enemy> toRemove = new ArrayList<>();
 	ArrayList<Enemy> deadEnemies = new ArrayList<>();
 	for (Enemy e : enemies) {
+		e.updateHitbox((int)e.getX(), (int) e.getY());
 		if (Math.abs(e.getX() - xTarget) < 1 && Math.abs(e.getY() - yTarget) < 1) {
 			substractLifeBar(e);
 			toRemove.add(e);
@@ -125,6 +126,7 @@ private void spawningInterval() {
 			spawnPoint[5] = currentTime + interval;
 			spawnPoint[3] = spawnedEnemy - 1;
 		}
+
 
 	}
 }
@@ -196,9 +198,7 @@ public void drawHealthBar(Enemy enemy, Graphics g) {
 }
 public int ratioHealth(Enemy enemy) {
 	float ratio = (float) enemy.getHealth() / enemy.getMaxHealth() * 100;
-	System.out.println("ratio" + ratio);
 	float healtBar = ratio * 32 / 100;
-	System.out.println("health" + healtBar);
 	return (int) healtBar;
 }
 
@@ -240,9 +240,7 @@ public void setPauseGame(boolean pauseGame) {
 			long currentTime = System.currentTimeMillis();
 			long pauseDuration = currentTime - pauseTime;
 
-
 			tempTime = Math.min(tempTime + pauseDuration, currentTime);
-
 
 			for (long[] spawnPoint : spawnPoints) {
 				spawnPoint[5] = spawnPoint[5] + pauseDuration;

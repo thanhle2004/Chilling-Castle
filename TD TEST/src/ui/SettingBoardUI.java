@@ -127,20 +127,21 @@ public class SettingBoardUI extends Board {
         if(bHome.getBounds().contains(x, y)) {
             openConfirmDialog = true;
             isOpen = false;
-            stageManager.isPaused = false;
         }
 
 
-        if (stageManager.isPaused && bContinue.getBounds().contains(x, y)) {
+        if (stageManager.isPaused && bContinue.getBounds().contains(x, y) && !openConfirmDialog) {
             stageManager.isPaused = false;
             soundEffect.playEffect(1);
             stageManager.getEnemyManager().setPauseGame(false);
+            isOpen = false;
         }
 
-        if (stageManager.isPaused && bReplay.getBounds().contains(x, y)) {
+        if (stageManager.isPaused  && bReplay.getBounds().contains(x, y) && !openConfirmDialog) {
             soundEffect.playEffect(1);
             stageManager.resetGame();
             stageManager.isPaused = false;
+            isOpen = false;
             stageManager.getEnemyManager().setPauseGame(false);
         }
 
@@ -212,7 +213,6 @@ public class SettingBoardUI extends Board {
     }
 
     public boolean getIsOpen() {
-
         return isOpen;
     }
 

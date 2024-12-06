@@ -84,6 +84,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
                 updateTick();
                 loseGame();
                 towerManager.update();
+
             }
         }
     }
@@ -153,7 +154,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         }
 
 
-        if (bOption.getBounds().contains(x, y)) {
+        if (bOption.getBounds().contains(x, y) && !SettingBoardUI.getIsOpen()) {
             isPaused = !isPaused;
             SettingBoardUI.setIsOpen(true);
             enemyManager.setPauseGame(true);
@@ -223,8 +224,12 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         if (!isPaused) {
             bOption.draw(g);
         } else {
-            if(SettingBoardUI.getIsOpen())
+            if(SettingBoardUI.getIsOpen()) {
                 SettingBoardUI.drawSettings(g);
+                System.out.println("Hello i am here");
+            }
+
+
         }
 
         if(SettingBoardUI.getOpenConfirmDialog()) {
@@ -310,17 +315,22 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     }
 
 
-    public Enemy getClosestEnemy(int x, int y, double range) {
-        Enemy closest = null;
-        double closestDistance = Double.MAX_VALUE;
+//    public Enemy getClosestEnemy(int x, int y, double range) {
+//        Enemy closest = null;
+//        double closestDistance = Double.MAX_VALUE;
+//
+//        for (Enemy enemy : enemyManager.getEnemies()) {
+//            double distance = Math.hypot(enemy.getX() - x, enemy.getY() - y);
+//            if (distance <= range && distance < closestDistance) {
+//                closest = enemy;
+//                closestDistance = distance;
+//            }
+//        }
+//        return closest;
+//    }
 
-        for (Enemy enemy : enemyManager.getEnemies()) {
-            double distance = Math.hypot(enemy.getX() - x, enemy.getY() - y);
-            if (distance <= range && distance < closestDistance) {
-                closest = enemy;
-                closestDistance = distance;
-            }
-        }
-        return closest;
-    }
+
+
+
+
 }
