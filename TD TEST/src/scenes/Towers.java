@@ -47,7 +47,7 @@ public class Towers extends GameScene implements SceneMethods {
 
     private void createTowerSelected() {
         bTowerSelected = new TowerButton(null, 0, 0, 0, 0, towerFrame);
-        towerSeclectedInfo = new TowerInfo(null, null, 0, 0, 0, -1);
+        towerSeclectedInfo = new TowerInfo(null, null, 0, 0, 0, -1, 0);
     }
 
     private void importImg() {
@@ -83,11 +83,11 @@ public class Towers extends GameScene implements SceneMethods {
 
     private void showTowerInfo() {
 
-        tower[0] = new TowerInfo(towerInfo[0], "Fire Tower", bTower[0].getX(), bTower[0].getY(),  25, FIRE_TOWER);
-        tower[1] = new TowerInfo(towerInfo[1], "Ice Tower", bTower[1].getX(), bTower[1].getY(), 35, ICE_TOWER);
-        tower[2] = new TowerInfo(towerInfo[2], "Lighting Tower", bTower[2].getX(), bTower[2].getY(), 45, LIGHT_TOWER);
-        tower[3] = new TowerInfo(towerInfo[3], "Support Tower", bTower[3].getX(), bTower[3].getY(),  50, BUFF_TOWER);
-        tower[4] = new TowerInfo(towerInfo[4], "Cooming Soon", bTower[4].getX(), bTower[4].getY(),  0, SUMMON_TOWER);
+        tower[0] = new TowerInfo(towerInfo[0], "Fire Tower", bTower[0].getX(), bTower[0].getY(),  25, FIRE_TOWER,1);
+        tower[1] = new TowerInfo(towerInfo[1], "Ice Tower", bTower[1].getX(), bTower[1].getY(), 35, ICE_TOWER,1);
+        tower[2] = new TowerInfo(towerInfo[2], "Lighting Tower", bTower[2].getX(), bTower[2].getY(), 45, LIGHT_TOWER,1);
+        tower[3] = new TowerInfo(towerInfo[3], "Support Tower", bTower[3].getX(), bTower[3].getY(),  50, BUFF_TOWER,1);
+        tower[4] = new TowerInfo(towerInfo[4], "Cooming Soon", bTower[4].getX(), bTower[4].getY(),  0, SUMMON_TOWER,1);
     }
 
     @Override

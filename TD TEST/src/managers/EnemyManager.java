@@ -255,6 +255,9 @@ public ArrayList<Enemy> getEnemies() {
 	return enemies;
 }
 
+public void setCoin(int coin) {
+	this.coin = coin;
+}
 
 }
 

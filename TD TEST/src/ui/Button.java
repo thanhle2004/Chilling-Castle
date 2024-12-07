@@ -134,4 +134,15 @@ public class Button {
 	public void setPosY(int y) {
 		this.y = y;
 	}
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setImage(BufferedImage img) {
+		this.img = img;
+	}
 }

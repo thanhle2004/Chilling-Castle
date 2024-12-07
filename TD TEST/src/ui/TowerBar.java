@@ -47,13 +47,13 @@ public class TowerBar extends Bar{
     private void initButtons() {
         // Initialize tower buttons with empty state
         for (int i = 0; i < 3; i++) {
-            towerEquippedButtons[i] = new TowerEquippedButton(towerFrame, 180 + i * 100, 530, 80, 80, 0, 0);
+            towerEquippedButtons[i] = new TowerEquippedButton(towerFrame, 180 + i * 100, 530, 80, 80, 0, 0,0);
         }
     }
 
     public void equipTower(TowerInfo selectedTower, TowerButton bSelectedTower, int position) {
         if (position >= 0 && position < towerEquippedButtons.length) {
-            towerEquippedButtons[position] = new TowerEquippedButton(bSelectedTower.getImage(), 180 + position * 100, 530, 80, 80,  selectedTower.getTowerCost(), selectedTower.getNumber());
+            towerEquippedButtons[position] = new TowerEquippedButton(bSelectedTower.getImage(), 180 + position * 100, 530, 80, 80,  selectedTower.getTowerCost(), selectedTower.getNumber(), selectedTower.getLevel());
         }
     }
 
@@ -63,7 +63,7 @@ public class TowerBar extends Bar{
 
     public void removeTower(int slot) {
         if (slot >= 0 && slot < 3) {
-            towerEquippedButtons[slot] = new TowerEquippedButton(towerFrame, 180 + slot * 100, 530, 80, 80, 0,  0);
+            towerEquippedButtons[slot] = new TowerEquippedButton(towerFrame, 180 + slot * 100, 530, 80, 80, 0,  0, 0);
         }
     }
 

@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import Map.Level1;
 import helpz.Constants;
 import scenes.Towers;
 
@@ -20,20 +21,22 @@ public class TowerEquippedButton {
     private boolean mouseOver, mousePressed, mouseClicked;
     private double baseDmg, currentDmg;
     private int mod;
-    public TowerEquippedButton(BufferedImage img, int posX, int posY, int width, int height, int cost, int TowerTypes) {
+    private int level;
+    public TowerEquippedButton(BufferedImage img, int posX, int posY, int width, int height, int cost, int TowerTypes, int level) {
 
         this.img = img;
         this.posX = posX;
         this.posY = posY;
         this.width = width;
         this.height = height;
-        this.DMG = Constants.Tower.Dmg(TowerTypes);
-        this.CD = Constants.Tower.CD(TowerTypes);
-        this.RNG = Constants.Tower.Range(TowerTypes);
-        this.cost = cost;
+        this.DMG = Constants.Tower.DmgLv1(TowerTypes);
+        this.CD = Constants.Tower.CDLv1(TowerTypes);
+        this.RNG = Constants.Tower.RangeLv1(TowerTypes);
+        this.cost = Constants.Tower.CoinToBuy(TowerTypes);
         this.TowerTypes = TowerTypes;
         this.lastShotTime = 0;
         this.mod = 1;
+        this.level = level;
         initBounds();
 
     }
@@ -171,5 +174,38 @@ public class TowerEquippedButton {
     public void setMod(int mod) {
         this.mod = mod;
     }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+    public int getLevel() {
+        return level;
+    }
+
+    public void updateStatPerLv() {
+        switch (level) {
+            case 1:
+                this.DMG = Constants.Tower.DmgLv1(TowerTypes);
+                this.CD = Constants.Tower.CDLv1(TowerTypes);
+                this.RNG = Constants.Tower.RangeLv1(TowerTypes);
+                break;
+            case 2:
+                this.DMG = Constants.Tower.DmgLv2(TowerTypes);
+                this.CD = Constants.Tower.CdLv2(TowerTypes);
+                this.RNG = Constants.Tower.RangeLv2(TowerTypes);
+                break;
+            case 3:
+                this.DMG = Constants.Tower.DmgLv3(TowerTypes);
+                this.CD = Constants.Tower.CdLv3(TowerTypes);
+                this.RNG = Constants.Tower.RangeLv3(TowerTypes);
+                break;
+            default:
+                break;
+        }
+    }
+
+
+
+
 
 }

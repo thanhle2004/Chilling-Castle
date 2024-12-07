@@ -1,7 +1,6 @@
 package managers;
 
 
-import enemies.Enemy;
 import helpz.LoadPathImage;
 import main.Game;
 import main.GameStates;
@@ -96,7 +95,6 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         drawSelectedTower(g);
         towerManager.draw(g);
         findEachNum(g);
-        towerBar.draw(g);
         drawTestHouse(g);
         if (GameStates.GetGameState() == GameStates.STAGE1) {
             game.getStage1().drawButtonPaused(g);
@@ -108,8 +106,8 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     }
 
     private void drawSelectedTower(Graphics g) {
-        if (towerBar.getSelectedTower() != null) {
-            g.drawImage(towerBar.getSelectedTowerImg(), mouseX, mouseY, 32, 32, null);
+        if (towerBar.getSelectedTower() != null && towerBar.getSelectedTower().getCost() <= getCoinValue()) {
+            g.drawImage(towerBar.getTowerFrame(towerBar.getSelectedTowerNum()), mouseX, mouseY, 32, 32, null);
         }
     }
 
@@ -173,12 +171,16 @@ public abstract class StageManager extends GameScene implements SceneMethods {
             towerBar.mouseClicked(x, y);
         }else {
             if (towerBar.getSelectedTower() != null) {
-                // Trying to place a tower
-                if (isTileGrass(mouseX, mouseY)) {
-                    if (getTowerAt(mouseX, mouseY) == null) {
-                        towerManager.addTower(towerBar.getSelectedTower(), mouseX, mouseY);
-                        towerBar.setTowerSelected(null);
+                if (towerBar.getSelectedTower().getCost() <= getCoinValue()) {
+                    // Trying to place a tower
+                    if (isTileGrass(mouseX, mouseY)) {
+                        if (getTowerAt(mouseX, mouseY) == null) {
+                            towerManager.addTower(towerBar.getSelectedTower(), mouseX, mouseY);
+                            towerBar.setTowerSelected(null);
+                        }
                     }
+                } else {
+                    towerBar.setTowerSelected(null);
                 }
             } else {
                 TowerEquippedButton t = getTowerAt(mouseX, mouseY);
@@ -270,13 +272,17 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
 
 
-    public int  changeCoinValue() {
+    public int getCoinValue() {
         return enemyManager.getCoin();
+    }
+
+    public void setCoin(int coin) {
+        enemyManager.setCoin(coin);
     }
 
 
     private void findEachNum(Graphics g) {
-        coinTemp = changeCoinValue();
+        coinTemp = getCoinValue();
         int coin = coinTemp;
         int count = 0;
         int x = 0;
@@ -287,6 +293,10 @@ public abstract class StageManager extends GameScene implements SceneMethods {
             count++;
         }
 
+        if (coin == 0) {
+            drawNumCoin(g, 0, x);  // Draw 0 immediately
+            return;
+        }
 
         int divisor = (int) Math.pow(10, count - 1);
 

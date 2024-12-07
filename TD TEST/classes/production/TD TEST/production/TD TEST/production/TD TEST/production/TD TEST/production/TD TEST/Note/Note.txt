@@ -70,4 +70,7 @@ update TowerType. (done)
 make update Tower function .(done)
 --------------------------------
 each tower has own mod fire state(done)
-**Note
+-------------------------------------
+adding - substract coin when upgrade
+change display showing mod
+fix bug ()

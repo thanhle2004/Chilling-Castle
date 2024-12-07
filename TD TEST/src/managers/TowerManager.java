@@ -1,12 +1,16 @@
 package managers;
 
 import enemies.Enemy;
+import helpz.Constants;
 import towers.Bullet;
 import towers.TowerEquippedButton;
 import ui.Button;
 import ui.TowerBar;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,11 +29,17 @@ public class TowerManager {
     private ArrayList<Bullet> bullets = new ArrayList<>();
     private Enemy currentTarget;
     private Button First, Last, Strongest, Closet;
-    private boolean OpenModButton    = false;
+    private boolean OpenModButton  = false;
+    private BufferedImage img11, img12, img13, img21, img22, img23, img31, img32, img33, img41, img42, img43;
+    private BufferedImage up1, up2, up3, sell1, sell2, sell3, first, last, closest, strongest, weakest, close;
+    private Button upgradeButton, sellButton, firstB, lastB, closestB, strongestB, weakestB, closeButton;
+
     public TowerManager(StageManager stageManager, TowerBar towerBar) {
         this.stageManager = stageManager;
         this.towerBar = towerBar;
         createButtonChooseMod();
+        importImg();
+        initButtons();
     }
 
     public void createButtonChooseMod() {
@@ -41,7 +51,7 @@ public class TowerManager {
 
     public boolean addTower(TowerEquippedButton selectedTower, int xPos, int yPos) {
         Point position = new Point(xPos, yPos);
-
+        int cost = selectedTower.getCost();
         if (towerMap.containsKey(position)) {
             return false;
         }
@@ -51,17 +61,105 @@ public class TowerManager {
                 xPos, yPos,
                 32, 32,
                 selectedTower.getCost(),
-                selectedTower.getTowerTypes()
+                selectedTower.getTowerTypes(),
+                selectedTower.getLevel()
         );
         newTower.setBaseDamage(selectedTower.getDMG());
         towerMap.put(position, newTower);
         towerAmount++;
+        deductionCoin(cost);
         return true;
     }
 
     public void shootBullet(TowerEquippedButton tower, Enemy target) {
         Bullet bullet = new Bullet(towerBar.getTowerBullet(tower.getTowerTypes()), tower.getPosX(), tower.getPosY(), 5, target, tower);
         bullets.add(bullet);
+    }
+
+    private void importImg() {
+        try {
+            img11 = ImageIO.read(getClass().getResourceAsStream("/T1_L1.png"));
+            img12 = ImageIO.read(getClass().getResourceAsStream("/T1_L2.png"));
+            img13 = ImageIO.read(getClass().getResourceAsStream("/T1_L3.png"));
+
+            img21 = ImageIO.read(getClass().getResourceAsStream("/T2_L1.png"));
+            img22 = ImageIO.read(getClass().getResourceAsStream("/T2_L2.png"));
+            img23 = ImageIO.read(getClass().getResourceAsStream("/T2_L3.png"));
+
+            img31 = ImageIO.read(getClass().getResourceAsStream("/T3_L1.png"));
+            img32 = ImageIO.read(getClass().getResourceAsStream("/T3_L2.png"));
+            img33 = ImageIO.read(getClass().getResourceAsStream("/T3_L3.png"));
+
+            img41 = ImageIO.read(getClass().getResourceAsStream("/T4_L1.png"));
+            img42 = ImageIO.read(getClass().getResourceAsStream("/T4_L2.png"));
+            img43 = ImageIO.read(getClass().getResourceAsStream("/T4_L3.png"));
+
+            up1 = ImageIO.read(getClass().getResourceAsStream("/Up1.png"));
+            up2 = ImageIO.read(getClass().getResourceAsStream("/Up2.png"));
+            up3 = ImageIO.read(getClass().getResourceAsStream("/Up3.png"));
+
+            sell1 = ImageIO.read(getClass().getResourceAsStream("/SellLv1.png"));
+            sell2 = ImageIO.read(getClass().getResourceAsStream("/SellLv2.png"));
+            sell3 = ImageIO.read(getClass().getResourceAsStream("/SellLv3.png"));
+
+            first = ImageIO.read(getClass().getResourceAsStream("/TypeAttack1.png"));
+            last = ImageIO.read(getClass().getResourceAsStream("/TypeAttack2.png"));
+            closest = ImageIO.read(getClass().getResourceAsStream("/TypeAttack3.png"));
+            strongest = ImageIO.read(getClass().getResourceAsStream("/TypeAttack4.png"));
+
+            close = ImageIO.read(getClass().getResourceAsStream("/bClose.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public BufferedImage getUpImg(TowerEquippedButton tower) {
+        switch (tower.getTowerTypes()) {
+            case FIRE_TOWER:
+                switch (tower.getLevel()) {
+                    case 1:
+                        return img11;
+                    case 2:
+                        return img12;
+                    case 3:
+                        return img13;
+                }
+            case ICE_TOWER:
+                switch (tower.getLevel()) {
+                    case 1:
+                        return img21;
+                    case 2:
+                        return img22;
+                    case 3:
+                        return img23;
+                }
+            case LIGHT_TOWER:
+                switch (tower.getLevel()) {
+                    case 1:
+                        return img31;
+                    case 2:
+                        return img32;
+                    case 3:
+                        return img33;
+                }
+            case BUFF_TOWER:
+                switch (tower.getLevel()) {
+                    case 1:
+                        return img41;
+                    case 2:
+                        return img42;
+                    case 3:
+                        return img43;
+                }
+        }
+        return null;
+    }
+
+
+    private void initButtons() {
+        upgradeButton = new Button(null, 25, 410, 150, 35, up1);
+        sellButton = new Button(null, 103,445,72, 35, sell1);
+        closeButton = new Button(null, 160, 190, 50, 50, close);
     }
 
 
@@ -102,16 +200,16 @@ public class TowerManager {
         for (TowerEquippedButton t : towerMap.values()) {
             drawTower(g, t);
         }
+        
+        for (Bullet bullet : bullets) {
+            bullet.draw(g);
+        }
 
         if (towerOnMap != null) {
-            drawRange(g, towerOnMap);
             if (OpenModButton) {
                 drawChooseMod(g);
             }
-        }
-
-        for (Bullet bullet : bullets) {
-            bullet.draw(g);
+            drawTowerSet(g, towerOnMap);
         }
     }
 
@@ -128,6 +226,16 @@ public class TowerManager {
         int y = centerY - radius;
 
         g.drawArc(x, y, radius * 2, radius * 2, 0, 360);
+    }
+
+
+    private void drawTowerSet(Graphics g, TowerEquippedButton tower) {
+        drawRange(g, tower);
+        g.drawImage(getUpImg(tower), 0, 200, 200, 300, null);
+        drawUpButton(g, tower);
+        drawSellButton(g, tower);
+        drawTypeAttackButton(g, tower);
+        drawCloseButton(g);
     }
 
     public void drawChooseMod(Graphics g) {
@@ -149,19 +257,57 @@ public class TowerManager {
         currentTarget = null;
     }
 
+    public boolean removeTower(int x, int y) {
+        Point position = new Point(x, y);
+        if (towerMap.remove(position) != null) {
+            towerAmount--;
+            return true; // have removed
+        }
+        return false; // Don't have tower to remove
+    }
+
     public void mouseClicked(int x, int y) {
         boolean clickedOnTower = false;
-
+        List<TowerEquippedButton> towersToRemove = new ArrayList<>();
         // Check if clicked on any tower
         for (TowerEquippedButton tower : towerMap.values()) {
             if (x >= tower.getPosX() && x <= tower.getPosX() + 32 &&
                     y >= tower.getPosY() && y <= tower.getPosY() + 32) {
                 towerOnMap = tower;
                 clickedOnTower = true;
+                upgradeButton.setImage(getUpgradeButtonImg(tower));
                 break;
             }
-        }
+            //Change upgrade image
+            if (towerOnMap != null && upgradeButton.getBounds().contains(x, y) && towerOnMap.getLevel() < 3) {
+                TowerEquippedButton selectedTower = getTowerAt(towerOnMap.getPosX(), towerOnMap.getPosY());
+                if (selectedTower.getLevel() < 3) {
+                    int currency = Constants.Tower.CoinUpgradeL(selectedTower.getLevel() + 1);
+                    if (canUpgarde(currency)) {
+                        selectedTower.setLevel(selectedTower.getLevel() + 1);
+                        updateUpgradeButtonImage(selectedTower);
+                        deductionCoin(currency);
+                        tower.updateStatPerLv();
+                    }
 
+                }
+                towerOnMap = null;
+            }
+
+            //Sell tower
+            if(towerOnMap != null && sellButton.getBounds().contains(x, y)) {
+                towersToRemove.add(tower);
+                getTowerAt(towerOnMap.getPosX(), towerOnMap.getPosY());
+                increaseCoin(Constants.Tower.coinReceived(towerOnMap.getLevel()));
+                towerOnMap = null;
+            }
+
+            if(towerOnMap != null && closeButton.getBounds().contains(x, y)) {
+                towerOnMap = null;
+            }
+
+
+        }
 
         boolean clickedOnModArea = isClickOnModArea(x, y);
 
@@ -174,6 +320,53 @@ public class TowerManager {
             OpenModButton = false;
             towerOnMap = null;
         }
+        for (TowerEquippedButton tower : towersToRemove) {
+            removeTower(tower.getPosX(), tower.getPosY()); // Xóa tháp sau khi vòng lặp kết thúc
+        }
+    }
+
+    private boolean canUpgarde(int currency) {
+        return stageManager.getCoinValue() >= currency;
+    }
+
+    private void deductionCoin(int currency) {
+        stageManager.setCoin(stageManager.getCoinValue() - currency);
+    }
+
+    private void increaseCoin(int currency) {
+        stageManager.setCoin(stageManager.getCoinValue() + currency);
+    }
+
+
+
+    private void updateUpgradeButtonImage(TowerEquippedButton tower) {
+        int level = tower.getLevel();
+        switch (level) {
+            case 1:
+                upgradeButton.setImage(up1);
+                break;
+            case 2:
+                upgradeButton.setImage(up2);
+                break;
+            case 3:
+                upgradeButton.setImage(up3);
+                break;
+            default:
+                upgradeButton.setImage(null);
+                break;
+        }
+    }
+
+    public BufferedImage getUpgradeButtonImg(TowerEquippedButton tower) {
+        switch (tower.getLevel()) {
+            case 1:
+                return up1;
+            case 2:
+                return up2;
+            case 3:
+                return up3;
+        }
+        return null;
     }
 
     private boolean isClickOnModArea(int x, int y) {
@@ -308,6 +501,35 @@ public class TowerManager {
         }
     }
 
+
+
+
+    public void drawUpButton(Graphics g, TowerEquippedButton tower) {
+        g.drawImage(upgradeButton.getImage(), upgradeButton.getX(), upgradeButton.getY(),
+                upgradeButton.getWidth(), upgradeButton.getHeight(), null);
+    }
+
+    public void drawCloseButton(Graphics g) {
+        g.drawImage(closeButton.getImage(), closeButton.getX(), closeButton.getY(), closeButton.getWidth(), closeButton.getHeight(), null);
+    }
+
+    public void drawSellButton(Graphics g, TowerEquippedButton tower) {
+        switch (tower.getLevel()) {
+            case 1:
+                g.drawImage(sell1, 103,445,72, 35, null);
+                break;
+            case 2:
+                g.drawImage(sell2, 103,445,72, 35, null);
+                break;
+            case 3:
+                g.drawImage(sell3, 103,445,72, 35, null);
+                break;
+        }
+    }
+
+    public void drawTypeAttackButton(Graphics g, TowerEquippedButton tower) {
+        g.drawImage(first, 25,445,72, 35, null);
+    }
 
 
 

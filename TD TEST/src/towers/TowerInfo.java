@@ -2,11 +2,8 @@ package towers;
 
 import helpz.Constants;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-
-import javax.swing.JButton;
 
 public class TowerInfo {
 
@@ -15,16 +12,18 @@ public class TowerInfo {
     private int  posX, posY, cost;
     private BufferedImage img;
     private int TowerTypes;
-    public TowerInfo(BufferedImage img, String towerName, int posX, int posY, int cost, int TowerType) {
+    private int level;
+    public TowerInfo(BufferedImage img, String towerName, int posX, int posY, int cost, int TowerType, int level) {
         this.TowerTypes = TowerType;
         this.img = img;
         this.towerName = towerName;
         this.posX = posX;
         this.posY = posY;
-        this.DMG = Constants.Tower.Dmg(TowerTypes);
-        this.CD = Constants.Tower.CD(TowerTypes);
-        this.RNG = Constants.Tower.Range(TowerTypes);
+        this.DMG = Constants.Tower.DmgLv1(TowerTypes);
+        this.CD = Constants.Tower.CDLv1(TowerTypes);
+        this.RNG = Constants.Tower.RangeLv1(TowerTypes);
         this.cost = cost;
+        this.level = level;
 
 
     }
@@ -57,5 +56,11 @@ public class TowerInfo {
     public int getTowerCost() {
         return cost;
     }
+
+    public int getLevel() {
+        return level;
+    }
+
+
 
 }
