@@ -33,31 +33,32 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     protected BufferedImage optionButton;
     protected Button bOption;
     public  boolean isPaused = false;
-    public boolean isLose;
-    private NotificationGameOver notiLosing;
+    public boolean isLose = false;
+    public boolean isWin = false;
+    private NotificationLoseGame notiLosing;
+    private NotificationWinGame notiWin;
     private TowerManager towerManager;
 
 
-    protected abstract NotificationGameOver createNotificationGameOver();
+    protected abstract NotificationLoseGame createNotificationGameOver();
     protected abstract SettingBoardUI createSettingBoardUI();
+    protected abstract NotificationWinGame  createNotificationWinGame();
     private int coinTemp;
 
-    public StageManager(Game game, TowerBar towerBar, Settings settings, boolean isLose) {
+    public StageManager(Game game, TowerBar towerBar, Settings settings) {
         super(game);
         MapLoader();
         importImage();
         initButtons();
-        MapLoader();
 
         this.towerBar = towerBar;
         this.settings = settings;
-        this.isLose = isLose;
         enemyManager = new EnemyManager(this);
         soundEffect = new SoundEffect();
         towerManager = new TowerManager(this, towerBar);
         SettingBoardUI = createSettingBoardUI();
         notiLosing = createNotificationGameOver();
-
+        notiWin = createNotificationWinGame();
 
     }
 
@@ -77,15 +78,13 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     protected abstract void MapLoader();
 
     public void update() {
-        if(!isLose) {
             enemyManager.update();
             if(!isPaused) {
                 updateTick();
                 loseGame();
+                winGame();
                 towerManager.update();
-
             }
-        }
     }
 
     @Override
@@ -94,7 +93,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         enemyManager.draw(g);
         drawSelectedTower(g);
         towerManager.draw(g);
-        findEachNum(g);
+        drawDigitCoin(g);
         drawTestHouse(g);
         if (GameStates.GetGameState() == GameStates.STAGE1) {
             game.getStage1().drawButtonPaused(g);
@@ -149,9 +148,11 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         if(isLose) {
             notiLosing.mouseClicked(x, y);
         }
+        if (isWin) {
+            notiWin.mouseClicked(x,y);
+        }
 
-
-        if (bOption.getBounds().contains(x, y) && !SettingBoardUI.getIsOpen()) {
+        if (bOption.getBounds().contains(x, y) && !SettingBoardUI.getIsOpen() && !SettingBoardUI.getOpenConfirmDialog()) {
             isPaused = !isPaused;
             SettingBoardUI.setIsOpen(true);
             enemyManager.setPauseGame(true);
@@ -167,26 +168,31 @@ public abstract class StageManager extends GameScene implements SceneMethods {
             SettingBoardUI.getConfirmDialog().mouseClicked(x, y);
         }
 
-        if(y>=530) {
-            towerBar.mouseClicked(x, y);
-        }else {
-            if (towerBar.getSelectedTower() != null) {
-                if (towerBar.getSelectedTower().getCost() <= getCoinValue()) {
-                    // Trying to place a tower
-                    if (isTileGrass(mouseX, mouseY)) {
-                        if (getTowerAt(mouseX, mouseY) == null) {
-                            towerManager.addTower(towerBar.getSelectedTower(), mouseX, mouseY);
-                            towerBar.setTowerSelected(null);
+
+        if (!isPaused && !isLose) {
+            if(y>=530) {
+                towerBar.mouseClicked(x, y);
+            }else {
+                if (towerBar.getSelectedTower() != null) {
+                    if (towerBar.getSelectedTower().getCost() <= getCoinValue()) {
+                        // Trying to place a tower
+                        if (isTileGrass(mouseX, mouseY)) {
+                            if (getTowerAt(mouseX, mouseY) == null) {
+                                towerManager.addTower(towerBar.getSelectedTower(), mouseX, mouseY);
+                                towerBar.setTowerSelected(null);
+                            }
                         }
+                    } else {
+                        towerBar.setTowerSelected(null);
                     }
                 } else {
-                    towerBar.setTowerSelected(null);
+                    TowerEquippedButton t = getTowerAt(mouseX, mouseY);
                 }
-            } else {
-                TowerEquippedButton t = getTowerAt(mouseX, mouseY);
             }
+            towerManager.mouseClicked(x, y);
         }
-        towerManager.mouseClicked(x, y);
+
+
     }
 
 
@@ -221,20 +227,21 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         if (isLose) {
             notiLosing.draw(g);
         }
+        if (isWin) {
+            notiWin.draw(g);
+        }
 
         if (!isPaused) {
             bOption.draw(g);
         } else {
             if(SettingBoardUI.getIsOpen()) {
                 SettingBoardUI.drawSettings(g);
-                System.out.println("Hello i am here");
             }
         }
 
         if(SettingBoardUI.getOpenConfirmDialog()) {
             SettingBoardUI.getConfirmDialog().draw(g);
         }
-
 
     }
 
@@ -249,6 +256,16 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     public void loseGame() {
         if(enemyManager.getLifeBar() <= 0) {
             isLose = true;
+            isPaused = true;
+            enemyManager.setPauseGame(true);
+        }
+    }
+
+    public void winGame() {
+        if (enemyManager.getTotalEnemies() == 0) {
+            isWin = true;
+            isPaused = true;
+            enemyManager.setPauseGame(true);
         }
     }
 
@@ -281,7 +298,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     }
 
 
-    private void findEachNum(Graphics g) {
+    private void drawDigitCoin(Graphics g) {
         coinTemp = getCoinValue();
         int coin = coinTemp;
         int count = 0;
@@ -308,20 +325,25 @@ public abstract class StageManager extends GameScene implements SceneMethods {
             x += 24;
             drawNumCoin(g, digit, x);
         }
+
     }
 
     private void drawNumCoin(Graphics g, int digit, int x)  {
         BufferedImage img = null;
+        BufferedImage dollarImg = null;
         try {
-            img = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Number" + digit + ".png")));
+            img = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/"+digit + ".png")));
+            dollarImg = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/$.png")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
+        g.drawImage(dollarImg, 40, 550,24,24, null);
         g.drawImage(img,50 + x,550, 24, 24, null);
     }
 
-
+    public Game game() {
+        return game;
+    }
 
 
 }

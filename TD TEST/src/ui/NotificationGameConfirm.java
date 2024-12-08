@@ -1,7 +1,6 @@
 package ui;
 
 import main.GameStates;
-import managers.StageManager;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -15,25 +14,40 @@ public class NotificationGameConfirm extends Board{
 
 
     private BufferedImage img;
-    private Button buttonYes, Buttonno;
+    private final Button buttonYes, buttonNo;
     private SettingBoardUI settingBoardUI;
-    public NotificationGameConfirm(int x, int y, int width, int height ,SettingBoardUI settingBoardUI) {
+    private BufferedImage Yes, No;
+    public NotificationGameConfirm(int x, int y, int width, int height, SettingBoardUI settingBoardUI) {
         super(x, y, width, height);
         this.settingBoardUI = settingBoardUI;
-        buttonYes= new Button("Yes", x + 160 , y + 340, 50, 50);
-        Buttonno= new Button("No", x + 320 + 50 + 10 + 5, y + 340 , 50, 50);
         ImprortImg();
+        int buttonWidth = 100;
+        int buttonHeight = 100;
+        int spaceBetweenButtons = 50;
+        int total_length = 2*buttonWidth + spaceBetweenButtons;
+        int length_left = 640 - total_length;
+        int startPointX = length_left / 2;
+        int nextStartPointX = startPointX + buttonWidth + spaceBetweenButtons;
+
+        // Căn chỉnh tọa độ nút
+        buttonYes = new Button(startPointX,370 , buttonWidth, buttonHeight, Yes);
+        buttonNo = new Button(nextStartPointX, 370, buttonWidth, buttonHeight, No);
+
+
     }
+
 
     public void draw(Graphics g) {
         drawNotification( g);
         buttonYes.draw(g);
-        Buttonno.draw(g);
+        buttonNo.draw(g);
     }
 
     public void ImprortImg() {
         try {
-            img = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/selectedBoard-export.png")));
+            img = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/LeaveGame.png")));
+            Yes = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Sure.png")));
+            No = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Cancel.png")));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,7 +55,7 @@ public class NotificationGameConfirm extends Board{
     }
 
     private void drawNotification(Graphics g) {
-        g.drawImage(img, x-25, y, null);
+        g.drawImage(img, x, y,width,height , null);
 
     }
 
@@ -52,12 +66,11 @@ public class NotificationGameConfirm extends Board{
             settingBoardUI.openConfirmDialog(false);
             settingBoardUI.getStageManager().isPaused = false;
 
-
-        } else if (Buttonno.getBounds().contains(x,y)) {
+        } else if (buttonNo.getBounds().contains(x,y)) {
             settingBoardUI.openConfirmDialog(false);
             settingBoardUI.getSoundEffect().playEffect(1);
             settingBoardUI.setIsOpen(true);
-            System.out.println("set is open " + settingBoardUI.getIsOpen());
+            settingBoardUI.getStageManager().isPaused = true;
         }
     }
 

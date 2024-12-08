@@ -74,3 +74,8 @@ each tower has own mod fire state(done)
 adding - substract coin when upgrade
 change display showing mod
 fix bug ()
+
+
+
+
+isPause trong stageManager doc lap voi enemyManager, de trong tuong lai co phat trien skill thi no the dung PauseGame in enemyManager ma khong anh huong den isPaused

@@ -1,5 +1,6 @@
 package managers;
 
+import Map.Level3;
 import enemies.Enemy;
 import static helpz.Constants.Direction.*;
 import static helpz.Constants.Tiles.*;
@@ -18,15 +19,21 @@ public class MoveManager {
     private Stage3 stage3;
     private float speed = 0.5f;
     private int tileValue = 0;
+    private int[][] level = new int[20][20];
 
     public MoveManager(Stage1 stage1) {
         this.stage1 = stage1;
+        level = Level1.getLevelData1();
+
     }
     public MoveManager(Stage2 stage2) {
         this.stage2 = stage2;
+        level = Level2.getLevelData2();
+
     }
     public MoveManager(Stage3 stage3) {
         this.stage3 = stage3;
+        level = Level3.getLevelData3();
     }
 
 
@@ -40,13 +47,9 @@ public class MoveManager {
 
         if (getTileType(newX, newY) == ROAD_TILE) {
         	MoveToTarger(e, xTarget, yTarget);
-
-        } else if (isAtEnd(e)) {
-
         } else {
             setNewDirectionAndMove(e,xTarget,yTarget);
         }
-
 
     }
 
@@ -56,22 +59,19 @@ public class MoveManager {
         int dir = e.getLastDir();
         int xCord = (int) (e.getX() / 32);
         int yCord = (int) (e.getY() / 32);
-//        System.out.println("Tile value is" + tileValue);
 
-        fixEnemyOffsetTile(e, dir, xCord, yCord);
+            fixEnemyOffsetTile(e, dir, xCord, yCord);
 
         int newX1 = (int) (e.getX() + getSpeedAndWidth(dir));
         int newY1 = (int) (e.getY() + getSpeedAndHeight(dir));
 
 
-        if (isAtEnd(e)) return;
-
-        int mapWidth = Level1.getLevelData1()[0].length;
-        int mapHeight = Level1.getLevelData1().length;
+        int mapWidth = 20;
+        int mapHeight = 20;
 
         if (newX1 / 32 >= 0 && newX1 / 32 < mapWidth &&
             newY1 / 32 >= 0 && newY1 / 32 < mapHeight) {
-            tileValue = Level1.getLevelData1()[yCord][xCord+1];
+            tileValue = level[yCord][xCord+1];
         } else {
         	if (dir == LEFT || dir == RIGHT) {
                 int newY = (int) (e.getY() + getSpeedAndHeight(UP));
@@ -89,14 +89,14 @@ public class MoveManager {
         }
 
         if (tileValue == 3) {
-//            System.out.println("I am here: 3");
+            System.out.println("I am here: 3");
             if (yTarget < e.getY()) {
                 if (getTileType((int) e.getX(), (int) (e.getY() + getSpeedAndHeight(UP))) == ROAD_TILE) {
                     e.move(speed, UP);
 //                    System.out.println("Hello");
                     return;
                 }
-            } else if (yTarget >= e.getY()) {
+            } else  {
                 if (getTileType((int) e.getX(), (int) (e.getY() + getSpeedAndHeight(DOWN))) == ROAD_TILE) {
                     e.move(speed, DOWN);
                     return;
@@ -132,6 +132,27 @@ public class MoveManager {
         int bestDir = getBestDir(currentDistance, xEnemy, yEnemy, xTarget, yTarget, e);
 
         e.move(speed, bestDir);
+    }
+
+    private int getBestDir(float currentDistance, int xEnemy, int yEnemy, int xTarget, int yTarget, Enemy e) {
+        int[] dir = {UP, DOWN, RIGHT, LEFT};
+
+
+        for (int direction : dir) {
+            int newX = (int) (e.getX() + getSpeedAndWidth(direction));
+            int newY = (int) (e.getY() + getSpeedAndHeight(direction));
+
+            if (getTileType(newX, newY) == ROAD_TILE) {
+                float newDistance = calculateDistance(newX, newY, xTarget, yTarget);
+
+                if (newDistance < currentDistance) {
+                    if (getTileType(newX, newY) != ROAD_TILE) {
+                        setNewDirectionAndMove(e,xTarget,yTarget);
+                    }
+                }
+            }
+        }
+        return e.getLastDir();
     }
 
 
@@ -187,37 +208,9 @@ public class MoveManager {
     }
 
 
-    private int getBestDir(float currentDistance, int xEnemy, int yEnemy, int xTarget, int yTarget, Enemy e) {
-        int[] dir = {UP, DOWN, RIGHT, LEFT};
-        int bestDir = -1;
-        float bestDistance = currentDistance;
-
-        for (int direction : dir) {
-            int newX = (int) (e.getX() + getSpeedAndWidth(direction));
-            int newY = (int) (e.getY() + getSpeedAndHeight(direction));
-
-            if (getTileType(newX, newY) == ROAD_TILE) {
-                float newDistance = calculateDistance(newX, newY, xTarget, yTarget);
-
-                if (newDistance < bestDistance) {
-                	if (getTileType(newX, newY) != ROAD_TILE) {
-                		 setNewDirectionAndMove(e,xTarget,yTarget);
-                	}
-                } else if (newDistance < bestDistance) {
-                		bestDistance = newDistance;
-                        bestDir = direction;
-                }
-            }
-        }
-        return bestDir != -1 ? bestDir : e.getLastDir();
-    }
-
-
 	// Calculate distance between two points
     private float calculateDistance(int xEnemy, int yEnemy, int xTarget, int yTarget) {
     	return Math.abs(xTarget - xEnemy) + Math.abs(yTarget - yEnemy);
     }
-
-
 
 }

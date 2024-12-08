@@ -33,7 +33,7 @@ private long tempTime;
 private long pauseTime;
 private int coin;
 private boolean pauseGame = false;
-
+private long totalEnemies, totalEnemiesTemp;
 
 public EnemyManager(GameScene stage) {
 
@@ -43,28 +43,42 @@ public EnemyManager(GameScene stage) {
 	wave = new Wave();
 
 	if (stage instanceof Stage1) {
-		moveManager = new MoveManager((Stage1) stage);
-		spawnPoints.add(wave.WaveInTurn(1, 4, DUDE, 15, 1000,1000,2000));
-		spawnPoints.add(wave.WaveInTurn(1, 14, OSTER, 5, 1000,1000,5000));
 		xTarget = 17 * 32;
 		yTarget = 9 * 32;
+		moveManager = new MoveManager((Stage1) stage);
+		//each enemies = long[] {spawnX, spawnY, EnemyType,numberPerTurn, startTime, nextSpawnTime, timeSpawnInterval}
+		spawnPoints.add(wave.WaveInTurn(1, 4, DUDE, 15, 1000,1000,2000));
+		spawnPoints.add(wave.WaveInTurn(1, 14, OSTER, 15, 1000,1000,5000));
+
 	}
 	if (stage instanceof Stage2) {
-		moveManager = new MoveManager((Stage2) stage);
-		spawnPoints.add(wave.WaveInTurn(0, 10, PINKY, 12, 1000,1000,2000));
-		spawnPoints.add(wave.WaveInTurn(0, 10, SLIME, 3, 12000,12000,2000));
 		xTarget = 19 * 32;
 		yTarget = 1 * 32;
+		moveManager = new MoveManager((Stage2) stage);
+		spawnPoints.add(wave.WaveInTurn(0, 10, PINKY, 2, 1000,1000,2000));
+		spawnPoints.add(wave.WaveInTurn(0, 10, SLIME, 15, 12000,12000,2000));
+
 	}
 	if (stage instanceof Stage3) {
-		moveManager = new MoveManager((Stage3) stage);
-		spawnPoints.add(wave.WaveInTurn(1, 4, DUDE, 1, 1000,1000,2000));
-//		spawnPoints.add(wave.WaveInTurn(1, 14, OSTER, 5, 1000,1000,5000));
 		xTarget = 17 * 32;
 		yTarget = 9 * 32;
+		moveManager = new MoveManager((Stage3) stage);
+		spawnPoints.add(wave.WaveInTurn(1, 4, DUDE, 1, 1000,1000,2000));
+		spawnPoints.add(wave.WaveInTurn(1, 14, OSTER, 5, 1000,1000,5000));
+
 	}
+	calculateTotalEnemies();
 }
-public void update() {
+
+	private void calculateTotalEnemies() {
+		totalEnemies = 0;
+		for (long[] enemies : spawnPoints) {
+			totalEnemies += enemies[3];
+		}
+		totalEnemiesTemp = totalEnemies;
+	}
+
+	public void update() {
 
 	if (pauseGame) {
 		timePauseSyn();
@@ -77,7 +91,6 @@ public void update() {
 		spawningInterval();
 	}
 
-//	ArrayList <Integer> tempLife = new ArrayList<>();
 	ArrayList<Enemy> toRemove = new ArrayList<>();
 	ArrayList<Enemy> deadEnemies = new ArrayList<>();
 	for (Enemy e : enemies) {
@@ -85,18 +98,18 @@ public void update() {
 		if (Math.abs(e.getX() - xTarget) < 1 && Math.abs(e.getY() - yTarget) < 1) {
 			substractLifeBar(e);
 			toRemove.add(e);
+			totalEnemies --;
 
 		}  else {
 			e.updateAnimation();
-			moveManager.isNextTileRoad(e, xTarget, yTarget);
+			moveManager.	isNextTileRoad(e, xTarget, yTarget);
 		}
 
 		if(e.dead()) {
 			deadEnemies.add(e);
 			coin += e.getCoin();
-
+			totalEnemies --;
 		}
-
 	}
 
 	enemies.removeAll(toRemove);
@@ -126,6 +139,7 @@ private void spawningInterval() {
 			spawnPoint[5] = currentTime + interval;
 			spawnPoint[3] = spawnedEnemy - 1;
 		}
+//		System.out.println("Subtract is " + (currentTime - tempTime));
 	}
 }
 
@@ -169,6 +183,7 @@ public void draw(Graphics g) {
 	g.fillRect(60, 2, (int) Math.abs(lifeBar), 20);
 	g.setColor(Color.WHITE);
 	g.drawString("Life Bar: " + lifeBar, 60, 18);
+	g.drawString("Total Enemies: " + totalEnemies, 60, 40);
 }
 private void drawEnemy(Enemy e, Graphics g) {
 	if (e.getImages() != null) {
@@ -187,6 +202,7 @@ public void resetEnemies() {
 	tempTime = System.currentTimeMillis();
 	lifeBar = 550;
 	coin = 100;
+	totalEnemies = totalEnemiesTemp;
 }
 
 
@@ -257,6 +273,10 @@ public ArrayList<Enemy> getEnemies() {
 
 public void setCoin(int coin) {
 	this.coin = coin;
+}
+
+public long getTotalEnemies() {
+	return totalEnemies;
 }
 
 }

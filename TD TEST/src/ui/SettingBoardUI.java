@@ -53,7 +53,7 @@ public class SettingBoardUI extends Board {
         this.soundX = settings.getSoundX();
         this.soundY = settings.getSoundY();
 
-        notificationGameConfirm = new NotificationGameConfirm(x,y,width,height,this);
+        notificationGameConfirm = new NotificationGameConfirm(120,120,400,400,this);
         bMusicHandle = new SettingButton(null, musicX, musicY, 20, 20, sliderHandle);
         bSoundHandle = new SettingButton(null, soundX, soundY, 20, 20, sliderHandle);
         bHome = new SettingButton(null, 90, 380, 130, 75, HomeButton);

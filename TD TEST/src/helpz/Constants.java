@@ -27,8 +27,8 @@ public class Constants {
 			switch (enemyType) {
 				case OSTER: return 200;
 				case SLIME: return 50;
-				case DUDE: return 300;
-				case PINKY: return 400;
+				case DUDE: return 100;
+				case PINKY: return 250;
 			}
 			return 0;
 		}

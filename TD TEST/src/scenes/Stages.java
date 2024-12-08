@@ -135,9 +135,6 @@ public class Stages extends GameScene implements SceneMethods {
                                     SetGameState(STAGE3);
                                     game.getStage3().getEnemyManager().setPauseGame(false);
                                     break;
-//	                    		case 3:
-//	                        		SetGameState(STAGE4);
-//	                        		break;
                             }
                         } else {
                             soundEffect.playEffect(2);

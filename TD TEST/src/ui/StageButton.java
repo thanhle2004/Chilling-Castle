@@ -10,15 +10,6 @@ public class StageButton extends Button {
         super(text, x, y, width, height, img);
     }
 
-
-    private void drawBody(Graphics g) {
-        if (mouseOver)
-            g.drawImage(img, x - 1, y - 1, width + 3, height + 3, null);
-        else
-            g.setColor(Color.WHITE);
-        g.fillRect(x, y, width, height);
-    }
-
     @Override
     public void drawText(Graphics g) {
         super.drawText(g);

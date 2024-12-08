@@ -165,7 +165,6 @@ public class TowerManager {
         closeButton = new Button(null, 160, 190, 50, 50, close);
     }
 
-
     public void update() {
         Iterator<Bullet> iterator = bullets.iterator();
         while (iterator.hasNext()) {
@@ -182,7 +181,7 @@ public class TowerManager {
             } else {
                 Enemy target = ChosenTarget(tower.getPosX(), tower.getPosY(), tower.getRNG(), tower.GetmodState());
                 if (target == null) {
-                System.out.println("No target found for tower at: " + tower.getPosX() + ", " + tower.getPosY());
+
                 } else if (tower.canShoot() && tower.getTowerTypes() < 4) { //nạp đạn
                     shootBullet(tower, target);
                     tower.resetCooldown();
@@ -304,7 +303,7 @@ public class TowerManager {
 
             //Sell tower
             if(towerOnMap != null && sellButton.getBounds().contains(x, y)) {
-                towersToRemove.add(tower);
+                towersToRemove.add(towerOnMap);
                 getTowerAt(towerOnMap.getPosX(), towerOnMap.getPosY());
                 increaseCoin(Constants.Tower.coinReceived(towerOnMap.getLevel()));
                 towerOnMap = null;
@@ -313,8 +312,6 @@ public class TowerManager {
             if(towerOnMap != null && closeButton.getBounds().contains(x, y)) {
                 towerOnMap = null;
             }
-
-
         }
 
         boolean clickedOnModArea = isClickOnModArea(x, y);
@@ -535,8 +532,4 @@ public class TowerManager {
                 break;
         }
     }
-
-
-
-
 }
