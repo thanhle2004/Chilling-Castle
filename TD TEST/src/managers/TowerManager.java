@@ -29,7 +29,7 @@ public class TowerManager {
     private ArrayList<Bullet> bullets = new ArrayList<>();
     private Enemy currentTarget;
     private Button First, Last, Strongest, Closet;
-    private boolean OpenModButton  = false;
+
     private BufferedImage img11, img12, img13, img21, img22, img23, img31, img32, img33, img41, img42, img43;
     private BufferedImage up1, up2, up3, sell1, sell2, sell3, first, last, closest, strongest, weakest, close;
     private Button upgradeButton, sellButton, firstB, lastB, closestB, strongestB, weakestB, closeButton;
@@ -37,16 +37,16 @@ public class TowerManager {
     public TowerManager(StageManager stageManager, TowerBar towerBar) {
         this.stageManager = stageManager;
         this.towerBar = towerBar;
-        createButtonChooseMod();
         importImg();
         initButtons();
+        createButtonChooseMod();
     }
 
     public void createButtonChooseMod() {
-        First = new Button("First" , 500, 525, 50, 50);
-        Last = new Button("Last" , 500 + 50 + 10, 525, 50, 50);
-        Closet  = new Button("Closet" , 500, 525 + 10 + 50, 50, 50);
-        Strongest = new Button("Strongest" , 500 + 10 + 50, 525 + 10 + 50, 50, 50);
+        First = new Button(25, 445, 72, 35, first);
+        Last = new Button(25, 445, 72, 35, last);
+        Closet  = new Button(25, 445, 72, 35,closest);
+        Strongest = new Button(25, 445, 72, 35,strongest);
     }
 
     public boolean addTower(TowerEquippedButton selectedTower, int xPos, int yPos) {
@@ -75,6 +75,9 @@ public class TowerManager {
         Bullet bullet = new Bullet(towerBar.getTowerBullet(tower.getTowerTypes()), tower.getPosX(), tower.getPosY(), 5, target, tower);
         bullets.add(bullet);
     }
+
+
+
 
     private void importImg() {
         try {
@@ -191,9 +194,6 @@ public class TowerManager {
             currentTarget = null;
         }
 
-        if (stageManager.isLose) {
-            OpenModButton = false;
-        }
     }
 
     public void draw(Graphics g) {
@@ -206,10 +206,24 @@ public class TowerManager {
         }
 
         if (towerOnMap != null) {
-            if (OpenModButton) {
-                drawChooseMod(g);
-            }
             drawTowerSet(g, towerOnMap);
+        }
+    }
+
+    public void drawTypeAttackButton(Graphics g, TowerEquippedButton tower) {
+        switch (tower.getIndexChange()) {
+            case 1:
+                First.draw(g);
+                break;
+            case 2:
+                Last.draw(g);
+                break;
+            case 3:
+                Closet.draw(g);
+                break;
+            case 4:
+                Strongest.draw(g);
+                break;
         }
     }
 
@@ -238,12 +252,6 @@ public class TowerManager {
         drawCloseButton(g);
     }
 
-    public void drawChooseMod(Graphics g) {
-        First.draw(g);
-        Last.draw(g);
-        Closet.draw(g);
-        Strongest.draw(g);
-    }
 
 
     public TowerEquippedButton getTowerAt(int x, int y) {
@@ -287,7 +295,7 @@ public class TowerManager {
                         selectedTower.setLevel(selectedTower.getLevel() + 1);
                         updateUpgradeButtonImage(selectedTower);
                         deductionCoin(currency);
-                        tower.updateStatPerLv();
+                        selectedTower.updateStatPerLv();
                     }
 
                 }
@@ -312,12 +320,10 @@ public class TowerManager {
         boolean clickedOnModArea = isClickOnModArea(x, y);
 
         if ((clickedOnTower || clickedOnModArea) && towerOnMap.getTowerTypes() != BUFF_TOWER) {
-            OpenModButton = true;
             if (clickedOnModArea) {
                 canClicked(x, y);
             }
         } else {
-            OpenModButton = false;
             towerOnMap = null;
         }
         for (TowerEquippedButton tower : towersToRemove) {
@@ -380,22 +386,25 @@ public class TowerManager {
         if (towerOnMap == null) {
             return;
         }
-        if (First.getBounds().contains(x, y)) {
+        if (First.getBounds().contains(x, y) && towerOnMap.getIndexChange() == 1 ) {
             System.out.println("Changing to First");
             towerOnMap.setMod(FIRSTE);
-            OpenModButton = true;
-        } else if (Last.getBounds().contains(x, y)) {
+            towerOnMap.setIndexChange(2);
+
+        } else if (Last.getBounds().contains(x, y) && towerOnMap.getIndexChange() == 2 ) {
             System.out.println("Changing to Last");
             towerOnMap.setMod(LASTE);
-            OpenModButton = true;
-        } else if (Closet.getBounds().contains(x, y)) {
+            towerOnMap.setIndexChange(3);
+
+        } else if (Closet.getBounds().contains(x, y) && towerOnMap.getIndexChange() == 3) {
             System.out.println("Changing to Closet");
             towerOnMap.setMod(CLOSET);
-            OpenModButton = true;
-        } else if (Strongest.getBounds().contains(x, y)) {
+            towerOnMap.setIndexChange(4);
+
+        } else if (Strongest.getBounds().contains(x, y) && towerOnMap.getIndexChange() == 4) {
             System.out.println("Changing to Strongest");
             towerOnMap.setMod(STRONGEST);
-            OpenModButton = true;
+            towerOnMap.setIndexChange(1);
         }
     }
 
@@ -527,9 +536,6 @@ public class TowerManager {
         }
     }
 
-    public void drawTypeAttackButton(Graphics g, TowerEquippedButton tower) {
-        g.drawImage(first, 25,445,72, 35, null);
-    }
 
 
 

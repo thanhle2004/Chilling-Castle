@@ -182,10 +182,10 @@ public class Constants {
 		}
 
 
-		public static final int CLOSET = 1;
-		public static final int STRONGEST = 2;
-		public static final int FIRSTE = 3;
-		public static final int LASTE = 4;
+		public static final int FIRSTE = 1;
+		public static final int LASTE = 2;
+		public static final int CLOSET = 3;
+		public static final int STRONGEST = 4;
 		public static final int RANDOM = 5;
 
 

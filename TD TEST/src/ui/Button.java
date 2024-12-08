@@ -35,6 +35,16 @@ public class Button {
 		initBounds();
 	}
 
+	public Button(int x, int y, int width, int height, BufferedImage img) {
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.img = img;
+
+		initBounds();
+	}
+
 	public int getX() {
 		return x;
 	}
@@ -58,7 +68,8 @@ public class Button {
 	        if (mouseOver) {
 	        	g.drawImage(img, x - 1, y - 1, width + 3, height + 3, null);
 	        }
-	    } else {
+	    }
+		else {
 
 	        drawBody(g);
 	        drawBorder(g);

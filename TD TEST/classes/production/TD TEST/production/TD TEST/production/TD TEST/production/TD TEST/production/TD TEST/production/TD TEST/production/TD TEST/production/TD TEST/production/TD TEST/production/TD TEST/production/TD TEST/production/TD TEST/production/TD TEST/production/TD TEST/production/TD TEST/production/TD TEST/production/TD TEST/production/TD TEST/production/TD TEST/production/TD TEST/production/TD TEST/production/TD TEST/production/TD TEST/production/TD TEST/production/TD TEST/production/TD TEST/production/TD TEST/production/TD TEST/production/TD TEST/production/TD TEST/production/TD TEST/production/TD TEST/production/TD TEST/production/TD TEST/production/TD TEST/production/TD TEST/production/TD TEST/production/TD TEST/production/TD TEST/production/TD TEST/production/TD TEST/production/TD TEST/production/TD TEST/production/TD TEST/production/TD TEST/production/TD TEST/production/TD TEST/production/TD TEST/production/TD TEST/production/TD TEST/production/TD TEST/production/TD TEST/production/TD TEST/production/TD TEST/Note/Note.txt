@@ -1,0 +1,76 @@
+
+ // Calculate speed and height based on direction
+    private float getSpeedAndHeight(int dir) {
+        if (dir == UP)
+            return -speed ; 
+        else if (dir == DOWN)
+            return speed + 32; 
+        return 0; 
+    }
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+vì sao phải + 32, vì tại gốc tọa độ của ô nằm ở góc trái trên cùng, mà nếu + speed thì nó xét 1 khoảng rất nhỏ, nên khi tới rìa mép, nó vẫn chưa xác định được là tới rìa mép. vậy nên nó mới đi ra khỏi rìa thì nó mới chuyển hướng
+
+    // Calculate speed and width based on direction
+    private float getSpeedAndWidth(int dir) {
+        if (dir == LEFT)
+            return -speed; 
+        else if (dir == RIGHT)
+            return speed + 32; 
+        return 0;
+    }
+còn - speed thì tại gốc tọa độ của tile nằm sẵn góc phải trên cùng vậy nên chỉ cần xét 0.5 là biết được ô tiếp theo. nếu mà -32 nữa thì nó sẽ xét 1 khoảng rất xa gây sai lệch lớn
+
+------------------------------------------------------------------------------------------------------------------------------------------
+    public void update() {
+    	//Không xóa trực tiếp trong enemies vì có thể xảy ra lỗi kích thước của arraylist
+    	// add vào toremove để tạm thời, sau đó xóa toàn bộ nó đi. vì e trong enemies và toRemove có chung địa chỉ.
+    	ArrayList<Enemy> toRemove = new ArrayList<>();
+        for (Enemy e : enemies) {
+            int xTarget = 19*32;
+            int yTarget = 8*32;
+            
+            if (Math.abs(e.getX() - xTarget) < 1 && Math.abs(e.getY() - yTarget) < 1) {
+            	 toRemove.add(e);
+            } else {
+            	e.updateAnimation(); 
+                moveManager.isNextTileRoad(e, xTarget, yTarget); 
+            }
+        }
+        enemies.removeAll(toRemove); 
+    }
+
+ ------------------------------------------------------------------------------------------------------------------------------------------
+
+ fix spawn khi replay. (Done)
+ update spawn time interval giữa các loài quái vật (Done)
+ update lifeSystem. (Done)
+ fix notiBoard. (done)
+ fix and optimize logic spawn (done)
+ -------------------------------------------------------
+ create dead state enemy (done)
+adding placing tower(done)
+------------------------------------------------
+hit and hurt(notyet)
+test dead(notyet)
+----------------------
+
+fix bug currentTime when pausing game (done)
+fix sound effect(done)
+------------------------------------------
+
+make a board to confirm when click home button  (done)
+fix bug time to continue() (done)
+-------------------------------------------
+update tower v2() (done)
+make logic dmg of tower() (done)
+hit and hurt() (done)
+test dead state() (done)
+update TowerType. (done)
+make update Tower function .(done)
+--------------------------------
+each tower has own mod fire state(done)
+-------------------------------------
+adding - substract coin when upgrade
+change display showing mod
+fix bug ()

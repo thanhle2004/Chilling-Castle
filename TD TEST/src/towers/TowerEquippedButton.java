@@ -21,6 +21,7 @@ public class TowerEquippedButton {
     private boolean mouseOver, mousePressed, mouseClicked;
     private double baseDmg, currentDmg;
     private int mod;
+    private int indexChange;
     private int level;
     public TowerEquippedButton(BufferedImage img, int posX, int posY, int width, int height, int cost, int TowerTypes, int level) {
 
@@ -35,7 +36,8 @@ public class TowerEquippedButton {
         this.cost = Constants.Tower.CoinToBuy(TowerTypes);
         this.TowerTypes = TowerTypes;
         this.lastShotTime = 0;
-        this.mod = 1;
+        this.mod = -1;
+        this.indexChange = 1;
         this.level = level;
         initBounds();
 
@@ -202,6 +204,14 @@ public class TowerEquippedButton {
             default:
                 break;
         }
+    }
+
+    public int getIndexChange() {
+        return indexChange;
+    }
+
+    public void setIndexChange(int indexChange) {
+        this.indexChange = indexChange;
     }
 
 
