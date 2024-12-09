@@ -28,13 +28,10 @@ public class TileManager {
 	public ArrayList<Tile> islands = new ArrayList<>();
 	
 
-
-	
 	public TileManager() {
 		loadAtalas();
 		loadNewAtalas();
 		createTiles();
-
 	}
 
 	private void createTiles() {
@@ -80,9 +77,7 @@ public class TileManager {
 
 	
 	
-	private BufferedImage[] getImgs(int firstX, int firstY, int secondX, int secondY) {
-		return new BufferedImage[] { getSprite(firstX, firstY), getSprite(secondX, secondY) };
-	}
+
 
 	private void loadAtalas() {
 		atlas = LoadPathImage.getSpriteAtlas();
@@ -109,7 +104,6 @@ public class TileManager {
 		for (int i = 0; i < 4; i++) {
 			arr[i] = getSprite(xCord + i, yCord);
 		}
-
 		return arr;
 	}
 
@@ -120,30 +114,10 @@ public class TileManager {
 	private BufferedImage getRoadSprite(int xCord, int yCord) {
 		return NewAtlas.getSubimage(xCord * 32, yCord * 32, 32, 32);
 	}
-	
-//////////////////////////
+
 	public boolean isSpriteAnimation(int spriteID) {
 		return tiles.get(spriteID).isAnimation();
 	}
 
-	public ArrayList<Tile> getRoadsS() {
-		return roadsS;
-	}
-
-	public ArrayList<Tile> getRoadsC() {
-		return roadsC;
-	}
-
-	public ArrayList<Tile> getCorners() {
-		return corners;
-	}
-
-	public ArrayList<Tile> getBeaches() {
-		return beaches;
-	}
-
-	public ArrayList<Tile> getIslands() {
-		return islands;
-	}
 
 }

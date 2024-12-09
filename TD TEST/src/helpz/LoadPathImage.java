@@ -8,8 +8,6 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 
 
-
-
 public class LoadPathImage {
 
 	public static BufferedImage getSpriteAtlas() {
@@ -85,29 +83,6 @@ public class LoadPathImage {
 		return img;
 	}
 
-	public static BufferedImage getTowerPath() {
-		BufferedImage img = null;
-		InputStream is = LoadPathImage.class.getClassLoader().getResourceAsStream("S_Attack.png");
-
-		try {
-			img = ImageIO.read(is);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return img;
-	}
-
-	public static BufferedImage getLifeHeart() {
-		BufferedImage img = null;
-		InputStream is = LoadPathImage.class.getClassLoader().getResourceAsStream("hearts16x16.png");
-		try {
-			img = ImageIO.read(is);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return img;
-	}
-
 	public static BufferedImage getTestHouse() {
 		BufferedImage img = null;
 		InputStream is = LoadPathImage.class.getClassLoader().getResourceAsStream("TestHouse.png");
@@ -118,8 +93,4 @@ public class LoadPathImage {
 		}
 		return img;
 	}
-
-
-
-
 }

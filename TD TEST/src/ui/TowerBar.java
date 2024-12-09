@@ -192,4 +192,7 @@ public class TowerBar extends Bar{
     public int getSelectedTowerNum() {
         return towerSelected.getTowerTypes();
     }
+    public void setSelectedTower(TowerEquippedButton tower) {
+        this.towerSelected = tower;
+    }
 }

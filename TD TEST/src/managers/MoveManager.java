@@ -19,7 +19,7 @@ public class MoveManager {
     private Stage3 stage3;
     private float speed = 0.5f;
     private int tileValue = 0;
-    private int[][] level = new int[20][20];
+    private int[][] level ;
 
     public MoveManager(Stage1 stage1) {
         this.stage1 = stage1;
@@ -46,7 +46,7 @@ public class MoveManager {
         int newY = (int) (e.getY() + getSpeedAndHeight(e.getLastDir()));
 
         if (getTileType(newX, newY) == ROAD_TILE) {
-        	MoveToTarger(e, xTarget, yTarget);
+        	MoveToTarget(e, xTarget, yTarget);
         } else {
             setNewDirectionAndMove(e,xTarget,yTarget);
         }
@@ -60,8 +60,7 @@ public class MoveManager {
         int xCord = (int) (e.getX() / 32);
         int yCord = (int) (e.getY() / 32);
 
-            fixEnemyOffsetTile(e, dir, xCord, yCord);
-
+        fixEnemyOffsetTile(e, dir, xCord, yCord);
         int newX1 = (int) (e.getX() + getSpeedAndWidth(dir));
         int newY1 = (int) (e.getY() + getSpeedAndHeight(dir));
 
@@ -71,8 +70,9 @@ public class MoveManager {
 
         if (newX1 / 32 >= 0 && newX1 / 32 < mapWidth &&
             newY1 / 32 >= 0 && newY1 / 32 < mapHeight) {
-            tileValue = level[yCord][xCord+1];
-        } else {
+            tileValue = level[yCord][xCord];
+        }
+        else {
         	if (dir == LEFT || dir == RIGHT) {
                 int newY = (int) (e.getY() + getSpeedAndHeight(UP));
                 if (getTileType((int) e.getX(), newY) == ROAD_TILE && yTarget < e.getY())
@@ -88,32 +88,12 @@ public class MoveManager {
             }
         }
 
-        if (tileValue == 3) {
-            System.out.println("I am here: 3");
-            if (yTarget < e.getY()) {
-                if (getTileType((int) e.getX(), (int) (e.getY() + getSpeedAndHeight(UP))) == ROAD_TILE) {
-                    e.move(speed, UP);
-//                    System.out.println("Hello");
-                    return;
-                }
-            } else  {
-                if (getTileType((int) e.getX(), (int) (e.getY() + getSpeedAndHeight(DOWN))) == ROAD_TILE) {
-                    e.move(speed, DOWN);
-                    return;
-                }
-            }
-        }
-
-
         if (dir == LEFT || dir == RIGHT) {
-
             int newY = (int) (e.getY() + getSpeedAndHeight(UP));
             if (getTileType((int) e.getX(), newY) == ROAD_TILE )
                 e.move(speed, UP);
-//                System.out.println("I am here");}
             else
                 e.move(speed, DOWN);
-//                System.out.println("I am here, allllllllllllllllllllllllllll");}
         } else {
             int newX = (int) (e.getX() + getSpeedAndWidth(RIGHT));
             if (getTileType(newX, (int) e.getY()) == ROAD_TILE )
@@ -124,13 +104,11 @@ public class MoveManager {
     }
 
     // Move towards the target based on the best direction
-    private void MoveToTarger(Enemy e, int xTarget, int yTarget) {
+    private void MoveToTarget(Enemy e, int xTarget, int yTarget) {
         int xEnemy = (int) e.getX();
         int yEnemy = (int) e.getY();
-
         float currentDistance = calculateDistance(xEnemy, yEnemy, xTarget, yTarget);
         int bestDir = getBestDir(currentDistance, xEnemy, yEnemy, xTarget, yTarget, e);
-
         e.move(speed, bestDir);
     }
 
@@ -139,11 +117,11 @@ public class MoveManager {
 
 
         for (int direction : dir) {
-            int newX = (int) (e.getX() + getSpeedAndWidth(direction));
-            int newY = (int) (e.getY() + getSpeedAndHeight(direction));
+            int newX = (int) (xEnemy+ getSpeedAndWidth(direction));
+            int newY = (int) (yEnemy + getSpeedAndHeight(direction));
 
-            if (getTileType(newX, newY) == ROAD_TILE) {
-                float newDistance = calculateDistance(newX, newY, xTarget, yTarget);
+            if (getTileType(xEnemy, yEnemy) == ROAD_TILE) {
+                float newDistance = calculateDistance(xEnemy, yEnemy, xTarget, yTarget);
 
                 if (newDistance < currentDistance) {
                     if (getTileType(newX, newY) != ROAD_TILE) {

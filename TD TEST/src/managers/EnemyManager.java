@@ -2,9 +2,11 @@ package managers;
 
 import java.awt.*;
 																							import java.awt.image.BufferedImage;
-																							import java.util.ArrayList;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Objects;
 
-																							import enemies.DUDE;
+import enemies.DUDE;
 																							import enemies.Enemy;
 																							import enemies.OSTER;
 																							import enemies.PINKY;
@@ -17,6 +19,8 @@ import stages.Stage2;
 																							import stages.Stage1;
 import stages.Stage3;
 import ui.SettingBoardUI;
+
+import javax.imageio.ImageIO;
 
 import static helpz.Constants.Enemy.*;
 public class EnemyManager {
@@ -34,6 +38,7 @@ private long pauseTime;
 private int coin;
 private boolean pauseGame = false;
 private long totalEnemies, totalEnemiesTemp;
+private BufferedImage HP, enemiesLeft;
 
 public EnemyManager(GameScene stage) {
 
@@ -41,7 +46,7 @@ public EnemyManager(GameScene stage) {
 	lifeBar = 550;
 	coin = 100;
 	wave = new Wave();
-
+	importImg();
 	if (stage instanceof Stage1) {
 		xTarget = 17 * 32;
 		yTarget = 9 * 32;
@@ -49,7 +54,7 @@ public EnemyManager(GameScene stage) {
 		//each enemies = long[] {spawnX, spawnY, EnemyType,numberPerTurn, startTime, nextSpawnTime, timeSpawnInterval}
 		spawnPoints.add(wave.WaveInTurn(1, 4, DUDE, 15, 1000,1000,2000));
 		spawnPoints.add(wave.WaveInTurn(1, 14, OSTER, 15, 1000,1000,5000));
-
+		spawnPoints.add(wave.WaveInTurn(1, 6, DUDE, 15, 1000,1000,2000));
 	}
 	if (stage instanceof Stage2) {
 		xTarget = 19 * 32;
@@ -182,8 +187,8 @@ public void draw(Graphics g) {
 	g.setColor(Color.RED);
 	g.fillRect(60, 2, (int) Math.abs(lifeBar), 20);
 	g.setColor(Color.WHITE);
-	g.drawString("Life Bar: " + lifeBar, 60, 18);
-	g.drawString("Total Enemies: " + totalEnemies, 60, 40);
+	g.drawImage(HP,50,10, 70, 70 ,null);
+	g.drawImage(enemiesLeft,0,550, 170, 170 ,null);
 }
 private void drawEnemy(Enemy e, Graphics g) {
 	if (e.getImages() != null) {
@@ -259,7 +264,6 @@ public void setPauseGame(boolean pauseGame) {
 			for (long[] spawnPoint : spawnPoints) {
 				spawnPoint[5] = spawnPoint[5] + pauseDuration;
 			}
-
 			pauseTime = 0;
 		}
 	}
@@ -278,7 +282,17 @@ public void setCoin(int coin) {
 public long getTotalEnemies() {
 	return totalEnemies;
 }
+private void importImg() {
+	try {
+		HP = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/HP.png")));
+		enemiesLeft  = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/EnemiesLeft.png")));
+	} catch (IOException e) {
+		throw new RuntimeException(e);
+	}
 
+
+
+}
 }
 
 

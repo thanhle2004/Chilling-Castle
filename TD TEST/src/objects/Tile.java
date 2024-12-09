@@ -24,11 +24,11 @@ public class Tile {
 
 	}
 
-	public Tile(String name, int ID, BufferedImage image) {
-		this.nameString = name;
-		this.id = ID;
-		this.image = image;
-	}
+//	public Tile(String name, int ID, BufferedImage image) {
+//		this.nameString = name;
+//		this.id = ID;
+//		this.image = image;
+//	}
 
 	public int getTileType() {
 		return tileType;
@@ -46,8 +46,8 @@ public class Tile {
 		return sprite.length > 1;
 	}
 
-	public int getId() {
-		return id;
-	}
+//	public int getId() {
+//		return id;
+//	}
 
 }

@@ -210,7 +210,7 @@ public class TowerManager {
     }
 
     public void drawTypeAttackButton(Graphics g, TowerEquippedButton tower) {
-        switch (tower.getIndexChange()) {
+        switch (tower.GetmodState()) {
             case 1:
                 First.draw(g);
                 break;
@@ -296,7 +296,6 @@ public class TowerManager {
                         deductionCoin(currency);
                         selectedTower.updateStatPerLv();
                     }
-
                 }
                 towerOnMap = null;
             }
@@ -316,7 +315,7 @@ public class TowerManager {
 
         boolean clickedOnModArea = isClickOnModArea(x, y);
 
-        if ((clickedOnTower || clickedOnModArea) && towerOnMap.getTowerTypes() != BUFF_TOWER) {
+            if ((clickedOnTower || clickedOnModArea)) {
             if (clickedOnModArea) {
                 canClicked(x, y);
             }
@@ -385,22 +384,22 @@ public class TowerManager {
         }
         if (First.getBounds().contains(x, y) && towerOnMap.getIndexChange() == 1 ) {
             System.out.println("Changing to First");
-            towerOnMap.setMod(FIRSTE);
+            towerOnMap.setMod(LASTE);
             towerOnMap.setIndexChange(2);
 
         } else if (Last.getBounds().contains(x, y) && towerOnMap.getIndexChange() == 2 ) {
             System.out.println("Changing to Last");
-            towerOnMap.setMod(LASTE);
+            towerOnMap.setMod(CLOSET);
             towerOnMap.setIndexChange(3);
 
         } else if (Closet.getBounds().contains(x, y) && towerOnMap.getIndexChange() == 3) {
             System.out.println("Changing to Closet");
-            towerOnMap.setMod(CLOSET);
+            towerOnMap.setMod(STRONGEST);
             towerOnMap.setIndexChange(4);
 
         } else if (Strongest.getBounds().contains(x, y) && towerOnMap.getIndexChange() == 4) {
             System.out.println("Changing to Strongest");
-            towerOnMap.setMod(STRONGEST);
+            towerOnMap.setMod(FIRSTE);
             towerOnMap.setIndexChange(1);
         }
     }
@@ -415,8 +414,6 @@ public class TowerManager {
                 return getFirstE(x, y, range);
             case LASTE:
                 return getLastEnemy(x,y,range);
-            case RANDOM:
-                return getRandomEnemy(x, y, range);
         }
         return null;
     }
@@ -467,19 +464,7 @@ public class TowerManager {
     }
 
 
-    private Enemy getRandomEnemy(int x, int y, double range) {
-        List<Enemy> enemiesInRange = new ArrayList<>();
-        for (Enemy enemy : stageManager.getEnemyManager().getEnemies()) {
-            double distance = Math.hypot(enemy.getX() - x, enemy.getY() - y);
-            if (distance <= range) {
-                enemiesInRange.add(enemy);
-            }
-        }
-        if (!enemiesInRange.isEmpty()) {
-            return enemiesInRange.get(new Random().nextInt(enemiesInRange.size()));
-        }
-        return null;
-    }
+
 
     private Enemy getStrongestEnemy(int x, int y, double range) {
         Enemy strongest = null;
@@ -506,7 +491,6 @@ public class TowerManager {
             }
         }
     }
-
 
 
 

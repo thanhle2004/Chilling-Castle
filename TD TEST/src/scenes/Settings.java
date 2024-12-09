@@ -232,8 +232,7 @@ public class Settings extends GameScene implements SceneMethods {
 		}
 	}
 
-	@Override
-	public void keyPressed(int key) {}
+
 
 	@Override
 	public void mouseRightClicked(int x, int y) {

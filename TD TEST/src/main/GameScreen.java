@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
-import inputs.KeyboardListener;
 import inputs.MyMouseListener;
 
 public class GameScreen extends JPanel {
@@ -13,7 +12,7 @@ public class GameScreen extends JPanel {
 	private Dimension size;
 
 	private MyMouseListener myMouseListener;
-	private KeyboardListener keyboardListener;
+
 
 	public GameScreen(Game game) {
 		this.game = game;
@@ -23,12 +22,8 @@ public class GameScreen extends JPanel {
 
 	public void initInputs() {
 		myMouseListener = new MyMouseListener(game);
-		keyboardListener = new KeyboardListener(game);
-
 		addMouseListener(myMouseListener);
 		addMouseMotionListener(myMouseListener);
-		addKeyListener(keyboardListener);
-
 		requestFocus();
 	}
 
@@ -41,9 +36,6 @@ public class GameScreen extends JPanel {
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
 		game.getRender().render(g);
-
 	}
-
 }

@@ -139,10 +139,6 @@ public class Menu extends GameScene implements SceneMethods {
 	public void mouseDragged(int x, int y) {
 	}
 
-	@Override
-	public void keyPressed(int key) {
-
-	}
 
 	@Override
 	public void mouseRightClicked(int x, int y) {

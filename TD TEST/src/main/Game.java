@@ -107,9 +107,6 @@ public class Game extends JFrame implements Runnable {
 		while (true) {
 			now = System.nanoTime();
 
-
-
-
 				if (now - lastUpdate >= timePerUpdate) {
 					updateGame();
 					lastUpdate = now;

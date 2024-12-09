@@ -36,7 +36,7 @@ public class TowerEquippedButton {
         this.cost = Constants.Tower.CoinToBuy(TowerTypes);
         this.TowerTypes = TowerTypes;
         this.lastShotTime = 0;
-        this.mod = -1;
+        this.mod = 1;
         this.indexChange = 1;
         this.level = level;
         initBounds();

@@ -250,14 +250,14 @@ public class Towers extends GameScene implements SceneMethods {
         bMenu.resetBooleans();
     }
 
-    //Getter
-    public TowerInfo getTowerSeclectedInfo() {
-        return towerSeclectedInfo;
-    }
-
-    public TowerButton getBTowerSeclected() {
-        return bTowerSelected;
-    }
+//    //Getter
+//    public TowerInfo getTowerSeclectedInfo() {
+//        return towerSeclectedInfo;
+//    }
+//
+//    public TowerButton getBTowerSeclected() {
+//        return bTowerSelected;
+//    }
 
     public TowerBar getBottomBar() {
         return towerBar;
@@ -265,9 +265,6 @@ public class Towers extends GameScene implements SceneMethods {
 
     @Override
     public void mouseDragged(int x, int y) {}
-
-    @Override
-    public void keyPressed(int key) {}
 
     @Override
     public void mouseRightClicked(int x, int y) {

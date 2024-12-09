@@ -93,7 +93,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         enemyManager.draw(g);
         drawSelectedTower(g);
         towerManager.draw(g);
-        drawDigitCoin(g);
+        drawDigit(g);
         drawTestHouse(g);
         if (GameStates.GetGameState() == GameStates.STAGE1) {
             game.getStage1().drawButtonPaused(g);
@@ -248,10 +248,9 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     public void resetGame() {
         enemyManager.resetEnemies();
         towerManager.clearTowers();
+        towerBar.setSelectedTower(null);
     }
 
-    @Override
-    public void keyPressed(int key) {}
 
     public void loseGame() {
         if(enemyManager.getLifeBar() <= 0) {
@@ -298,7 +297,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     }
 
 
-    private void drawDigitCoin(Graphics g) {
+    private void drawDigit(Graphics g) {
         coinTemp = getCoinValue();
         int coin = coinTemp;
         int count = 0;
@@ -317,12 +316,11 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
         int divisor = (int) Math.pow(10, count - 1);
 
-
         while (divisor > 0) {
             int digit = coin / divisor;
             coin %= divisor;
             divisor /= 10;
-            x += 24;
+            x += 20;
             drawNumCoin(g, digit, x);
         }
 
@@ -331,19 +329,22 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     private void drawNumCoin(Graphics g, int digit, int x)  {
         BufferedImage img = null;
         BufferedImage dollarImg = null;
+        BufferedImage moneyImg = null;
+
         try {
             img = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/"+digit + ".png")));
             dollarImg = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/$.png")));
+            moneyImg = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Money.png")));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        g.drawImage(dollarImg, 40, 550,24,24, null);
-        g.drawImage(img,50 + x,550, 24, 24, null);
+        g.drawImage(moneyImg , 13, 500,80,80,null);
+        g.drawImage(dollarImg, 13, 530,20,20, null);
+        g.drawImage(img,13 + x,530, 20, 20, null);
     }
 
     public Game game() {
         return game;
     }
-
 
 }

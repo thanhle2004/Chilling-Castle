@@ -68,7 +68,6 @@ public class Enemy {
 	}
 
 	public void setPos(int x, int y) {
-		// Don't use this one for moving the enemy.
 		this.x = x;
 		this.y = y;
 	}
@@ -91,6 +90,9 @@ public class Enemy {
 
 	public int getEnemyType() {
 		return enemyType;	
+	}
+	public void setLastDir(int dir) {
+		lastDir = dir;
 	}
 
 	public int getLastDir() {
