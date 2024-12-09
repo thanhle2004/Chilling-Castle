@@ -187,7 +187,7 @@ public void draw(Graphics g) {
 	g.setColor(Color.RED);
 	g.fillRect(60, 2, (int) Math.abs(lifeBar), 20);
 	g.setColor(Color.WHITE);
-	g.drawImage(HP,50,10, 70, 70 ,null);
+	g.drawImage(HP,45,0, 70, 70 ,null);
 	g.drawImage(enemiesLeft,0,550, 170, 170 ,null);
 }
 private void drawEnemy(Enemy e, Graphics g) {
@@ -289,9 +289,6 @@ private void importImg() {
 	} catch (IOException e) {
 		throw new RuntimeException(e);
 	}
-
-
-
 }
 }
 

@@ -21,7 +21,7 @@ public class NotificationLoseGame extends Board{
         importImage();
         this.stageManager = stageManager;
         int buttonWidth = 100;
-        int buttonHeight = 100;
+        int buttonHeight = 50;
         int spaceBetweenButtons = 50;
         int total_length = 2*buttonWidth + spaceBetweenButtons;
         int length_left = 640 - total_length;
@@ -29,7 +29,6 @@ public class NotificationLoseGame extends Board{
         int nextStartPointX = startPointX + buttonWidth + spaceBetweenButtons;
         homeButton = new Button(startPointX,370,buttonWidth,buttonHeight,HomeButton);
         replayButton = new Button(nextStartPointX,370,buttonWidth,buttonHeight,ReplayButton);
-
     }
 
 

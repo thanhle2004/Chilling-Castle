@@ -43,7 +43,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     protected abstract NotificationLoseGame createNotificationGameOver();
     protected abstract SettingBoardUI createSettingBoardUI();
     protected abstract NotificationWinGame  createNotificationWinGame();
-    private int coinTemp;
+    private int Temp;
 
     public StageManager(Game game, TowerBar towerBar, Settings settings) {
         super(game);
@@ -93,7 +93,10 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         enemyManager.draw(g);
         drawSelectedTower(g);
         towerManager.draw(g);
-        drawDigit(g);
+        drawDigit(g, getCoinValue(), 530, 13);
+        drawDigit(g,(int) enemyManager.getLifeBar(), 1, 75);
+        drawDigit(g,(int) enemyManager.getTotalEnemies(), 580, -7);
+        drawSt(g);
         drawTestHouse(g);
         if (GameStates.GetGameState() == GameStates.STAGE1) {
             game.getStage1().drawButtonPaused(g);
@@ -147,25 +150,32 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     public void mouseClicked(int x, int y) {
         if(isLose) {
             notiLosing.mouseClicked(x, y);
+            return;
         }
         if (isWin) {
             notiWin.mouseClicked(x,y);
+            return;
         }
 
-        if (bOption.getBounds().contains(x, y) && !SettingBoardUI.getIsOpen() && !SettingBoardUI.getOpenConfirmDialog()) {
+        if (bOption.getBounds().contains(x, y)
+                && !SettingBoardUI.getIsOpen()
+                && !SettingBoardUI.getOpenConfirmDialog()
+                && !isWin && !isLose) {
             isPaused = !isPaused;
             SettingBoardUI.setIsOpen(true);
             enemyManager.setPauseGame(true);
             soundEffect.playEffect(1);
+            return;
         }
 
-        if(isPaused && x >= 30 && x <= 590 && y >= 15 && y <= 570) {
+        if (SettingBoardUI.getOpenConfirmDialog()) {
+            SettingBoardUI.getConfirmDialog().mouseClicked(x, y);
+            return;
+        }
+        if (isPaused && x >= 30 && x <= 590 && y >= 15 && y <= 570 && SettingBoardUI.getIsOpen()) {
             soundEffect.playEffect(1);
             SettingBoardUI.mouseClicked(x, y);
-        }
-
-        if (SettingBoardUI.getOpenConfirmDialog())  {
-            SettingBoardUI.getConfirmDialog().mouseClicked(x, y);
+            return;
         }
 
 
@@ -297,42 +307,56 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     }
 
 
-    private void drawDigit(Graphics g) {
-        coinTemp = getCoinValue();
-        int coin = coinTemp;
+    private void drawDigit(Graphics g, int value, int StartY, int StartX) {
+        Temp = value;
+        int Number = Temp;
         int count = 0;
         int x = 0;
 
         // Count the digits
-        while (coinTemp != 0) {
-            coinTemp /= 10;
+        while (Temp != 0) {
+            Temp /= 10;
             count++;
         }
 
-        if (coin == 0) {
-            drawNumCoin(g, 0, x);  // Draw 0 immediately
+        if (Number == 0) {
+            drawNumCoin(g, 0, x, StartY, StartX);  // Draw 0 immediately
             return;
         }
 
         int divisor = (int) Math.pow(10, count - 1);
 
         while (divisor > 0) {
-            int digit = coin / divisor;
-            coin %= divisor;
+            int digit = Number / divisor;
+            Number %= divisor;
             divisor /= 10;
             x += 20;
-            drawNumCoin(g, digit, x);
+            drawNumCoin(g, digit, x, StartY, StartX );
         }
 
     }
 
-    private void drawNumCoin(Graphics g, int digit, int x)  {
+    private void drawNumCoin(Graphics g, int digit, int x, int y,int startX)  {
         BufferedImage img = null;
+
+        try {
+            img = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/"+digit + ".png")));
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        g.drawImage(img,startX + x,y, 20, 20, null);
+    }
+
+    public Game game() {
+        return game;
+    }
+
+    private void drawSt(Graphics g) {
         BufferedImage dollarImg = null;
         BufferedImage moneyImg = null;
 
         try {
-            img = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/"+digit + ".png")));
             dollarImg = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/$.png")));
             moneyImg = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/Money.png")));
         } catch (IOException e) {
@@ -340,11 +364,6 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         }
         g.drawImage(moneyImg , 13, 500,80,80,null);
         g.drawImage(dollarImg, 13, 530,20,20, null);
-        g.drawImage(img,13 + x,530, 20, 20, null);
-    }
-
-    public Game game() {
-        return game;
     }
 
 }

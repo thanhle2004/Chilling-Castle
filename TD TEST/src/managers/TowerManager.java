@@ -231,10 +231,9 @@ public class TowerManager {
     }
 
     private void drawRange(Graphics g, TowerEquippedButton tower) {
-        int radius = (int) tower.getRNG();
+        int radius = (int) tower.getRNG() + 16;
         int centerX = tower.getPosX() + 16;
         int centerY = tower.getPosY() + 16;
-
         int x = centerX - radius;
         int y = centerY - radius;
 

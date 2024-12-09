@@ -47,19 +47,14 @@ public class TowerEquippedButton {
         if (img != null) {
             g.drawImage(img, posX, posY, width, height, null);
             if (mouseOver) {
-
                 g.drawImage(img, posX - 1, posY - 1, width + 3, height + 3, null);
             }
 
         } else {
-
             // Body
             drawBody(g);
-
             // Border
             drawBorder(g);
-
-
         }
     }
 
