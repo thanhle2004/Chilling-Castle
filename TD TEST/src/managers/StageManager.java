@@ -43,7 +43,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     protected abstract NotificationLoseGame createNotificationGameOver();
     protected abstract SettingBoardUI createSettingBoardUI();
     protected abstract NotificationWinGame  createNotificationWinGame();
-    private int Temp;
+
 
     public StageManager(Game game, TowerBar towerBar, Settings settings) {
         super(game);
@@ -94,7 +94,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         drawSelectedTower(g);
         towerManager.draw(g);
         drawDigit(g, getCoinValue(), 530, 13);
-        drawDigit(g,(int) enemyManager.getLifeBar(), 1, 75);
+        drawDigit(g,(int) enemyManager.getLifeBar(), 2, 80);
         drawDigit(g,(int) enemyManager.getTotalEnemies(), 580, -7);
         drawSt(g);
         drawTestHouse(g);
@@ -296,8 +296,6 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         towerBar.mouseRightClicked(x, y);
     }
 
-
-
     public int getCoinValue() {
         return enemyManager.getCoin();
     }
@@ -308,7 +306,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
 
     private void drawDigit(Graphics g, int value, int StartY, int StartX) {
-        Temp = value;
+        int Temp = value;
         int Number = Temp;
         int count = 0;
         int x = 0;
@@ -320,7 +318,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         }
 
         if (Number == 0) {
-            drawNumCoin(g, 0, x, StartY, StartX);  // Draw 0 immediately
+            drawNumCoin(g, 0, 20, StartY, StartX);
             return;
         }
 
@@ -333,7 +331,6 @@ public abstract class StageManager extends GameScene implements SceneMethods {
             x += 20;
             drawNumCoin(g, digit, x, StartY, StartX );
         }
-
     }
 
     private void drawNumCoin(Graphics g, int digit, int x, int y,int startX)  {
