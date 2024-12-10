@@ -52,16 +52,15 @@ public EnemyManager(GameScene stage) {
 		yTarget = 9 * 32;
 		moveManager = new MoveManager((Stage1) stage);
 		//each enemies = long[] {spawnX, spawnY, EnemyType,numberPerTurn, startTime, nextSpawnTime, timeSpawnInterval}
-		spawnPoints.add(wave.WaveInTurn(1, 4, DUDE, 15, 1000,1000,2000));
-		spawnPoints.add(wave.WaveInTurn(1, 14, OSTER, 15, 1000,1000,5000));
-		spawnPoints.add(wave.WaveInTurn(1, 6, DUDE, 15, 1000,1000,2000));
+		spawnPoints.add(wave.WaveInTurn(1, 4, DUDE, 21, 1000,1000,2000));
+		spawnPoints.add(wave.WaveInTurn(0, 11, OSTER, 45, 5000,5000,2500));
 	}
 	if (stage instanceof Stage2) {
-		xTarget = 19 * 32;
-		yTarget = 1 * 32;
+		xTarget = 18 * 32;
+		yTarget = 3 * 32;
 		moveManager = new MoveManager((Stage2) stage);
-		spawnPoints.add(wave.WaveInTurn(0, 10, PINKY, 2, 1000,1000,2000));
-		spawnPoints.add(wave.WaveInTurn(0, 10, SLIME, 15, 12000,12000,2000));
+		spawnPoints.add(wave.WaveInTurn(0, 3, PINKY, 2, 1000,1000,2000));
+		spawnPoints.add(wave.WaveInTurn(0, 6, SLIME, 15, 12000,12000,2000));
 
 	}
 	if (stage instanceof Stage3) {
@@ -69,7 +68,7 @@ public EnemyManager(GameScene stage) {
 		yTarget = 9 * 32;
 		moveManager = new MoveManager((Stage3) stage);
 		spawnPoints.add(wave.WaveInTurn(1, 4, DUDE, 1, 1000,1000,2000));
-		spawnPoints.add(wave.WaveInTurn(1, 14, OSTER, 5, 1000,1000,5000));
+		spawnPoints.add(wave.WaveInTurn(0, 6, OSTER, 5, 1000,1000,5000));
 
 	}
 	calculateTotalEnemies();
@@ -144,7 +143,7 @@ private void spawningInterval() {
 			spawnPoint[5] = currentTime + interval;
 			spawnPoint[3] = spawnedEnemy - 1;
 		}
-//		System.out.println("Subtract is " + (currentTime - tempTime));
+		System.out.println("Subtract is " + (currentTime - tempTime));
 	}
 }
 

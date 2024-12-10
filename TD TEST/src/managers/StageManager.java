@@ -97,13 +97,16 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         drawDigit(g,(int) enemyManager.getLifeBar(), 2, 80);
         drawDigit(g,(int) enemyManager.getTotalEnemies(), 580, -7);
         drawSt(g);
-        drawTestHouse(g);
+
         if (GameStates.GetGameState() == GameStates.STAGE1) {
             game.getStage1().drawButtonPaused(g);
+            drawTestHouse(g,18*32,224);
         } else if (GameStates.GetGameState() == GameStates.STAGE2) {
             game.getStage2().drawButtonPaused(g);
+            drawTestHouse(g,18*32,32);
         } else if (GameStates.GetGameState() == GameStates.STAGE3) {
             game.getStage3().drawButtonPaused(g);
+            drawTestHouse(g,18*32,224);
         }
     }
 
@@ -113,9 +116,9 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         }
     }
 
-    private void drawTestHouse(Graphics g) {
+    private void drawTestHouse(Graphics g,int x, int y) {
         BufferedImage testHouse = LoadPathImage.getTestHouse();
-        g.drawImage(testHouse, 18*32, 224, null);
+        g.drawImage(testHouse, x, y,100,100, null);
     }
 
 

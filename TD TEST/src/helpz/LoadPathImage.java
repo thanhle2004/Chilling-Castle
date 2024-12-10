@@ -85,7 +85,7 @@ public class LoadPathImage {
 
 	public static BufferedImage getTestHouse() {
 		BufferedImage img = null;
-		InputStream is = LoadPathImage.class.getClassLoader().getResourceAsStream("TestHouse.png");
+		InputStream is = LoadPathImage.class.getClassLoader().getResourceAsStream("Castle.png");
 		try {
 			img = ImageIO.read(is);
 		} catch (IOException e) {
