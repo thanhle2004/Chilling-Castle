@@ -52,7 +52,7 @@ public EnemyManager(GameScene stage) {
 		yTarget = 9 * 32;
 		moveManager = new MoveManager((Stage1) stage);
 		//each enemies = long[] {spawnX, spawnY, EnemyType,numberPerTurn, startTime, nextSpawnTime, timeSpawnInterval}
-		spawnPoints.add(wave.WaveInTurn(1, 4, DUDE, 21, 1000,1000,2000));
+		spawnPoints.add(wave.WaveInTurn(0, 4, DUDE, 21, 1000,1000,2000));
 		spawnPoints.add(wave.WaveInTurn(0, 11, OSTER, 45, 5000,5000,2500));
 	}
 	if (stage instanceof Stage2) {

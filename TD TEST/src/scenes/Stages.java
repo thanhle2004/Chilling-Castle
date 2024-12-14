@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import main.Game;
 import managers.EnemyManager;
+import managers.StageManager;
 import objects.SoundEffect;
 import ui.StageButton;
 import ui.Button;
@@ -28,8 +29,6 @@ public class Stages extends GameScene implements SceneMethods {
     private TowerBar towerBar;
 
     private SoundEffect soundEffect;
-
-    private EnemyManager enemyManager;
 
     public Stages(Game game, TowerBar towerBar) {
         super(game);
@@ -118,7 +117,7 @@ public class Stages extends GameScene implements SceneMethods {
             for (int i = 0; i < 4; i++) {
                 if (bStage[i].getBounds().contains(x, y)) {
                     for (int j = 0; j < 3; j++) {
-                        if (towerBar.isEquippedTower()) {
+                        if (towerBar.isEquippedTower() && StageManager.isUnlockStage(i)) {
                             switch (i) {
                                 case 0:
                                     SetGameState(STAGE1);

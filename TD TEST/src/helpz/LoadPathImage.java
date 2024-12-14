@@ -23,7 +23,7 @@ public class LoadPathImage {
 	}
     
     
-	public static BufferedImage getRoadAtlas() {
+	public static BufferedImage getAtlasV2() {
 		BufferedImage imgs = null;
 		InputStream is = LoadPathImage.class.getClassLoader().getResourceAsStream("terrain_tiles_v2.png");
 
@@ -85,7 +85,7 @@ public class LoadPathImage {
 
 	public static BufferedImage getTestHouse() {
 		BufferedImage img = null;
-		InputStream is = LoadPathImage.class.getClassLoader().getResourceAsStream("Castle.png");
+		InputStream is = LoadPathImage.class.getClassLoader().getResourceAsStream("Castle1.png");
 		try {
 			img = ImageIO.read(is);
 		} catch (IOException e) {

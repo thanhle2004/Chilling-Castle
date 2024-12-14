@@ -38,7 +38,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
     private NotificationLoseGame notiLosing;
     private NotificationWinGame notiWin;
     private TowerManager towerManager;
-
+    private static boolean[] unlockStage = new boolean[3];
 
     protected abstract NotificationLoseGame createNotificationGameOver();
     protected abstract SettingBoardUI createSettingBoardUI();
@@ -59,6 +59,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         SettingBoardUI = createSettingBoardUI();
         notiLosing = createNotificationGameOver();
         notiWin = createNotificationWinGame();
+        unlockStage[0] = true;
 
     }
 
@@ -100,13 +101,13 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
         if (GameStates.GetGameState() == GameStates.STAGE1) {
             game.getStage1().drawButtonPaused(g);
-            drawTestHouse(g,18*32,224);
+            drawCastle(g,18*32 -50,224 - 92);
         } else if (GameStates.GetGameState() == GameStates.STAGE2) {
             game.getStage2().drawButtonPaused(g);
-            drawTestHouse(g,18*32,32);
+            drawCastle(g,18*32,32);
         } else if (GameStates.GetGameState() == GameStates.STAGE3) {
             game.getStage3().drawButtonPaused(g);
-            drawTestHouse(g,18*32,224);
+            drawCastle(g,18*32,224);
         }
     }
 
@@ -116,9 +117,9 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         }
     }
 
-    private void drawTestHouse(Graphics g,int x, int y) {
+    private void drawCastle(Graphics g, int x, int y) {
         BufferedImage testHouse = LoadPathImage.getTestHouse();
-        g.drawImage(testHouse, x, y,100,100, null);
+        g.drawImage(testHouse, x, y,200,200, null);
     }
 
 
@@ -183,7 +184,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
 
         if (!isPaused && !isLose) {
-            if(y>=530) {
+            if(y>=512) {
                 towerBar.mouseClicked(x, y);
             }else {
                 if (towerBar.getSelectedTower() != null) {
@@ -211,7 +212,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
     @Override
     public void mouseMoved(int x, int y) {
-        if (y >= 530)
+        if (y >= 512)
             towerBar.mouseMoved(x, y);
         else {
             mouseX = (x / 32) * 32;
@@ -221,7 +222,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
 
     @Override
     public void mousePressed(int x, int y) {
-        if (y >= 530) {
+        if (y >= 512) {
             towerBar.mousePressed(x, y);
         }
     }
@@ -262,6 +263,7 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         enemyManager.resetEnemies();
         towerManager.clearTowers();
         towerBar.setSelectedTower(null);
+
     }
 
 
@@ -278,7 +280,14 @@ public abstract class StageManager extends GameScene implements SceneMethods {
             isWin = true;
             isPaused = true;
             enemyManager.setPauseGame(true);
+            if (GameStates.GetGameState() == GameStates.STAGE1) {
+                unlockStage[1] = true;
+            } else if (GameStates.GetGameState() == GameStates.STAGE2) {
+                unlockStage[2] = true;
+            }
         }
+
+
     }
 
     public EnemyManager getEnemyManager() {
@@ -364,6 +373,10 @@ public abstract class StageManager extends GameScene implements SceneMethods {
         }
         g.drawImage(moneyImg , 13, 500,80,80,null);
         g.drawImage(dollarImg, 13, 530,20,20, null);
+    }
+
+    public static boolean isUnlockStage(int i) {
+        return unlockStage[i];
     }
 
 }

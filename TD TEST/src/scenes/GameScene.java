@@ -34,27 +34,6 @@ public class GameScene {
 		}
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	protected BufferedImage getSprite(int spriteID) {
 		return game.getTileManager().getSprite(spriteID);
 	}

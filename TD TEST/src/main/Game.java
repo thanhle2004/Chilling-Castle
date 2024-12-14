@@ -9,6 +9,9 @@ import scenes.*;
 import stages.Stage1;
 import stages.Stage2;
 import stages.Stage3;
+import ui.NotificationLoseGame;
+import ui.NotificationWinGame;
+import ui.SettingBoardUI;
 
 public class Game extends JFrame implements Runnable {
 
@@ -29,6 +32,7 @@ public class Game extends JFrame implements Runnable {
 	private Stage1 stage1;
 	private Stage3 stage3;
 	private TileManager tileManager;
+	private StageManager stageManager;
 
 
 	public Game() {

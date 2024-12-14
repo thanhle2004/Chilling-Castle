@@ -44,6 +44,5 @@ public class Stage2 extends StageManager {
 	public void resetGame() {
 		super.resetGame();
 	}
-
-
+	
 }

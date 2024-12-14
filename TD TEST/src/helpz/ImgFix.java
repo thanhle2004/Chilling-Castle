@@ -1,6 +1,7 @@
 package helpz;
 
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class ImgFix {
@@ -42,7 +43,22 @@ public class ImgFix {
 		}
 
 		return arr;
+	}
 
+	public static BufferedImage imageFlip(BufferedImage image) {
+		int width = image.getWidth();
+		int height = image.getHeight();
+
+
+		BufferedImage flippedImage = new BufferedImage(width, height, image.getType());
+
+		Graphics2D g = flippedImage.createGraphics();
+		AffineTransform transform = AffineTransform.getScaleInstance(-1, 1); // Lật ngang
+		transform.translate(-width, 0);
+		g.drawImage(image, transform, null);
+		g.dispose();
+
+		return flippedImage;
 	}
 
 }

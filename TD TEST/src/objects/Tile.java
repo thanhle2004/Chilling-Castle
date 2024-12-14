@@ -43,6 +43,7 @@ public class Tile {
 	}
 
 	public boolean isAnimation() {
+
 		return sprite.length > 1;
 	}
 

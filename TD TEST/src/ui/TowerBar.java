@@ -157,25 +157,25 @@ public class TowerBar extends Bar{
         return false;
     }
 
-    public BufferedImage getTowerImg(int i) {
-        switch (i) {
-            case 0:
-                return towerEquippedButtons[0].getImg();
-
-
-            case 1:
-                return towerEquippedButtons[1].getImg();
-
-
-            case 2:
-                return towerEquippedButtons[2].getImg();
-
-            default:
-                break;
-        }
-
-        return null;
-    }
+//    public BufferedImage getTowerImg(int i) {
+//        switch (i) {
+//            case 0:
+//                return towerEquippedButtons[0].getImg();
+//
+//
+//            case 1:
+//                return towerEquippedButtons[1].getImg();
+//
+//
+//            case 2:
+//                return towerEquippedButtons[2].getImg();
+//
+//            default:
+//                break;
+//        }
+//
+//        return null;
+//    }
 
     public TowerEquippedButton getSelectedTower() {
         return towerSelected;
@@ -184,10 +184,10 @@ public class TowerBar extends Bar{
     public void setTowerSelected(TowerEquippedButton selectedTower) {
         this.towerSelected = selectedTower;
     }
-
-    public BufferedImage getSelectedTowerImg() {
-        return towerSelected.getImg();
-    }
+//
+//    public BufferedImage getSelectedTowerImg() {
+//        return towerSelected.getImg();
+//    }
 
     public int getSelectedTowerNum() {
         return towerSelected.getTowerTypes();
