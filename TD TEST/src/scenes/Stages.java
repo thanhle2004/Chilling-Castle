@@ -8,7 +8,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import main.Game;
-import managers.EnemyManager;
 import managers.StageManager;
 import objects.SoundEffect;
 import ui.StageButton;
@@ -21,11 +20,13 @@ public class Stages extends GameScene implements SceneMethods {
     private Button bMenu, selectedStage;
     private StageButton[] bStage = new StageButton[4];
 
-    private BufferedImage background, menuButton, warningImage;
+    private BufferedImage background, menuButton, warningImageTower, warningImageStage;
     private BufferedImage[] bStageImg;
 
-    private long warningStartTime = 0;
+    private long warningTowerStartTime = 0;
+    private long warningStageStartTime = 0;
 
+    private int y = 30;
     private TowerBar towerBar;
 
     private SoundEffect soundEffect;
@@ -45,7 +46,8 @@ public class Stages extends GameScene implements SceneMethods {
         try {
             menuButton = ImageIO.read(getClass().getResourceAsStream("/bMenu.png"));
             background = ImageIO.read(getClass().getResourceAsStream("/StagesBoard.png"));
-            warningImage = ImageIO.read(getClass().getResourceAsStream("/equippedWarning.png"));
+            warningImageTower = ImageIO.read(getClass().getResourceAsStream("/equippedWarning.png"));
+            warningImageStage = ImageIO.read(getClass().getResourceAsStream("/stageWarning.png"));
 
             for (int i = 0; i < 4; i++) {
                 bStageImg[i] = ImageIO.read(getClass().getResource("/Stage" + (i + 1) + ".png"));
@@ -76,9 +78,9 @@ public class Stages extends GameScene implements SceneMethods {
 
         towerBar.draw(g);
 
-        drawWarning(g);
+        drawWarningTower(g);
 
-
+        drawWarningStage(g);
     }
 
     private void drawBackground(Graphics g) {
@@ -96,14 +98,26 @@ public class Stages extends GameScene implements SceneMethods {
     }
 
     //Warning if not equip tower
-    public void drawWarning(Graphics g) {
-        if (warningImage != null && warningStartTime > 0) {
+    public void drawWarningTower(Graphics g) {
+        if (warningImageTower != null && warningTowerStartTime > 0) {
             long currentTime = System.currentTimeMillis();
-            if (currentTime - warningStartTime < 1500) {
-                g.drawImage(warningImage, 170, 30, 300, 60, game);
+            if (currentTime - warningTowerStartTime < 1500) {
+                g.drawImage(warningImageTower, 170, 30, 300, 60, game);
             } else {
 
-                warningStartTime = 0;
+                warningTowerStartTime = 0;
+            }
+        }
+    }
+
+
+    public void drawWarningStage(Graphics g) {
+        if (warningImageStage != null && warningStageStartTime > 0) {
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - warningStageStartTime < 1500) {
+                g.drawImage(warningImageStage, 170, y, 300, 60, game);
+            } else {
+                warningStageStartTime = 0;
             }
         }
     }
@@ -117,30 +131,34 @@ public class Stages extends GameScene implements SceneMethods {
             for (int i = 0; i < 4; i++) {
                 if (bStage[i].getBounds().contains(x, y)) {
                     for (int j = 0; j < 3; j++) {
-                        if (towerBar.isEquippedTower() && StageManager.isUnlockStage(i)) {
-                            switch (i) {
-                                case 0:
-                                    SetGameState(STAGE1);
-                                    soundEffect.playEffect(1);
-                                    game.getStage1().getEnemyManager().setPauseGame(false);
-                                    break;
-                                case 1:
-                                    SetGameState(STAGE2);
-                                    soundEffect.playEffect(1);
-                                    game.getStage2().getEnemyManager().setPauseGame(false);
+                        if (towerBar.isEquippedTower()) {
+                            if (StageManager.isUnlockStage(i)) {
+                                switch (i) {
+                                    case 0:
+                                        SetGameState(STAGE1);
+                                        soundEffect.playEffect(1);
+                                        game.getStage1().getEnemyManager().setPauseGame(false);
+                                        break;
+                                    case 1:
+                                        SetGameState(STAGE2);
+                                        soundEffect.playEffect(1);
+                                        game.getStage2().getEnemyManager().setPauseGame(false);
 
-                                    break;
-                                case 2:
-                                    SetGameState(STAGE3);
-                                    game.getStage3().getEnemyManager().setPauseGame(false);
-                                    break;
+                                        break;
+                                    case 2:
+                                        SetGameState(STAGE3);
+                                        game.getStage3().getEnemyManager().setPauseGame(false);
+                                        break;
+                                }
+                            } else {
+                                soundEffect.playEffect(2);
+                                warningStageStartTime = System.currentTimeMillis();
                             }
                         } else {
-                            soundEffect.playEffect(2);
-                            warningStartTime = System.currentTimeMillis();
+                                soundEffect.playEffect(2);
+                                warningTowerStartTime = System.currentTimeMillis();
                         }
                     }
-
                 }
             }
         }
