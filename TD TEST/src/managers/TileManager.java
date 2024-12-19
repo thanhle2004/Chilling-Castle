@@ -10,7 +10,7 @@ import static helpz.Constants.Tiles.*;
 
 public class TileManager {
 
-	public Tile GRASS, WATER,ROAD,CORNER_LD,CORNER_LU,CORNER_RU,CORNER_RD,EDGE;
+	public Tile GRASS, WATER,ROAD,EDGE;
 
 	
 	//OLD
@@ -47,6 +47,11 @@ public class TileManager {
 		tiles.add(EDGE = new Tile(getSpritev2(3,5), id++, GRASS_TILE));//9
 		//WATER
 		tiles.add(WATER = new Tile(getAniSprites(0, 0), id++, WATER_TILE)); //10
+
+		//NGA 3
+		tiles.add(ROAD = new Tile(ImgFix.getRotImg(getSpritev2(2, 3),180), id++, ROAD_TILE));//11
+
+
 
 
 

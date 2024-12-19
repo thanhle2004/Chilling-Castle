@@ -159,11 +159,6 @@ public class TowerEquippedButton {
         return currentDmg;
     }
 
-    public void printTowerInfo() {
-        System.out.println("Tower Type: " + TowerTypes);
-        System.out.println("Base Damage: " + baseDmg);
-        System.out.println("Current Damage: " + currentDmg);
-    }
     public int GetmodState() {
         return mod;
     }

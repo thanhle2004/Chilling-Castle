@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Random;
 import java.util.List;
 import static helpz.Constants.Tower.*;
 
@@ -193,6 +192,7 @@ public class TowerManager {
             currentTarget = null;
         }
 
+
     }
 
     public void draw(Graphics g) {
@@ -210,20 +210,23 @@ public class TowerManager {
     }
 
     public void drawTypeAttackButton(Graphics g, TowerEquippedButton tower) {
-        switch (tower.GetmodState()) {
-            case 1:
-                First.draw(g);
-                break;
-            case 2:
-                Last.draw(g);
-                break;
-            case 3:
-                Closet.draw(g);
-                break;
-            case 4:
-                Strongest.draw(g);
-                break;
+        if (tower.getTowerTypes() != BUFF_TOWER) {
+            switch (tower.GetmodState()) {
+                case 1:
+                    First.draw(g);
+                    break;
+                case 2:
+                    Last.draw(g);
+                    break;
+                case 3:
+                    Closet.draw(g);
+                    break;
+                case 4:
+                    Strongest.draw(g);
+                    break;
+            }
         }
+
     }
 
     private void drawTower(Graphics g, TowerEquippedButton tower) {
@@ -238,6 +241,31 @@ public class TowerManager {
         int y = centerY - radius;
 
         g.drawArc(x, y, radius * 2, radius * 2, 0, 360);
+        System.out.println("Dame is " + towerOnMap.getCurrentDmg());
+    }
+
+
+    public void drawUpButton(Graphics g, TowerEquippedButton tower) {
+        g.drawImage(upgradeButton.getImage(), upgradeButton.getX(), upgradeButton.getY(),
+                upgradeButton.getWidth(), upgradeButton.getHeight(), null);
+    }
+
+    public void drawCloseButton(Graphics g) {
+        g.drawImage(closeButton.getImage(), closeButton.getX(), closeButton.getY(), closeButton.getWidth(), closeButton.getHeight(), null);
+    }
+
+    public void drawSellButton(Graphics g, TowerEquippedButton tower) {
+        switch (tower.getLevel()) {
+            case 1:
+                g.drawImage(sell1, 103,445,72, 35, null);
+                break;
+            case 2:
+                g.drawImage(sell2, 103,445,72, 35, null);
+                break;
+            case 3:
+                g.drawImage(sell3, 103,445,72, 35, null);
+                break;
+        }
     }
 
 
@@ -288,7 +316,7 @@ public class TowerManager {
             if (towerOnMap != null && upgradeButton.getBounds().contains(x, y) && towerOnMap.getLevel() < 3) {
                 TowerEquippedButton selectedTower = getTowerAt(towerOnMap.getPosX(), towerOnMap.getPosY());
                 if (selectedTower.getLevel() < 3) {
-                    int currency = Constants.Tower.CoinUpgradeL(selectedTower.getLevel() + 1);
+                    int currency = Constants.Tower.CoinUpgradeLevel(selectedTower.getLevel() + 1);
                     if (canUpgarde(currency)) {
                         selectedTower.setLevel(selectedTower.getLevel() + 1);
                         updateUpgradeButtonImage(selectedTower);
@@ -301,6 +329,7 @@ public class TowerManager {
 
             //Sell tower
             if(towerOnMap != null && sellButton.getBounds().contains(x, y)) {
+                deleteBuff(towerOnMap);
                 towersToRemove.add(towerOnMap);
                 getTowerAt(towerOnMap.getPosX(), towerOnMap.getPosY());
                 increaseCoin(Constants.Tower.coinReceived(towerOnMap.getLevel()));
@@ -463,8 +492,6 @@ public class TowerManager {
     }
 
 
-
-
     private Enemy getStrongestEnemy(int x, int y, double range) {
         Enemy strongest = null;
         int highestHealth = Integer.MIN_VALUE;
@@ -491,28 +518,18 @@ public class TowerManager {
         }
     }
 
-
-
-    public void drawUpButton(Graphics g, TowerEquippedButton tower) {
-        g.drawImage(upgradeButton.getImage(), upgradeButton.getX(), upgradeButton.getY(),
-                upgradeButton.getWidth(), upgradeButton.getHeight(), null);
-    }
-
-    public void drawCloseButton(Graphics g) {
-        g.drawImage(closeButton.getImage(), closeButton.getX(), closeButton.getY(), closeButton.getWidth(), closeButton.getHeight(), null);
-    }
-
-    public void drawSellButton(Graphics g, TowerEquippedButton tower) {
-        switch (tower.getLevel()) {
-            case 1:
-                g.drawImage(sell1, 103,445,72, 35, null);
-                break;
-            case 2:
-                g.drawImage(sell2, 103,445,72, 35, null);
-                break;
-            case 3:
-                g.drawImage(sell3, 103,445,72, 35, null);
-                break;
+    private void deleteBuff(TowerEquippedButton buffTower) {
+        for (TowerEquippedButton tower : towerMap.values()) {
+            if (tower != buffTower) {
+                double distance = Math.hypot(tower.getPosX() - buffTower.getPosX(), tower.getPosY() - buffTower.getPosY());
+                if (distance <= buffTower.getRNG()) {
+                    tower.setBaseDamage(tower.getDMG());
+                }
+            }
         }
     }
+
+
+
+
 }

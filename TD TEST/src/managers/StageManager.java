@@ -104,10 +104,10 @@ public abstract class StageManager extends GameScene implements SceneMethods {
             drawCastle(g,18*32 -50,224 - 92);
         } else if (GameStates.GetGameState() == GameStates.STAGE2) {
             game.getStage2().drawButtonPaused(g);
-            drawCastle(g,18*32,32);
+            drawCastle(g,18*32-50,224 - 92);
         } else if (GameStates.GetGameState() == GameStates.STAGE3) {
             game.getStage3().drawButtonPaused(g);
-            drawCastle(g,18*32,224);
+            drawCastle(g,18*32-50,224 - 92);
         }
     }
 
